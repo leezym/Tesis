@@ -19,6 +19,13 @@ public class UsersManager : MonoBehaviour
         DataBaseManager.instace.InsertUser("Inductors", uid, body);
     }
 
+    public void PostNewStudent(string uid, string name, string document)
+    {
+        Student user = new Student(uid, name, document);
+        string body = JsonUtility.ToJson(user);
+        DataBaseManager.instace.InsertUser("Students", uid, body);
+    }
+
     public void PutUser(string db, string userId, string atribute, string value)
     {
         DataBaseManager.instace.UpdateUser(db, userId, atribute, value);
@@ -39,16 +46,27 @@ public class Inductor
 
     public Inductor() { }
 
-    public Inductor(string id, string username, string email)
+    public Inductor(string id, string room, string email)
     {
         this.id = id;
-        this.room = username;
+        this.room = room;
         this.email = email;
     }
-
-    /*public string GetUsername() { return this.username; }
-    public string GetEmail() { return this.email; }
-
-    public void SetUsername(string username) { this.username = username; }
-    public void SetEmail(string email) { this.email = email; }*/
 }
+
+public class Student
+{
+    public string id;
+    public string name;
+    public string document;
+
+    public Student() { }
+
+    public Student(string id, string name, string document)
+    {
+        this.id = id;
+        this.name = name;
+        this.document = document;
+    }
+}
+

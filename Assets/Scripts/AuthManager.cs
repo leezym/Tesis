@@ -23,7 +23,6 @@ public class AuthManager : MonoBehaviour
     public Text textUserName;
 
     // UserData
-    private string user;
     private bool isInductor;
 
     public DataSnapshot GetSnapshot() { return snapshot; }
@@ -63,7 +62,7 @@ public class AuthManager : MonoBehaviour
             }
             else
             {
-
+                textUserName.text = GetSnapshot().Child("name").GetValue(true).ToString();
             }
 
             SetSnapshot(null);
@@ -111,7 +110,8 @@ public class AuthManager : MonoBehaviour
                 }
                 else
                 {
-
+                    ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
+                    ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
                 }
             }
         }
@@ -125,7 +125,7 @@ public class AuthManager : MonoBehaviour
     }
 
     public void SignInInductor() {
-        user = inputFieldUser.text;
+        string user = inputFieldUser.text;
         string password = inputFieldPassword.text;
         string email = user + "@javerianacali.edu.co";
         authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
@@ -165,8 +165,8 @@ public class AuthManager : MonoBehaviour
 
     public void SignInStudent()
     {
-        string document = inputFieldDocument.text;
         string name = inputFieldName.text;
+        string document = inputFieldDocument.text;
 
         authFirebase.SignInAnonymouslyAsync().ContinueWith(task => {
             if (task.IsCanceled)
@@ -182,11 +182,8 @@ public class AuthManager : MonoBehaviour
 
             Firebase.Auth.FirebaseUser newUser = task.Result;
             //Debug.LogFormat("User signed in successfully: {0} ({1})", newUser.DisplayName, newUser.UserId);
-            //UsersManager.instance.PostNewInductor(userFirebase.UserId, "Sala de "+user, userFirebase.Email);
-            
+            UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document);            
             UsersManager.instance.GetUser("Students").ValueChanged += HandleValueChanged;
-            ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
-            ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
         });
     }
 
