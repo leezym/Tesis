@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Firebase.Database;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 
 public class UsersManager : MonoBehaviour
 {
@@ -27,14 +28,14 @@ public class UsersManager : MonoBehaviour
         DataBaseManager.instance.InsertUser("Students", uid, user.ConvertJson());
     }
 
-    public void PutUser(string db, string userId, string atribute, string value)
+    public async Task PutUserAsync(string db, string userId, string atribute, string value)
     {
-        DataBaseManager.instance.UpdateUser(db, userId, atribute, value);
+        await DataBaseManager.instance.UpdateUserAsync(db, userId, atribute, value);
     }
 
-    public DatabaseReference GetUser(string db)
+    public async Task<Dictionary<string, object>> GetUserAsync(string db, string userId)
     {
-        return DataBaseManager.instance.SelectUserById(db);
+        return await DataBaseManager.instance.SelectUserByIdAsync(db, userId);
     }
 
     public void DeleteUser(string db, string userId) 
@@ -46,7 +47,6 @@ public class UsersManager : MonoBehaviour
 
 public class Inductor
 {
-    public string id;
     public string room;
     public string email;
 
@@ -54,14 +54,12 @@ public class Inductor
 
     public Inductor(string id, string room, string email)
     {
-        this.id = id;
         this.room = room;
         this.email = email;
     }
     public Dictionary<string, object> ConvertJson()
     {
         return new Dictionary<string, object>() {
-            { "id", this.id },
             { "room", this.room },
             { "email", this.email }
         };
@@ -70,7 +68,6 @@ public class Inductor
 
 public class Student
 {
-    public string id;
     public string name;
     public string document;
 
@@ -78,14 +75,12 @@ public class Student
 
     public Student(string id, string name, string document)
     {
-        this.id = id;
         this.name = name;
         this.document = document;
     }
 
     public Dictionary<string, object> ConvertJson(){
         return new Dictionary<string, object>() {
-            { "id", this.id },
             { "name", this.name },
             { "document", this.document }
         };

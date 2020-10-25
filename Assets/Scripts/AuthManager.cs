@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using Firebase.Database;
 using Firebase.Firestore;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 public class AuthManager : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class AuthManager : MonoBehaviour
     private bool signedIn;
 
     // DataBase
-    private DataSnapshot snapshot;
+    private Dictionary<string, object> snapshot;
 
     // Canvas
     public Canvas canvasLoginInductor, canvasMenuInductor;
@@ -27,13 +28,13 @@ public class AuthManager : MonoBehaviour
     // UserData
     private bool isInductor;
 
-    public DataSnapshot GetSnapshot() { return snapshot; }
-    public void SetSnapshot(DataSnapshot snapshot) { this.snapshot = snapshot; }
+    public Dictionary<string, object> GetSnapshot() { return snapshot; }
+    public void SetSnapshot(Dictionary<string, object> snapshot) { this.snapshot = snapshot; }
 
     public bool GetIsInductor() { return isInductor; }
     public void SetIsInductor(bool isInductor) { this.isInductor = isInductor; }
 
-    private void Awake() 
+    public void Awake() 
     {
         instance = this;
         InitializeFirebase();
@@ -55,16 +56,17 @@ public class AuthManager : MonoBehaviour
         AuthStateChanged(this, null);
     }
 
-    private void Update()
-    {
+    public void Update()
+    {    
+
         if (signedIn && GetSnapshot() != null)
         {
             if (GetIsInductor()){
-                //textRoomName.text = GetSnapshot().Child("room").GetValue(true).ToString();
+                textRoomName.text = GetSnapshot()["room"].ToString();
             }
             else
             {
-                textUserName.text = GetSnapshot().Child("name").GetValue(true).ToString();
+                //textUserName.text = GetSnapshot()["name"].ToString();
             }
 
             SetSnapshot(null);
@@ -80,17 +82,6 @@ public class AuthManager : MonoBehaviour
         }
         return null;
     }
-
-    /*void HandleValueChanged(object sender, ValueChangedEventArgs args)
-    {
-        if (args.DatabaseError != null)
-        {
-            Debug.LogError(args.DatabaseError.Message);
-            return;
-        }
-        string userId = AuthManager.instance.GetIdUser();
-        SetSnapshot(args.Snapshot.Child(userId));
-    }*/
 
     public void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
@@ -142,14 +133,11 @@ public class AuthManager : MonoBehaviour
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                 return;
             }
-
-            // Firebase user has been created.
-            Firebase.Auth.FirebaseUser newUser = task.Result;
-            Debug.LogFormat("Firebase user created successfully: ", newUser.Email);
-            UsersManager.instance.PostNewInductor(newUser.UserId, "Sala de "+user, newUser.Email);
+            
+            UsersManager.instance.PostNewInductor(userFirebase.UserId, "Sala de "+user, userFirebase.Email);
         });
 
-        authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
+        authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async task => {
             if (task.IsCanceled)
             {
                 Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");
@@ -160,8 +148,8 @@ public class AuthManager : MonoBehaviour
                 Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                 return;
             }
-
-            UsersManager.instance.GetUser("Inductors");
+            
+            SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
         });
     }
 
@@ -170,7 +158,7 @@ public class AuthManager : MonoBehaviour
         string name = inputFieldName.text;
         string document = inputFieldDocument.text;
 
-        authFirebase.SignInAnonymouslyAsync().ContinueWith(task => {
+        authFirebase.SignInAnonymouslyAsync().ContinueWith(async task => {
             if (task.IsCanceled)
             {
                 Debug.LogError("SignInAnonymouslyAsync was canceled.");
@@ -181,11 +169,9 @@ public class AuthManager : MonoBehaviour
                 Debug.LogError("SignInAnonymouslyAsync encountered an error: " + task.Exception);
                 return;
             }
-
-            Firebase.Auth.FirebaseUser newUser = task.Result;
-            //Debug.LogFormat("User signed in successfully: {0} ({1})", newUser.DisplayName, newUser.UserId);
+            
             UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document);
-            UsersManager.instance.GetUser("Students");
+            SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
         });
     }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class EditUser : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class EditUser : MonoBehaviour
             input.interactable = false;
             TextbuttonEdit.text = "Editar";
             string userId = AuthManager.instance.GetIdUser();
-            UsersManager.instance.PutUser("Inductors", userId, "room", input.text);
+            UsersManager.instance.PutUserAsync("Inductors", userId, "room", input.text);
         }
         else 
         {
