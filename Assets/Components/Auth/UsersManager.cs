@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Firebase.Database;
+using System.Threading.Tasks;
 
 public class UsersManager : MonoBehaviour
 {
@@ -15,27 +16,32 @@ public class UsersManager : MonoBehaviour
     public void PostNewInductor(string uid, string room, string email)
     {
         Inductor user = new Inductor(uid, room, email);
-        string body = JsonUtility.ToJson(user);
-        DataBaseManager.instace.InsertUser("Inductors", uid, body);
+        //string body = JsonUtility.ToJson(user);
+        DataBaseManager.instance.InsertUser("Inductors", uid, user.ConvertJson());
     }
 
     public void PostNewStudent(string uid, string name, string document)
     {
         Student user = new Student(uid, name, document);
-        string body = JsonUtility.ToJson(user);
-        DataBaseManager.instace.InsertUser("Students", uid, body);
+        //string body = JsonUtility.ToJson(user);
+        DataBaseManager.instance.InsertUser("Students", uid, user.ConvertJson());
     }
 
     public void PutUser(string db, string userId, string atribute, string value)
     {
-        DataBaseManager.instace.UpdateUser(db, userId, atribute, value);
+        DataBaseManager.instance.UpdateUser(db, userId, atribute, value);
     }
 
     public DatabaseReference GetUser(string db)
     {
-        return DataBaseManager.instace.SelectUserById(db);
+        return DataBaseManager.instance.SelectUserById(db);
     }
 
+    public void DeleteUser(string db, string userId) 
+    {
+        DataBaseManager.instance.DeleteUser(db, userId);
+
+    }
 }
 
 public class Inductor
@@ -52,6 +58,14 @@ public class Inductor
         this.room = room;
         this.email = email;
     }
+    public Dictionary<string, object> ConvertJson()
+    {
+        return new Dictionary<string, object>() {
+            { "id", this.id },
+            { "room", this.room },
+            { "email", this.email }
+        };
+    }
 }
 
 public class Student
@@ -67,6 +81,14 @@ public class Student
         this.id = id;
         this.name = name;
         this.document = document;
+    }
+
+    public Dictionary<string, object> ConvertJson(){
+        return new Dictionary<string, object>() {
+            { "id", this.id },
+            { "name", this.name },
+            { "document", this.document }
+        };
     }
 }
 

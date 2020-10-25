@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Firebase.Database;
+using Firebase.Firestore;
+using System.Threading.Tasks;
 
 public class AuthManager : MonoBehaviour
 {
@@ -58,7 +60,7 @@ public class AuthManager : MonoBehaviour
         if (signedIn && GetSnapshot() != null)
         {
             if (GetIsInductor()){
-                textRoomName.text = GetSnapshot().Child("room").GetValue(true).ToString();
+                //textRoomName.text = GetSnapshot().Child("room").GetValue(true).ToString();
             }
             else
             {
@@ -79,7 +81,7 @@ public class AuthManager : MonoBehaviour
         return null;
     }
 
-    void HandleValueChanged(object sender, ValueChangedEventArgs args)
+    /*void HandleValueChanged(object sender, ValueChangedEventArgs args)
     {
         if (args.DatabaseError != null)
         {
@@ -88,7 +90,7 @@ public class AuthManager : MonoBehaviour
         }
         string userId = AuthManager.instance.GetIdUser();
         SetSnapshot(args.Snapshot.Child(userId));
-    }
+    }*/
 
     public void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
@@ -98,7 +100,7 @@ public class AuthManager : MonoBehaviour
             if (!signedIn && userFirebase != null)
             {
                 Debug.Log("Signed out " + userFirebase.Email);
-                //DataBaseManager.instace.DeleteUser("Inductors", userFirebase.UserId);
+                //UsersManager.instance.DeleteUser("Inductors", userFirebase.UserId);
             }
             userFirebase = authFirebase.CurrentUser;
             if (signedIn)
@@ -158,8 +160,8 @@ public class AuthManager : MonoBehaviour
                 Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                 return;
             }
-                
-            UsersManager.instance.GetUser("Inductors").ValueChanged += HandleValueChanged;
+
+            UsersManager.instance.GetUser("Inductors");
         });
     }
 
@@ -182,8 +184,8 @@ public class AuthManager : MonoBehaviour
 
             Firebase.Auth.FirebaseUser newUser = task.Result;
             //Debug.LogFormat("User signed in successfully: {0} ({1})", newUser.DisplayName, newUser.UserId);
-            UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document);            
-            UsersManager.instance.GetUser("Students").ValueChanged += HandleValueChanged;
+            UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document);
+            UsersManager.instance.GetUser("Students");
         });
     }
 
