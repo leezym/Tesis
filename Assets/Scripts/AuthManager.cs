@@ -22,7 +22,6 @@ public class AuthManager : MonoBehaviour
     public Canvas canvasLoginStudent, canvasMenuStudent;
     public InputField inputFieldUser, inputFieldPassword;
     public InputField inputFieldDocument, inputFieldName;
-    public InputField textRoomName;
     public Text textUserName;
 
     // UserData
@@ -31,8 +30,8 @@ public class AuthManager : MonoBehaviour
     public Dictionary<string, object> GetSnapshot() { return snapshot; }
     public void SetSnapshot(Dictionary<string, object> snapshot) { this.snapshot = snapshot; }
 
-    public bool GetIsInductor() { return isInductor; }
     public void SetIsInductor(bool isInductor) { this.isInductor = isInductor; }
+    public bool GetIsInductor() { return isInductor; }
 
     public void Awake() 
     {
@@ -57,23 +56,23 @@ public class AuthManager : MonoBehaviour
     }
 
     public void Update()
-    {    
+    {
+        //Debug.Log("IsInductor " + isInductor);
 
-        if (signedIn && GetSnapshot() != null)
+        /*if (signedIn && GetSnapshot() != null)
         {
-            if (GetIsInductor()){
-                textRoomName.text = GetSnapshot()["room"].ToString();
+            if (GetIsInductor())
+            {
             }
             else
             {
-                //textUserName.text = GetSnapshot()["name"].ToString();
             }
 
             SetSnapshot(null);
-        }
+        }*/
     }
 
-    public string GetIdUser()
+    public string GetUserId()
     {
         userFirebase = authFirebase.CurrentUser;
         if (userFirebase != null)
@@ -90,8 +89,14 @@ public class AuthManager : MonoBehaviour
             signedIn = userFirebase != authFirebase.CurrentUser && authFirebase.CurrentUser != null;
             if (!signedIn && userFirebase != null)
             {
-                Debug.Log("Signed out " + userFirebase.Email);
-                //UsersManager.instance.DeleteUser("Inductors", userFirebase.UserId);
+                if (GetIsInductor())
+                {
+                    Debug.Log("Se salio el inductor");
+                }
+                else
+                {
+                    Debug.Log("Se salio el neo");
+                }
             }
             userFirebase = authFirebase.CurrentUser;
             if (signedIn)
@@ -105,6 +110,7 @@ public class AuthManager : MonoBehaviour
                 {
                     ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
                     ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
+                    UsersManager.instance.SearchDataAsync("Inductors");
                 }
             }
         }
@@ -180,6 +186,15 @@ public class AuthManager : MonoBehaviour
         userFirebase = authFirebase.CurrentUser;
         if (userFirebase != null)
         {
+            if (GetIsInductor())
+            {
+                UsersManager.instance.DeleteUserAsync("Inductors", userFirebase.UserId);
+            }
+            else
+            {
+                UsersManager.instance.DeleteUserAsync("Students", userFirebase.UserId);
+            }
+
             userFirebase.DeleteAsync().ContinueWith(task => {
                 if (task.IsCanceled)
                 {

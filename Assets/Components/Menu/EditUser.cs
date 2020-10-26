@@ -14,7 +14,7 @@ public class EditUser : MonoBehaviour
         {
             input.interactable = false;
             TextbuttonEdit.text = "Editar";
-            string userId = AuthManager.instance.GetIdUser();
+            string userId = AuthManager.instance.GetUserId();
             UsersManager.instance.PutUserAsync("Inductors", userId, "room", input.text);
         }
         else 

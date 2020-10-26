@@ -11,3 +11,43 @@ Para el error "unable find to app directory"
 - Abrir el cmd
 - Buscar la ruta C:\Users[username]\AppData\Local
 - Escribir "mkdir com.Tesis.Firebase"
+
+///////////////////////////////////////////////////////////
+
+Inicializar el git (solo se hace la primera vez al clonar)
+- git init
+
+-----------------------------------------------------------
+
+Clonar repositorio
+- git clone <url repositorio>
+
+-----------------------------------------------------------
+
+Pasarse a rama que ya existe
+- git checkout <nombre de la rama>
+
+Crear una rama y subir los cambios
+- git checkout -b <nombre de la rama>
+- git add .
+- git commit -m "<nombre rama>:<mensaje>"
+- git push origin <nombre de la rama>
+
+-----------------------------------------------------------
+
+Traer cambios a mi rama de mi propia rama
+- git fetch --all
+- git pull
+
+Traer cambios a mi rama de otra rama
+- git fetch --all
+- git pull origin <nombre de la otra rama>
+
+-----------------------------------------------------------
+
+Subir los cambios a la rama
+- git add .
+- git commit -m "<nombre rama>:<mensaje>"
+- git push
+
+///////////////////////////////////////////////////////////

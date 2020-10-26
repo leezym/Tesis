@@ -43,6 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59fd198cefbe94040961306460da7891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasLoginInductor: {fileID: 0}
+  canvasMenuInductor: {fileID: 0}
+  canvasLoginStudent: {fileID: 0}
+  canvasMenuStudent: {fileID: 0}
   inputFieldUser: {fileID: 0}
   inputFieldPassword: {fileID: 0}
   inputFieldDocument: {fileID: 0}
