@@ -74,6 +74,6 @@ public class DataBaseManager : MonoBehaviour
         else 
         {
             Debug.Log("Hay inductores para ti");
-        }*/
+        }
     }
 }
