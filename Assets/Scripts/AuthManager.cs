@@ -82,7 +82,7 @@ public class AuthManager : MonoBehaviour
         return null;
     }
 
-    public void AuthStateChanged(object sender, System.EventArgs eventArgs)
+    public async void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
         if (authFirebase.CurrentUser != userFirebase)
         {
@@ -105,12 +105,13 @@ public class AuthManager : MonoBehaviour
                 {
                     ScenesManager.instance.DeleteCurrentCanvas(canvasLoginInductor);
                     ScenesManager.instance.LoadNewCanvas(canvasMenuInductor);
-                }
-                else
+                }                    
+                else if(! await DataBaseManager.instance.IsEmptyTable("Inductors"))
                 {
+                    
+                    UsersManager.instance.PutUserAsync("Students", userFirebase.UserId, "id_inductor", "busqueda salvaje de un id aleatorio de un inductor");
                     ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
                     ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
-                    UsersManager.instance.SearchDataAsync("Inductors");
                 }
             }
         }
@@ -141,7 +142,6 @@ public class AuthManager : MonoBehaviour
             }
             
             UsersManager.instance.PostNewInductor(userFirebase.UserId, "Sala de "+user, userFirebase.Email);
-            //UsersManager.instance.DeleteUserAsync("Inductors", "null");
         });
 
         authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async task => {

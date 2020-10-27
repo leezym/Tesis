@@ -42,13 +42,7 @@ public class UsersManager : MonoBehaviour
     {
         await DataBaseManager.instance.DeleteUserAsync(db, userId);
 
-    }
-
-    public async Task SearchDataAsync(string db) 
-    {
-        await DataBaseManager.instance.SearchDataAsync(db);
-    }
-    
+    }    
 }
 
 public class Inductor

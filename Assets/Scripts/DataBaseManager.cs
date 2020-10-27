@@ -43,7 +43,7 @@ public class DataBaseManager : MonoBehaviour
     public void InsertUser(string db, string userId, Dictionary<string, object> json)
     {
         CollectionReference colRef = reference.Collection(db);
-        colRef.Document(userId).SetAsync(json);
+        colRef.Document(userId).SetAsync(json, SetOptions.MergeAll);
     }
 
     public async Task UpdateUserAsync(string db, string userId, string attribute, string value)
@@ -62,18 +62,21 @@ public class DataBaseManager : MonoBehaviour
         await docRef.DeleteAsync();
     }
 
-    public async Task SearchDataAsync(string db)
+    public async Task<int> SizeTable(string db)
     {
-        DocumentReference docRef = reference.Collection(db).Document(" ");
-        DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
-        if (snapshot.Exists)
-        {
-            Dictionary<string, object> data = snapshot.ToDictionary();
-            Debug.Log("No hay inductores para ti");
-        }
-        else 
-        {
-            Debug.Log("Hay inductores para ti");
-        }
+        Query queryCol = reference.Collection(db);
+        QuerySnapshot querySnapshot = await queryCol.GetSnapshotAsync();
+        return querySnapshot.Count;
+    }
+
+    public async Task<bool> IsEmptyTable(string db)
+    {
+        if (await SizeTable(db) == 0) return true;
+        else return false;
+    }
+
+    public async Task SearchData(string db) 
+    {
+              
     }
 }
