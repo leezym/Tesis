@@ -21,9 +21,9 @@ public class DataBaseManager : MonoBehaviour
     [System.Obsolete]
     void Start() {
         reference = FirebaseFirestore.DefaultInstance;
-        InsertUser("Inductors", "null", new Dictionary<string, object>() {
+        /*InsertUser("Inductors", "null", new Dictionary<string, object>() {
             { " ", " " }
-        });
+        });*/
     }
 
     public async Task<Dictionary<string, object>> SelectUserByIdAsync(string db, string userId)
@@ -64,7 +64,7 @@ public class DataBaseManager : MonoBehaviour
 
     public async Task SearchDataAsync(string db)
     {
-        DocumentReference docRef = reference.Collection(db).Document("null");
+        DocumentReference docRef = reference.Collection(db).Document(" ");
         DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
         if (snapshot.Exists)
         {
@@ -74,6 +74,6 @@ public class DataBaseManager : MonoBehaviour
         else 
         {
             Debug.Log("Hay inductores para ti");
-        }
+        }*/
     }
 }
