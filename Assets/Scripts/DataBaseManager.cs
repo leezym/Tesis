@@ -13,7 +13,7 @@ public class DataBaseManager : MonoBehaviour
 
     FirebaseFirestore reference;
 
-    private void Awake()
+    public void Awake()
     {
         instance = this;
     }
@@ -21,6 +21,9 @@ public class DataBaseManager : MonoBehaviour
     [System.Obsolete]
     void Start() {
         reference = FirebaseFirestore.DefaultInstance;
+        InsertUser("Inductors", "null", new Dictionary<string, object>() {
+            { " ", " " }
+        });
     }
 
     public async Task<Dictionary<string, object>> SelectUserByIdAsync(string db, string userId)
@@ -61,6 +64,16 @@ public class DataBaseManager : MonoBehaviour
 
     public async Task SearchDataAsync(string db)
     {
-        Debug.Log("id searchdata " + reference.Equals(db));
+        DocumentReference docRef = reference.Collection(db).Document("null");
+        DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+        if (snapshot.Exists)
+        {
+            Dictionary<string, object> data = snapshot.ToDictionary();
+            Debug.Log("No hay inductores para ti");
+        }
+        else 
+        {
+            Debug.Log("Hay inductores para ti");
+        }
     }
 }

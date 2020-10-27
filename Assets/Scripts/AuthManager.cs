@@ -141,6 +141,7 @@ public class AuthManager : MonoBehaviour
             }
             
             UsersManager.instance.PostNewInductor(userFirebase.UserId, "Sala de "+user, userFirebase.Email);
+            UsersManager.instance.DeleteUserAsync("Inductors", "null");
         });
 
         authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async task => {
