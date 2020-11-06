@@ -158,7 +158,7 @@ public class AuthManager : MonoBehaviour
         string name = inputFieldName.text;
         string document = inputFieldDocument.text;
 
-        if (!await DataBaseManager.instance.IsEmptyTable("Inductors"))
+        if (!await DataBaseManager.instance.IsEmptyTable("Rooms"))
         {            
             await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task =>
              {
