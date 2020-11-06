@@ -20,9 +20,9 @@ public class UsersManager : MonoBehaviour
         DataBaseManager.instance.InsertWithId("Inductors", uid, element.ConvertJson());
     }
 
-    public void PostNewStudent(string uid, string name, string document, string iduser)
+    public void PostNewStudent(string uid, string name, string document, string idRoom)
     {
-        Student element = new Student(name, document, iduser);
+        Student element = new Student(name, document, idRoom);
         DataBaseManager.instance.InsertWithId("Students", uid, element.ConvertJson());
     }
 
@@ -33,7 +33,7 @@ public class UsersManager : MonoBehaviour
 
     public async Task<Dictionary<string, object>> GetUserAsync(string db, string userId)
     {
-        return await DataBaseManager.instance.SelectUserByIdAsync(db, userId);
+        return await DataBaseManager.instance.SearchById(db, userId);
     }
 
     public async Task DeleteUserAsync(string db, string userId) 
@@ -68,22 +68,22 @@ public class Student
 {
     public string name;
     public string document;
-    public string iduser;
+    public string idRoom;
 
     public Student() { }
 
-    public Student(string name, string document, string iduser)
+    public Student(string name, string document, string idRoom)
     {
         this.name = name;
         this.document = document;
-        this.iduser = iduser;
+        this.idRoom = idRoom;
     }
 
     public Dictionary<string, object> ConvertJson(){
         return new Dictionary<string, object>() {
             { "name", this.name },
             { "document", this.document },
-            { "iduser", this.iduser }
+            { "iduser", this.idRoom }
         };
     }
 }

@@ -149,7 +149,7 @@ public class AuthManager : MonoBehaviour
             }
             
             SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
-            RoomsManager.instance.PostNewRoom("Sala de " + user, userFirebase.UserId);
+            RoomsManager.instance.PostNewRoom("Sala de " + user, 10, userFirebase.UserId);
         });
     }
 
@@ -173,7 +173,8 @@ public class AuthManager : MonoBehaviour
                      return;
                  }
 
-                 UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, "id_room");
+                 string idRoom = await RoomsManager.instance.SearchRoom("Rooms");
+                 UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
                  SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
 
                  ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);

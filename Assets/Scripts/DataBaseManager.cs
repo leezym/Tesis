@@ -6,6 +6,7 @@ using Firebase.Unity.Editor;
 using Firebase.Firestore;
 using System.Threading.Tasks;
 using System;
+using System.Linq;
 
 public class DataBaseManager : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class DataBaseManager : MonoBehaviour
         reference = FirebaseFirestore.DefaultInstance;
     }
 
-    public async Task<Dictionary<string, object>> SelectUserByIdAsync(string db, string id)
+    public async Task<Dictionary<string, object>> SearchById(string db, string id)
     {
         DocumentReference docRef = reference.Collection(db).Document(id);
         DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
@@ -70,7 +71,7 @@ public class DataBaseManager : MonoBehaviour
         QuerySnapshot querySnapshot = await queryValue.GetSnapshotAsync();
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
         {
-            DocumentReference docRef = documentSnapshot.ConvertTo<DocumentReference>();
+            DocumentReference docRef = documentSnapshot.Reference;
             await docRef.DeleteAsync();
         }
     }
@@ -88,8 +89,32 @@ public class DataBaseManager : MonoBehaviour
         else return false;
     }
 
-    public async Task SearchData(string db) 
+    public async Task<string> SearchRoom(string db) 
     {
-        
+        Query queryCol = reference.Collection(db);
+        QuerySnapshot querySnapshot = await queryCol.GetSnapshotAsync();
+
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            Dictionary<string, object> data = documentSnapshot.ToDictionary();
+            int size = 0, currentSize = 0;
+            foreach (KeyValuePair<string, object> pair in data)
+            {
+                if (pair.Key == "size")
+                {
+                    size = (int)pair.Value;
+                }
+                else if (pair.Key == "currentSize") 
+                {
+                    currentSize = (int)pair.Value;
+                }
+            }
+
+            if (currentSize < size) 
+            {
+                return documentSnapshot.Id;
+            }
+        }
+        return null;
     }
 }
