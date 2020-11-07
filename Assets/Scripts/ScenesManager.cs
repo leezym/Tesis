@@ -3,7 +3,7 @@
 public class ScenesManager : MonoBehaviour
 {
     public static ScenesManager instance;
-
+    
     private void Awake ()
     {
         instance = this;        
