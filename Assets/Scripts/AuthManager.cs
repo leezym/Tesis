@@ -108,8 +108,8 @@ public class AuthManager : MonoBehaviour
                 }                    
                 else if(! await DataBaseManager.instance.IsEmptyTable("Inductors"))
                 {
-                    
-                    UsersManager.instance.PutUserAsync("Students", userFirebase.UserId, "id_inductor", "busqueda salvaje de un id aleatorio de un inductor");
+
+                    await UsersManager.instance.PutUserAsync("Students", userFirebase.UserId, "id_inductor", "busqueda salvaje de un id aleatorio de un inductor");
                     ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
                     ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
                 }
@@ -117,11 +117,11 @@ public class AuthManager : MonoBehaviour
         }
     }
 
-    void OnDestroy()
+    async Task OnDestroyAsync()
     {
         authFirebase.StateChanged -= AuthStateChanged;
         //auth = null;
-        DeleteUser();
+        await DeleteUserAsync();
     }
 
     public void SignInInductor() {
@@ -183,20 +183,21 @@ public class AuthManager : MonoBehaviour
     }
 
 
-    public void DeleteUser() {
+    public async Task DeleteUserAsync() {
         userFirebase = authFirebase.CurrentUser;
         if (userFirebase != null)
         {
             if (GetIsInductor())
             {
-                UsersManager.instance.DeleteUserAsync("Inductors", userFirebase.UserId);
+                await UsersManager.instance.DeleteUserAsync("Inductors", userFirebase.UserId);
             }
             else
             {
-                UsersManager.instance.DeleteUserAsync("Students", userFirebase.UserId);
+                await UsersManager.instance.DeleteUserAsync("Students", userFirebase.UserId);
             }
 
-            userFirebase.DeleteAsync().ContinueWith(task => {
+            await userFirebase.DeleteAsync().ContinueWith(task =>
+            {
                 if (task.IsCanceled)
                 {
                     Debug.LogError("DeleteAsync was canceled.");
