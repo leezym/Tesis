@@ -115,7 +115,7 @@ public class AuthManager : MonoBehaviour
         }
     }
 
-    void OnDestroy()
+    async Task OnDestroyAsync()
     {
         authFirebase.StateChanged -= AuthStateChanged;
         //auth = null;
@@ -184,8 +184,8 @@ public class AuthManager : MonoBehaviour
                  UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
                  SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
 
-                 ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
-                 ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
+                 //ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
+                 //ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
              });
         }
     }
