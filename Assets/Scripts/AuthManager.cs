@@ -115,7 +115,7 @@ public class AuthManager : MonoBehaviour
         }
     }
 
-    async Task OnDestroyAsync()
+    async Task OnDestroy()
     {
         authFirebase.StateChanged -= AuthStateChanged;
         //auth = null;
