@@ -83,7 +83,7 @@ public class Student
         return new Dictionary<string, object>() {
             { "name", this.name },
             { "document", this.document },
-            { "iduser", this.idRoom }
+            { "idRoom", this.idRoom }
         };
     }
 }

@@ -104,7 +104,13 @@ public class AuthManager : MonoBehaviour
                 {
                     ScenesManager.instance.DeleteCurrentCanvas(canvasLoginInductor);
                     ScenesManager.instance.LoadNewCanvas(canvasMenuInductor);
-                }            
+                }
+                else
+                {
+                    ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
+                    ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
+                }     
+                
             }
         }
     }
@@ -157,9 +163,11 @@ public class AuthManager : MonoBehaviour
     {
         string name = inputFieldName.text;
         string document = inputFieldDocument.text;
+        string idRoom = null;
 
         if (!await DataBaseManager.instance.IsEmptyTable("Rooms"))
         {            
+            idRoom = await RoomsManager.instance.SearchRoom("Rooms");
             await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task =>
              {
                  if (task.IsCanceled)
@@ -173,7 +181,6 @@ public class AuthManager : MonoBehaviour
                      return;
                  }
 
-                 string idRoom = await RoomsManager.instance.SearchRoom("Rooms");
                  UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
                  SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
 

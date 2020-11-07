@@ -102,16 +102,22 @@ public class DataBaseManager : MonoBehaviour
             {
                 if (pair.Key == "size")
                 {
-                    size = (int)pair.Value;
+                    size = Convert.ToInt32(pair.Value);
                 }
                 else if (pair.Key == "currentSize") 
                 {
-                    currentSize = (int)pair.Value;
+                    currentSize = Convert.ToInt32(pair.Value);
                 }
             }
-
+            Debug.Log(currentSize + " " + size);
             if (currentSize < size) 
             {
+                await reference.Collection(db).Document(documentSnapshot.Id).UpdateAsync(new Dictionary<string, object>
+                {
+                    { "currentSize", currentSize+1 }
+                });
+
+                Debug.Log("DataBaseManager.SearchRoom " + documentSnapshot.Id);
                 return documentSnapshot.Id;
             }
         }
