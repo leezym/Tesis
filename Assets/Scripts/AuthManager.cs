@@ -62,10 +62,10 @@ public class AuthManager : MonoBehaviour
 
         if (signedIn && !GetIsInductor())
         {
-            Dictionary<string, object> data = await UsersManager.instance.GetUserAsync("Students", GetUserId());
-            if (data == null)
+            SetSnapshot(await UsersManager.instance.GetUserAsync("Students", GetUserId()));
+            if (GetSnapshot() == null)
             {
-                LogOut();
+                DeleteUser();
                 GameObject.Find("PanelGeneralSessions").GetComponent<Canvas>().enabled = true;
             }
         }
@@ -81,7 +81,7 @@ public class AuthManager : MonoBehaviour
         return null;
     }
 
-    public async void AuthStateChanged(object sender, System.EventArgs eventArgs)
+    public void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
         if (authFirebase.CurrentUser != userFirebase)
         {
@@ -90,7 +90,7 @@ public class AuthManager : MonoBehaviour
             {
                 if (GetIsInductor())
                 {
-                    Debug.Log("Se salio el inductor");                    
+                    Debug.Log("Se salio el inductor");
                 }
                 else
                 {
@@ -120,7 +120,6 @@ public class AuthManager : MonoBehaviour
         authFirebase.StateChanged -= AuthStateChanged;
         //auth = null;
         DeleteUser();
-        LogOut();
     }
 
     public void SignInInductor() {
@@ -155,7 +154,7 @@ public class AuthManager : MonoBehaviour
                 return;
             }
             
-            SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
+            //SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
             RoomsManager.instance.PostNewRoom("Sala de " + user, 10, userFirebase.UserId);
         });
     }
@@ -183,7 +182,6 @@ public class AuthManager : MonoBehaviour
                  }
 
                  UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
-                 SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
 
                  //ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
                  //ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
@@ -191,8 +189,8 @@ public class AuthManager : MonoBehaviour
         }
     }
 
-    public async void DeleteUser()
-    {
+
+    public async void DeleteUser() {
         userFirebase = authFirebase.CurrentUser;
         if (userFirebase != null)
         {
@@ -200,16 +198,11 @@ public class AuthManager : MonoBehaviour
             {
                 await UsersManager.instance.DeleteSession("Inductor", userFirebase.UserId, "Rooms", "Students");
             }
-            else
+            else if (GetSnapshot() != null)
             {
-                await UsersManager.instance.DeleteUserAsync("Students", userFirebase.UserId);
+                    await UsersManager.instance.DeleteUserAsync("Students", userFirebase.UserId);
             }
-        }
-    }
-    public async void LogOut() {
-        userFirebase = authFirebase.CurrentUser;
-        if (userFirebase != null)
-        {
+
             await userFirebase.DeleteAsync().ContinueWith(task =>
             {
                 if (task.IsCanceled)
@@ -223,7 +216,7 @@ public class AuthManager : MonoBehaviour
                     return;
                 }
 
-                authFirebase.SignOut();
+                //authFirebase.SignOut(); // cerrar sesion
             });
         }
     }
