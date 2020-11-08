@@ -9,23 +9,21 @@ public class UsersManager : MonoBehaviour
 {
     public static UsersManager instance;
 
-    private void Awake()
+    public void Awake()
     {
         instance = this;
     }
 
-    public void PostNewInductor(string uid, string room, string email)
+    public void PostNewInductor(string uid, string user, string email)
     {
-        Inductor user = new Inductor(uid, room, email);
-        //string body = JsonUtility.ToJson(user);
-        DataBaseManager.instance.InsertUser("Inductors", uid, user.ConvertJson());
+        Inductor element = new Inductor(user, email);
+        DataBaseManager.instance.InsertWithId("Inductors", uid, element.ConvertJson());
     }
 
-    public void PostNewStudent(string uid, string name, string document)
+    public void PostNewStudent(string uid, string name, string document, string idRoom)
     {
-        Student user = new Student(uid, name, document);
-        //string body = JsonUtility.ToJson(user);
-        DataBaseManager.instance.InsertUser("Students", uid, user.ConvertJson());
+        Student element = new Student(name, document, idRoom);
+        DataBaseManager.instance.InsertWithId("Students", uid, element.ConvertJson());
     }
 
     public async Task PutUserAsync(string db, string userId, string atribute, string value)
@@ -35,7 +33,7 @@ public class UsersManager : MonoBehaviour
 
     public async Task<Dictionary<string, object>> GetUserAsync(string db, string userId)
     {
-        return await DataBaseManager.instance.SelectUserByIdAsync(db, userId);
+        return await DataBaseManager.instance.SearchById(db, userId);
     }
 
     public async Task DeleteUserAsync(string db, string userId) 
@@ -47,20 +45,20 @@ public class UsersManager : MonoBehaviour
 
 public class Inductor
 {
-    public string room;
+    public string user;
     public string email;
 
     public Inductor() { }
 
-    public Inductor(string id, string room, string email)
+    public Inductor(string user, string email)
     {
-        this.room = room;
+        this.user = user;
         this.email = email;
     }
     public Dictionary<string, object> ConvertJson()
     {
         return new Dictionary<string, object>() {
-            { "room", this.room },
+            { "user", this.user },
             { "email", this.email }
         };
     }
@@ -70,19 +68,22 @@ public class Student
 {
     public string name;
     public string document;
+    public string idRoom;
 
     public Student() { }
 
-    public Student(string id, string name, string document)
+    public Student(string name, string document, string idRoom)
     {
         this.name = name;
         this.document = document;
+        this.idRoom = idRoom;
     }
 
     public Dictionary<string, object> ConvertJson(){
         return new Dictionary<string, object>() {
             { "name", this.name },
-            { "document", this.document }
+            { "document", this.document },
+            { "idRoom", this.idRoom }
         };
     }
 }

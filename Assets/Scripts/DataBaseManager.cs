@@ -6,6 +6,7 @@ using Firebase.Unity.Editor;
 using Firebase.Firestore;
 using System.Threading.Tasks;
 using System;
+using System.Linq;
 
 public class DataBaseManager : MonoBehaviour
 {
@@ -18,17 +19,13 @@ public class DataBaseManager : MonoBehaviour
         instance = this;
     }
 
-    [System.Obsolete]
-    void Start() {
+    public void Start() {
         reference = FirebaseFirestore.DefaultInstance;
-        /*InsertUser("Inductors", "null", new Dictionary<string, object>() {
-            { " ", " " }
-        });*/
     }
 
-    public async Task<Dictionary<string, object>> SelectUserByIdAsync(string db, string userId)
+    public async Task<Dictionary<string, object>> SearchById(string db, string id)
     {
-        DocumentReference docRef = reference.Collection(db).Document(userId);
+        DocumentReference docRef = reference.Collection(db).Document(id);
         DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
         if (snapshot.Exists)
         {
@@ -40,15 +37,21 @@ public class DataBaseManager : MonoBehaviour
 
     // Recuperar las puntuaciones https://firebase.google.com/docs/database/unity/retrieve-data?hl=es
     
-    public void InsertUser(string db, string userId, Dictionary<string, object> json)
+    public void InsertWithId(string db, string id, Dictionary<string, object> json)
     {
         CollectionReference colRef = reference.Collection(db);
-        colRef.Document(userId).SetAsync(json, SetOptions.MergeAll);
+        colRef.Document(id).SetAsync(json, SetOptions.MergeAll);
     }
 
-    public async Task UpdateUserAsync(string db, string userId, string attribute, string value)
+    public void InsertWithoutId(string db, Dictionary<string, object> json)
     {
-        DocumentReference docRef = reference.Collection(db).Document(userId);
+        CollectionReference colRef = reference.Collection(db);
+        colRef.AddAsync(json);
+    }
+
+    public async Task UpdateUserAsync(string db, string id, string attribute, string value)
+    {
+        DocumentReference docRef = reference.Collection(db).Document(id);
         Dictionary<string, object> data = new Dictionary<string, object>
         {
             { attribute, value }
@@ -56,10 +59,21 @@ public class DataBaseManager : MonoBehaviour
         await docRef.UpdateAsync(data);
     }
 
-    public async Task DeleteUserAsync(string db, string userId) 
+    public async Task DeleteUserAsync(string db, string id) 
     {
-        DocumentReference docRef = reference.Collection(db).Document(userId);
+        DocumentReference docRef = reference.Collection(db).Document(id);
         await docRef.DeleteAsync();
+    }
+
+    public async Task DeleteRoomAsync(string db, string id)
+    {
+        Query queryValue = reference.Collection(db).WhereEqualTo("idInductor", id);
+        QuerySnapshot querySnapshot = await queryValue.GetSnapshotAsync();
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            DocumentReference docRef = documentSnapshot.Reference;
+            await docRef.DeleteAsync();
+        }
     }
 
     public async Task<int> SizeTable(string db)
@@ -75,9 +89,39 @@ public class DataBaseManager : MonoBehaviour
         else return false;
     }
 
-    public void SearchData(string db)
+    public async Task<string> SearchRoom(string db) 
     {
+        Query queryCol = reference.Collection(db);
+        QuerySnapshot querySnapshot = await queryCol.GetSnapshotAsync();
 
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            Dictionary<string, object> data = documentSnapshot.ToDictionary();
+            int size = 0, currentSize = 0;
+            foreach (KeyValuePair<string, object> pair in data)
+            {
+                if (pair.Key == "size")
+                {
+                    size = Convert.ToInt32(pair.Value);
+                }
+                else if (pair.Key == "currentSize") 
+                {
+                    currentSize = Convert.ToInt32(pair.Value);
+                }
+            }
+            Debug.Log(currentSize + " " + size);
+            if (currentSize < size) 
+            {
+                await reference.Collection(db).Document(documentSnapshot.Id).UpdateAsync(new Dictionary<string, object>
+                {
+                    { "currentSize", currentSize+1 }
+                });
+
+                Debug.Log("DataBaseManager.SearchRoom " + documentSnapshot.Id);
+                return documentSnapshot.Id;
+            }
+        }
+        return null;
     }
 
     public async Task<List<string>> SearchNeoJaveriansAsync(string db, string idInductor)

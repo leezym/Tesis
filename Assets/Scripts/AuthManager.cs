@@ -57,7 +57,6 @@ public class AuthManager : MonoBehaviour
 
     public void Update()
     {
-        //Debug.Log("IsInductor " + isInductor);
 
         /*if (signedIn && GetSnapshot() != null)
         {
@@ -82,7 +81,7 @@ public class AuthManager : MonoBehaviour
         return null;
     }
 
-    public async void AuthStateChanged(object sender, System.EventArgs eventArgs)
+    public void AuthStateChanged(object sender, System.EventArgs eventArgs)
     {
         if (authFirebase.CurrentUser != userFirebase)
         {
@@ -105,23 +104,22 @@ public class AuthManager : MonoBehaviour
                 {
                     ScenesManager.instance.DeleteCurrentCanvas(canvasLoginInductor);
                     ScenesManager.instance.LoadNewCanvas(canvasMenuInductor);
-                }                    
-                else if(! await DataBaseManager.instance.IsEmptyTable("Inductors"))
+                }
+                else
                 {
-
-                    await UsersManager.instance.PutUserAsync("Students", userFirebase.UserId, "id_inductor", "busqueda salvaje de un id aleatorio de un inductor");
                     ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
                     ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
-                }
+                }     
+                
             }
         }
     }
 
-    async Task OnDestroyAsync()
+    public void OnDestroy()
     {
         authFirebase.StateChanged -= AuthStateChanged;
         //auth = null;
-        await DeleteUserAsync();
+        DeleteUser();
     }
 
     public void SignInInductor() {
@@ -141,7 +139,7 @@ public class AuthManager : MonoBehaviour
                 return;
             }
             
-            UsersManager.instance.PostNewInductor(userFirebase.UserId, "Sala de "+user, userFirebase.Email);
+            UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email);
         });
 
         authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async task => {
@@ -157,39 +155,50 @@ public class AuthManager : MonoBehaviour
             }
             
             SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
+            RoomsManager.instance.PostNewRoom("Sala de " + user, 10, userFirebase.UserId);
         });
     }
 
-    public void SignInStudent()
+    public async void SignInStudent()
     {
         string name = inputFieldName.text;
         string document = inputFieldDocument.text;
+        string idRoom = null;
 
-        authFirebase.SignInAnonymouslyAsync().ContinueWith(async task => {
-            if (task.IsCanceled)
-            {
-                Debug.LogError("SignInAnonymouslyAsync was canceled.");
-                return;
-            }
-            if (task.IsFaulted)
-            {
-                Debug.LogError("SignInAnonymouslyAsync encountered an error: " + task.Exception);
-                return;
-            }
-            
-            UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document);
-            SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
-        });
+        if (!await DataBaseManager.instance.IsEmptyTable("Rooms"))
+        {            
+            idRoom = await RoomsManager.instance.SearchRoom("Rooms");
+            await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task =>
+             {
+                 if (task.IsCanceled)
+                 {
+                     Debug.LogError("SignInAnonymouslyAsync was canceled.");
+                     return;
+                 }
+                 if (task.IsFaulted)
+                 {
+                     Debug.LogError("SignInAnonymouslyAsync encountered an error: " + task.Exception);
+                     return;
+                 }
+
+                 UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
+                 SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
+
+                 ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
+                 ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
+             });
+        }
     }
 
 
-    public async Task DeleteUserAsync() {
+    public async void DeleteUser() {
         userFirebase = authFirebase.CurrentUser;
         if (userFirebase != null)
         {
             if (GetIsInductor())
             {
                 await UsersManager.instance.DeleteUserAsync("Inductors", userFirebase.UserId);
+                await RoomsManager.instance.DeleteRoomAsync("Rooms", userFirebase.UserId);
             }
             else
             {
