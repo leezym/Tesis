@@ -8,15 +8,15 @@ using UnityEngine.UI;
 
 public class EditGroup : MonoBehaviour
 {
-    private string roomId, sizeRoom;
+    private string roomId;
     private Dictionary<string, object> datosRoom, datosInductor;
-    public Text groupName, inductorNameLabel;
+    public Text groupNameLabel, inductorNameLabel;
     public Canvas canvasNombreInductor, canvasMenuInductor;
-    public InputField inputRoomSize, inputInductorName;
+    public InputField inputRoomSize, inputInductorName, sizeRoomLabel;
     // Start is called before the first frame update
     void Start()
     {
-        sizeRoom = "";
+        sizeRoomLabel.text = "";
         inputRoomSize.text = "";
         inputInductorName.text = "";
     }
@@ -26,12 +26,12 @@ public class EditGroup : MonoBehaviour
     {
         if(GetComponent<Canvas>().enabled)
         {
-            //GetRoomDataAsync();
-            //GetInductorName();
+            GetRoomDataAsync();
+            GetInductorDataAsync();
         }
     }
 
-    async void GetRoomDataAsync()
+    async void  GetRoomDataAsync()
     {
         roomId = await RoomsManager.instance.SearchRoomByInductor("Rooms", AuthManager.instance.GetUserId());
         datosRoom = await RoomsManager.instance.GetRoomAsync("Rooms", roomId);
@@ -39,21 +39,20 @@ public class EditGroup : MonoBehaviour
         {
             if (pair.Key == "room")
             {
-                groupName.text = pair.Value.ToString();
+                groupNameLabel.text = pair.Value.ToString();
             }
             else if (pair.Key == "currentSize")
             {
-                sizeRoom = pair.Value.ToString();
+                sizeRoomLabel.text = pair.Value.ToString();
             }
         }
     }
 
-    async void GetInductorName()
+    async void GetInductorDataAsync()
     {
         datosInductor = await UsersManager.instance.GetUserAsync("Inductors", AuthManager.instance.GetUserId());
         foreach(KeyValuePair<string, object> pair in datosInductor)
         {
-            Debug.Log(pair.Key + " " + pair.Value);
             if (pair.Key == "name")
             {
                 inductorNameLabel.text = pair.Value.ToString();
@@ -64,9 +63,7 @@ public class EditGroup : MonoBehaviour
     public bool CheckNewData()
     {
         if( inputInductorName.text != "" && inputRoomSize.text != "")
-        {
-            //UsersManager.instance.PutUserAsync("Inductors", AuthManager.instance.GetUserId(), "name", inputInductorName.text);
-            //RoomsManager.instance.PutRoomAsync("Rooms", roomId, "size", inputRoomSize.text);
+        {            
             return true;
         }
 
@@ -75,13 +72,12 @@ public class EditGroup : MonoBehaviour
 
     public void SendInductorName()
     {
-        //Debug.Log(CheckNewData());
-        //if (CheckNewData())
-        //{
+        if (CheckNewData())
+        {
             UsersManager.instance.PutUserAsync("Inductors", AuthManager.instance.GetUserId(), "name", inputInductorName.text);
             RoomsManager.instance.PostNewRoom("Sala de " + inputInductorName.text, Convert.ToInt32(inputRoomSize.text), AuthManager.instance.GetUserId());
             ScenesManager.instance.DeleteCurrentCanvas(canvasNombreInductor);
             ScenesManager.instance.LoadNewCanvas(canvasMenuInductor);
-        //}
+        }
     }
 }

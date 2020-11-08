@@ -50,7 +50,7 @@ public class AuthManager : MonoBehaviour
         inputFieldDocument.text = "";
         inputFieldName.text = "";
         inputInductorName.text = "";
-        inputInductorRoomSize.text = "0";
+        inputInductorRoomSize.text = "";
     }
 
     private void InitializeFirebase()
