@@ -1036,10 +1036,30 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1021448885616411490, guid: ab2e211d3dfe1b747bc928149d5f7feb,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1021448885616411501, guid: ab2e211d3dfe1b747bc928149d5f7feb,
         type: 3}
       propertyPath: m_Name
       value: PanelMyGroup
+      objectReference: {fileID: 0}
+    - target: {fileID: 1978013635512576622, guid: ab2e211d3dfe1b747bc928149d5f7feb,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1978013635512576622, guid: ab2e211d3dfe1b747bc928149d5f7feb,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1978013635512576622, guid: ab2e211d3dfe1b747bc928149d5f7feb,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2325084942488248099, guid: ab2e211d3dfe1b747bc928149d5f7feb,
         type: 3}
@@ -1099,7 +1119,7 @@ PrefabInstance:
     - target: {fileID: 8410297848614179738, guid: ab2e211d3dfe1b747bc928149d5f7feb,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000061035156
+      value: -2737.1106
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab2e211d3dfe1b747bc928149d5f7feb, type: 3}
@@ -1630,9 +1650,44 @@ PrefabInstance:
       objectReference: {fileID: 104213147}
     - target: {fileID: 5383425218417604124, guid: ba7756928fe81e54d868af01e5bf1988,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5383425218417604124, guid: ba7756928fe81e54d868af01e5bf1988,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
       value: 
-      objectReference: {fileID: 1502112455}
+      objectReference: {fileID: 1470639200}
+    - target: {fileID: 5383425218417604124, guid: ba7756928fe81e54d868af01e5bf1988,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5383425218417604124, guid: ba7756928fe81e54d868af01e5bf1988,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5383425218417604124, guid: ba7756928fe81e54d868af01e5bf1988,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
+      value: 
+      objectReference: {fileID: 2038316232}
+    - target: {fileID: 5383425218417604124, guid: ba7756928fe81e54d868af01e5bf1988,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: DeleteUser
+      objectReference: {fileID: 0}
+    - target: {fileID: 5383425218417604124, guid: ba7756928fe81e54d868af01e5bf1988,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8561682796864738248, guid: ba7756928fe81e54d868af01e5bf1988,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba7756928fe81e54d868af01e5bf1988, type: 3}
 --- !u!114 &5536165464281843004 stripped

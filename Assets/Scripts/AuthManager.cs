@@ -65,11 +65,9 @@ public class AuthManager : MonoBehaviour
 
         if (signedIn && !GetIsInductor())
         {
-            Debug.Log("entra no NULL");
             SetSnapshot(await UsersManager.instance.GetUserAsync("Students", GetUserId()));
-            if (GetSnapshot() == null)
+            if (GetSnapshot() == null && signedIn)
             {
-                Debug.Log("entra NULL");
                 DeleteUser();
                 GameObject.Find("PanelGeneralSessions").GetComponent<Canvas>().enabled = true;
                 foreach(Canvas canvas in canvasViewStudent)

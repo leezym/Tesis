@@ -40,7 +40,7 @@ public class ListNeos : MonoBehaviour
             content.text = "";
             foreach(string name in NeoJaverianos)
             {
-                content.text += name + "\n";
+                content.text += name + "\n\n";
             }
             currentSizeStudents = newSizeStudents;
         }
