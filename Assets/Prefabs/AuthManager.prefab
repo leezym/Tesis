@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasLoginInductor: {fileID: 0}
+  canvasNombreInductor: {fileID: 0}
   canvasMenuInductor: {fileID: 0}
   canvasLoginStudent: {fileID: 0}
   canvasMenuStudent: {fileID: 0}
