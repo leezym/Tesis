@@ -32,7 +32,7 @@ public class ListNeos : MonoBehaviour
             currentSizeStudents = await SearchCurrentSizeRoom();
         }
 
-        NeoJaverianos = await DataBaseManager.instance.SearchNeoJaveriansAsync("Students", idInductor);
+        NeoJaverianos = await DataBaseManager.instance.ListNameStudents("Students", idInductor);
         newSizeStudents = NeoJaverianos.Count;
 
         if (currentSizeStudents != newSizeStudents)
@@ -48,7 +48,7 @@ public class ListNeos : MonoBehaviour
 
     async Task<int> SearchCurrentSizeRoom()
     {
-        string idRoom = await DataBaseManager.instance.SearchRoomByInductor("Rooms", idInductor);
+        string idRoom = await RoomsManager.instance.SearchRoomByInductor("Rooms", idInductor);
         Dictionary<string, object> data = await DataBaseManager.instance.SearchById("Rooms", idRoom);
         foreach (KeyValuePair<string, object> pair in data)
         {

@@ -511,7 +511,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2325084942488248095}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1197320580
+--- !u!114 &1197320584
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -532,7 +532,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 54be6424194298846951cb3cce99b261, type: 3}
-    m_FontSize: 20
+    m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
@@ -703,7 +703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69ee692e18067934fadc372d743ea3fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewport: {fileID: 0}
+  content: {fileID: 0}
   NeoJaverianos: []
   fontStudent: {fileID: 0}
 --- !u!114 &1886472805 stripped
@@ -910,6 +910,11 @@ PrefabInstance:
       propertyPath: viewport
       value: 
       objectReference: {fileID: 1643063664}
+    - target: {fileID: 918674449193968564, guid: ab2e211d3dfe1b747bc928149d5f7feb,
+        type: 3}
+      propertyPath: content
+      value: 
+      objectReference: {fileID: 1197320584}
     - target: {fileID: 1021448885616411489, guid: ab2e211d3dfe1b747bc928149d5f7feb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1093,12 +1098,12 @@ PrefabInstance:
     - target: {fileID: 8410297848614179738, guid: ab2e211d3dfe1b747bc928149d5f7feb,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.00024414062
+      value: -3222.5217
       objectReference: {fileID: 0}
     - target: {fileID: 8410297848614179738, guid: ab2e211d3dfe1b747bc928149d5f7feb,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 9807.058
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1453194464, guid: ab2e211d3dfe1b747bc928149d5f7feb, type: 3}
@@ -1191,6 +1196,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 560586500}
     m_Modifications:
+    - target: {fileID: 1757621362572041133, guid: 7f62259bb3dce704b96fa2033466d763,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2594252347352137337, guid: 7f62259bb3dce704b96fa2033466d763,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument

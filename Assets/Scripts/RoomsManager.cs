@@ -35,9 +35,9 @@ public class RoomsManager : MonoBehaviour
         return await DataBaseManager.instance.SearchRoom(db);
     }
 
-    public async Task DeleteRoomAsync(string db, string inductorId)
+    public async Task<string> SearchRoomByInductor(string db, string idInductor)
     {
-        await DataBaseManager.instance.DeleteRoomAsync(db, inductorId);
+        return await DataBaseManager.instance.SearchRoomByInductor(db, idInductor);
 
     }
 }

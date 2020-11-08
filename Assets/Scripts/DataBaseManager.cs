@@ -65,17 +65,6 @@ public class DataBaseManager : MonoBehaviour
         await docRef.DeleteAsync();
     }
 
-    public async Task DeleteRoomAsync(string db, string id)
-    {
-        Query queryValue = reference.Collection(db).WhereEqualTo("idInductor", id);
-        QuerySnapshot querySnapshot = await queryValue.GetSnapshotAsync();
-        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
-        {
-            DocumentReference docRef = documentSnapshot.Reference;
-            await docRef.DeleteAsync();
-        }
-    }
-
     public async Task<int> SizeTable(string db)
     {
         Query queryCol = reference.Collection(db);
@@ -136,7 +125,7 @@ public class DataBaseManager : MonoBehaviour
         return null;
     }
 
-    public async Task<List<string>> SearchNeoJaveriansAsync(string db, string idInductor)
+    public async Task<List<string>> ListNameStudents(string db, string idInductor)
     {  
         string RoomId = await SearchRoomByInductor("Rooms", idInductor);        
 
@@ -158,5 +147,33 @@ public class DataBaseManager : MonoBehaviour
             }
         }
         return Estudiantes;     
+    }
+
+    public async Task DeleteSession(string dbInductors, string idInductor, string dbRooms, string dbStudents)
+    {
+        // Eliminar inductor
+        DocumentReference docRefInductor = reference.Collection(dbInductors).Document(idInductor);
+        await docRefInductor.DeleteAsync();
+
+        // Eliminar sala
+        Query queryValue = reference.Collection(dbRooms).WhereEqualTo("idInductor", idInductor);
+        QuerySnapshot querySnapshotRoom = await queryValue.GetSnapshotAsync();
+        string idRoom = "";
+        foreach (DocumentSnapshot documentSnapshot in querySnapshotRoom.Documents)
+        {
+            idRoom = documentSnapshot.Id;
+            DocumentReference docRefRoom = documentSnapshot.Reference;
+            await docRefRoom.DeleteAsync();
+        }
+
+        // Eliminar estudiantes de la sala
+        Query queryCol = reference.Collection(dbStudents).WhereEqualTo("idRoom", idRoom);
+        QuerySnapshot querySnapshotStudent = await queryCol.GetSnapshotAsync();
+
+        foreach (DocumentSnapshot documentSnapshot in querySnapshotStudent.Documents)
+        {
+            DocumentReference docRefStudent = documentSnapshot.Reference;
+            await docRefStudent.DeleteAsync();
+        }
     }
 }

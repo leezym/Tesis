@@ -55,20 +55,15 @@ public class AuthManager : MonoBehaviour
         AuthStateChanged(this, null);
     }
 
-    public void Update()
+    public async void Update()
     {
 
-        /*if (signedIn && GetSnapshot() != null)
+        if (signedIn && !GetIsInductor())
         {
-            if (GetIsInductor())
-            {
-            }
-            else
-            {
-            }
-
-            SetSnapshot(null);
-        }*/
+            Dictionary<string, object> data = await UsersManager.instance.GetUserAsync("Students", GetUserId());
+            if (data == null)
+                DeleteUser();
+        }
     }
 
     public string GetUserId()
@@ -115,7 +110,7 @@ public class AuthManager : MonoBehaviour
         }
     }
 
-    async Task OnDestroy()
+    void OnDestroy()
     {
         authFirebase.StateChanged -= AuthStateChanged;
         //auth = null;
@@ -197,8 +192,7 @@ public class AuthManager : MonoBehaviour
         {
             if (GetIsInductor())
             {
-                await UsersManager.instance.DeleteUserAsync("Inductors", userFirebase.UserId);
-                await RoomsManager.instance.DeleteRoomAsync("Rooms", userFirebase.UserId);
+                await UsersManager.instance.DeleteSession("Inductor", userFirebase.UserId, "Rooms", "Students");
             }
             else
             {
@@ -218,8 +212,7 @@ public class AuthManager : MonoBehaviour
                     return;
                 }
 
-                authFirebase.SignOut(); // cerrar sesion
-                Debug.Log("User deleted successfully.");
+                //authFirebase.SignOut(); // cerrar sesion
             });
         }
     }
