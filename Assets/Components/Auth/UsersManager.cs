@@ -42,9 +42,9 @@ public class UsersManager : MonoBehaviour
 
     }    
 
-    public async Task DeleteSession(string dbInductors, string idInductor, string dbRooms, string dbStudents) 
+    public async Task DeleteSession(string idInductor) 
     {
-        await DataBaseManager.instance.DeleteSession(dbInductors, idInductor, dbRooms, dbStudents);
+        await DataBaseManager.instance.DeleteSession(idInductor);
 
     }
 }

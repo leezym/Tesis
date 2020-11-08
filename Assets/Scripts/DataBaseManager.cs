@@ -23,6 +23,10 @@ public class DataBaseManager : MonoBehaviour
         reference = FirebaseFirestore.DefaultInstance;
     }
 
+    /*
+    Nombre: 
+    */
+
     public async Task<Dictionary<string, object>> SearchById(string db, string id)
     {
         DocumentReference docRef = reference.Collection(db).Document(id);
@@ -78,9 +82,9 @@ public class DataBaseManager : MonoBehaviour
         else return false;
     }
 
-    public async Task<string> SearchAvailableRoom(string db) 
+    public async Task<string> SearchAvailableRoom(string dbRoom) 
     {
-        Query queryCol = reference.Collection(db);
+        Query queryCol = reference.Collection(dbRoom);
         QuerySnapshot querySnapshot = await queryCol.GetSnapshotAsync();
 
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
@@ -99,9 +103,9 @@ public class DataBaseManager : MonoBehaviour
                 }
             }
 
-            if (currentSize < size) 
+            if (currentSize < size && size > 0) 
             {
-                await reference.Collection(db).Document(documentSnapshot.Id).UpdateAsync(new Dictionary<string, object>
+                await reference.Collection(dbRoom).Document(documentSnapshot.Id).UpdateAsync(new Dictionary<string, object>
                 {
                     { "currentSize", currentSize+1 }
                 });
@@ -149,14 +153,14 @@ public class DataBaseManager : MonoBehaviour
         return Estudiantes;     
     }
 
-    public async Task DeleteSession(string dbInductors, string idInductor, string dbRooms, string dbStudents)
+    public async Task DeleteSession(string idInductor)
     {
         // Eliminar inductor
-        DocumentReference docRefInductor = reference.Collection(dbInductors).Document(idInductor);
+        DocumentReference docRefInductor = reference.Collection("Inductors").Document(idInductor);
         await docRefInductor.DeleteAsync();
 
         // Eliminar sala
-        Query queryValue = reference.Collection(dbRooms).WhereEqualTo("idInductor", idInductor);
+        Query queryValue = reference.Collection("Rooms").WhereEqualTo("idInductor", idInductor);
         QuerySnapshot querySnapshotRoom = await queryValue.GetSnapshotAsync();
         string idRoom = "";
         foreach (DocumentSnapshot documentSnapshot in querySnapshotRoom.Documents)
@@ -167,13 +171,37 @@ public class DataBaseManager : MonoBehaviour
         }
 
         // Eliminar estudiantes de la sala
-        Query queryCol = reference.Collection(dbStudents).WhereEqualTo("idRoom", idRoom);
+        Query queryCol = reference.Collection("Students").WhereEqualTo("idRoom", idRoom);
         QuerySnapshot querySnapshotStudent = await queryCol.GetSnapshotAsync();
 
         foreach (DocumentSnapshot documentSnapshot in querySnapshotStudent.Documents)
         {
             DocumentReference docRefStudent = documentSnapshot.Reference;
             await docRefStudent.DeleteAsync();
+        }
+    }
+
+    public async Task DeleteStudentInRoom(string idStudent)
+    {
+        Dictionary<string, object> data = await SearchById("Students", idStudent);
+        string idRoom = "";
+        foreach (KeyValuePair<string, object> pair in data)
+        {
+            if(pair.Key == "idRoom")      
+                idRoom = pair.Value.ToString();    
+        }
+
+        DocumentReference docRef = reference.Collection("Students").Document(idStudent);
+        await docRef.DeleteAsync();
+
+        data = await SearchById("Rooms", idRoom);
+        foreach (KeyValuePair<string, object> pair in data)
+        {
+            if(pair.Key == "currentSize")
+                await reference.Collection("Rooms").Document(idRoom).UpdateAsync(new Dictionary<string, object>
+                {
+                    { "currentSize", Convert.ToInt32(pair.Value)-1 }
+                });
         }
     }
 }
