@@ -4,6 +4,7 @@ using Firebase.Database;
 using Firebase.Firestore;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System;
 
 public class AuthManager : MonoBehaviour
 {
@@ -18,10 +19,10 @@ public class AuthManager : MonoBehaviour
     private Dictionary<string, object> snapshot;
 
     // Canvas
-    public Canvas canvasLoginInductor, canvasMenuInductor;
+    public Canvas canvasLoginInductor, canvasNombreInductor, canvasMenuInductor;
     public Canvas canvasLoginStudent, canvasMenuStudent;
-    public InputField inputFieldUser, inputFieldPassword;
-    public InputField inputFieldDocument, inputFieldName;
+    public InputField inputFieldUser, inputFieldPassword, inputInductorName;
+    public InputField inputFieldDocument, inputFieldName, inputInductorRoomSize;
     public Text textUserName;
 
     public List<Canvas> canvasViewStudent = new List<Canvas>();
@@ -48,8 +49,8 @@ public class AuthManager : MonoBehaviour
         inputFieldPassword.text = "";
         inputFieldDocument.text = "";
         inputFieldName.text = "";
-
-
+        inputInductorName.text = "";
+        inputInductorRoomSize.text = "";
     }
 
     private void InitializeFirebase()
@@ -109,7 +110,7 @@ public class AuthManager : MonoBehaviour
                 if (GetIsInductor())
                 {
                     ScenesManager.instance.DeleteCurrentCanvas(canvasLoginInductor);
-                    ScenesManager.instance.LoadNewCanvas(canvasMenuInductor);
+                    ScenesManager.instance.LoadNewCanvas(canvasNombreInductor);
                 }
                 else
                 {
@@ -131,6 +132,7 @@ public class AuthManager : MonoBehaviour
     public void SignInInductor() {
         string user = inputFieldUser.text;
         string password = inputFieldPassword.text;
+
         string email = user + "@javerianacali.edu.co";
         authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
             if (task.IsCanceled)
@@ -145,7 +147,7 @@ public class AuthManager : MonoBehaviour
                 return;
             }
             
-            UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email);
+            UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputInductorName.text);
         });
 
         authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async task => {
@@ -160,8 +162,8 @@ public class AuthManager : MonoBehaviour
                 return;
             }
             
-            //SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
-            RoomsManager.instance.PostNewRoom("Sala de " + user, 10, userFirebase.UserId);
+            SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
+            RoomsManager.instance.PostNewRoom("Sala de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
         });
     }
 
@@ -173,7 +175,7 @@ public class AuthManager : MonoBehaviour
 
         if (!await DataBaseManager.instance.IsEmptyTable("Rooms"))
         {            
-            idRoom = await RoomsManager.instance.SearchRoom("Rooms");
+            idRoom = await RoomsManager.instance.SearchAvailableRoom("Rooms");
             await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task =>
              {
                  if (task.IsCanceled)

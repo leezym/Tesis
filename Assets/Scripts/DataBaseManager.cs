@@ -78,7 +78,7 @@ public class DataBaseManager : MonoBehaviour
         else return false;
     }
 
-    public async Task<string> SearchRoom(string db) 
+    public async Task<string> SearchAvailableRoom(string db) 
     {
         Query queryCol = reference.Collection(db);
         QuerySnapshot querySnapshot = await queryCol.GetSnapshotAsync();
