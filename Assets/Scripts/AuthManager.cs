@@ -4,6 +4,7 @@ using Firebase.Database;
 using Firebase.Firestore;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System;
 
 public class AuthManager : MonoBehaviour
 {
@@ -18,10 +19,10 @@ public class AuthManager : MonoBehaviour
     private Dictionary<string, object> snapshot;
 
     // Canvas
-    public Canvas canvasLoginInductor, canvasMenuInductor;
+    public Canvas canvasLoginInductor, canvasNombreInductor, canvasMenuInductor;
     public Canvas canvasLoginStudent, canvasMenuStudent;
-    public InputField inputFieldUser, inputFieldPassword;
-    public InputField inputFieldDocument, inputFieldName;
+    public InputField inputFieldUser, inputFieldPassword, inputInductorName;
+    public InputField inputFieldDocument, inputFieldName, inputInductorRoomSize;
     public Text textUserName;
 
     // UserData
@@ -46,6 +47,8 @@ public class AuthManager : MonoBehaviour
         inputFieldPassword.text = "";
         inputFieldDocument.text = "";
         inputFieldName.text = "";
+        inputInductorName.text = "";
+        inputInductorRoomSize.text = "0";
     }
 
     private void InitializeFirebase()
@@ -115,7 +118,7 @@ public class AuthManager : MonoBehaviour
         }
     }
 
-    public void OnDestroy()
+    void OnDestroy()
     {
         authFirebase.StateChanged -= AuthStateChanged;
         //auth = null;
@@ -125,6 +128,7 @@ public class AuthManager : MonoBehaviour
     public void SignInInductor() {
         string user = inputFieldUser.text;
         string password = inputFieldPassword.text;
+
         string email = user + "@javerianacali.edu.co";
         authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
             if (task.IsCanceled)
@@ -139,7 +143,7 @@ public class AuthManager : MonoBehaviour
                 return;
             }
             
-            UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email);
+            UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputInductorName.text);
         });
 
         authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async task => {
@@ -155,7 +159,7 @@ public class AuthManager : MonoBehaviour
             }
             
             SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
-            RoomsManager.instance.PostNewRoom("Sala de " + user, 10, userFirebase.UserId);
+            RoomsManager.instance.PostNewRoom("Sala de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
         });
     }
 
@@ -167,7 +171,7 @@ public class AuthManager : MonoBehaviour
 
         if (!await DataBaseManager.instance.IsEmptyTable("Rooms"))
         {            
-            idRoom = await RoomsManager.instance.SearchRoom("Rooms");
+            idRoom = await RoomsManager.instance.SearchAvailableRoom("Rooms");
             await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task =>
              {
                  if (task.IsCanceled)
@@ -184,8 +188,8 @@ public class AuthManager : MonoBehaviour
                  UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
                  SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
 
-                 ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
-                 ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
+                 //ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
+                 //ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
              });
         }
     }

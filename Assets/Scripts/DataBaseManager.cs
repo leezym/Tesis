@@ -89,7 +89,7 @@ public class DataBaseManager : MonoBehaviour
         else return false;
     }
 
-    public async Task<string> SearchRoom(string db) 
+    public async Task<string> SearchAvailableRoom(string db) 
     {
         Query queryCol = reference.Collection(db);
         QuerySnapshot querySnapshot = await queryCol.GetSnapshotAsync();
@@ -109,7 +109,7 @@ public class DataBaseManager : MonoBehaviour
                     currentSize = Convert.ToInt32(pair.Value);
                 }
             }
-            Debug.Log(currentSize + " " + size);
+
             if (currentSize < size) 
             {
                 await reference.Collection(db).Document(documentSnapshot.Id).UpdateAsync(new Dictionary<string, object>
@@ -124,47 +124,39 @@ public class DataBaseManager : MonoBehaviour
         return null;
     }
 
-    public async Task<List<string>> SearchNeoJaveriansAsync(string db, string idInductor)
-    {  
+    
+    public async Task<string> SearchRoomByInductor(string db, string idInductor)
+    {
         Query RoomMembersQuery = reference.Collection(db).WhereEqualTo("idInductor", idInductor);
         QuerySnapshot RoomMembersQuerySnapshot = await RoomMembersQuery.GetSnapshotAsync();
         foreach (DocumentSnapshot documentSnapshotRooms in RoomMembersQuerySnapshot.Documents)
         {
-            Console.WriteLine("Document data for {0} document:", documentSnapshotRooms.Id);
-            var RoomId = documentSnapshotRooms.Id;
-
-            Query MembersQuery = reference.Collection("Students").WhereEqualTo("idRoom", RoomId);
-            QuerySnapshot MembersQuerySnapshot = await MembersQuery.GetSnapshotAsync();
-
-            List<string> Estudiantes = new List<string>();
-
-            foreach (DocumentSnapshot documentSnapshotMembers in MembersQuerySnapshot.Documents)
-            {
-                
-
-                Dictionary<string, object> NeoJaverian = documentSnapshotMembers.ToDictionary();
-                foreach (KeyValuePair<string, object> pair in NeoJaverian)
-                {
-                    Console.WriteLine("{0}: {1}", pair.Key, pair.Value);
-                    if (pair.Key == "name")
-                    {
-                        Estudiantes.Add(pair.Value.ToString());
-                    }
-           
-                }
-            }
-            return Estudiantes;
-            /*
-            Dictionary<string, object> city = documentSnapshot.ToDictionary();
-            foreach (KeyValuePair<string, object> pair in city)
-            {
-                Console.WriteLine("{0}: {1}", pair.Key, pair.Value);
-            }
-            Console.WriteLine("");
-            */
+            return documentSnapshotRooms.Id;
         }
         return null;
-        
     }
 
+    public async Task<List<string>> SearchNeoJaveriansAsync(string db, string idInductor)
+    {  
+        string RoomId = await SearchRoomByInductor("Rooms", idInductor);        
+
+        Query MembersQuery = reference.Collection(db).WhereEqualTo("idRoom", RoomId);
+        QuerySnapshot MembersQuerySnapshot = await MembersQuery.GetSnapshotAsync();
+
+        List<string> Estudiantes = new List<string>();
+
+        foreach (DocumentSnapshot documentSnapshotMembers in MembersQuerySnapshot.Documents)
+        {
+            Dictionary<string, object> NeoJaverian = documentSnapshotMembers.ToDictionary();
+            foreach (KeyValuePair<string, object> pair in NeoJaverian)
+            {
+                if (pair.Key == "name")
+                {
+                    Estudiantes.Add(pair.Value.ToString());
+                }
+        
+            }
+        }
+        return Estudiantes;     
+    }
 }
