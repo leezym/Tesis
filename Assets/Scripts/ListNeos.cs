@@ -13,26 +13,21 @@ public class ListNeos : MonoBehaviour
     private string idInductor;
     public List<string> NeoJaverianos = new List<string>();
     int currentSizeStudents = 0, newSizeStudents = 0;
-    public Font fontStudent;
 
-    void Start()
-    {
-    }
-
-    void Update()
+    async Task UpdateAsync()
     {
         if (GetComponent<Canvas>().enabled)
-            DetectStudent();
+            await DetectStudent();
     }
 
-    async void DetectStudent()
+    async Task DetectStudent()
     {     
         if (idInductor == null){
             idInductor = AuthManager.instance.GetUserId();
-            currentSizeStudents = await SearchCurrentSizeRoom();
+            currentSizeStudents = await GroupManager.instance.SearchCurrentSizeRoom(idInductor);
         }
 
-        NeoJaverianos = await DataBaseManager.instance.ListNameStudents("Students", idInductor);
+        NeoJaverianos = await GroupManager.instance.ListNameStudents(idInductor);
         newSizeStudents = NeoJaverianos.Count;
 
         if (currentSizeStudents != newSizeStudents)
@@ -44,17 +39,5 @@ public class ListNeos : MonoBehaviour
             }
             currentSizeStudents = newSizeStudents;
         }
-    }
-
-    async Task<int> SearchCurrentSizeRoom()
-    {
-        string idRoom = await RoomsManager.instance.SearchRoomByInductor("Rooms", idInductor);
-        Dictionary<string, object> data = await DataBaseManager.instance.SearchById("Rooms", idRoom);
-        foreach (KeyValuePair<string, object> pair in data)
-        {
-            if (pair.Key == "currentSize")
-                return Convert.ToInt32(pair.Value);
-        }
-        return 0;
     }
 }

@@ -21,7 +21,7 @@ public class AuthManager : MonoBehaviour
     // Canvas
     public Canvas canvasLoginInductor, canvasNombreInductor, canvasMenuInductor;
     public Canvas canvasLoginStudent, canvasMenuStudent;
-    public InputField inputFieldUser, inputFieldPassword, inputInductorName;
+    public InputField inputFieldUser, inputFieldPassword, inputRoomName;
     public InputField inputFieldDocument, inputFieldName, inputInductorRoomSize;
     public Text textUserName;
 
@@ -40,16 +40,16 @@ public class AuthManager : MonoBehaviour
     {
         instance = this;
         InitializeFirebase();
-        InitializeAtributes();
+        initializeAttributes();
     }
 
-    public void InitializeAtributes() 
+    public void initializeAttributes() 
     {
         inputFieldUser.text = "";
         inputFieldPassword.text = "";
         inputFieldDocument.text = "";
         inputFieldName.text = "";
-        inputInductorName.text = "";
+        inputRoomName.text = "";
         inputInductorRoomSize.text = "";
     }
 
@@ -60,7 +60,7 @@ public class AuthManager : MonoBehaviour
         AuthStateChanged(this, null);
     }
 
-    public async void Update()
+    public async Task Update()
     {
 
         if (signedIn && !GetIsInductor())
@@ -147,7 +147,7 @@ public class AuthManager : MonoBehaviour
                 return;
             }
             
-            UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputInductorName.text);
+            UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);
         });
 
         authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
@@ -167,7 +167,7 @@ public class AuthManager : MonoBehaviour
         });
     }
 
-    public async void SignInStudent()
+    public async Task SignInStudent()
     {
         string name = inputFieldName.text;
         string document = inputFieldDocument.text;
@@ -202,7 +202,7 @@ public class AuthManager : MonoBehaviour
     }
 
 
-    public async void DeleteUser() {
+    public async Task DeleteUser() {
         userFirebase = authFirebase.CurrentUser;
         if (userFirebase != null)
         {

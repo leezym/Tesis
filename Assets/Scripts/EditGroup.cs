@@ -8,33 +8,35 @@ using UnityEngine.UI;
 
 public class EditGroup : MonoBehaviour
 {
-    private string roomId;
-    private Dictionary<string, object> datosRoom, datosInductor;
     public Text groupNameLabel, inductorNameLabel;
-    public Canvas canvasNombreInductor, canvasMenuInductor;
-    public InputField inputRoomSize, inputInductorName, sizeRoomLabel;
-    // Start is called before the first frame update
+    public Canvas canvasMyGroup, canvasNombreInductor, canvasMenuInductor;
+    public InputField inputRoomSize, inputInductorName;
+    //public InputField newInputRoomSize, newInputRoomName;
+    
     void Start()
     {
-        sizeRoomLabel.text = "";
+        initializeAttributes();
+    }
+    public void initializeAttributes()
+    {
+        groupNameLabel.text = "";
+        inductorNameLabel.text = "";
         inputRoomSize.text = "";
         inputInductorName.text = "";
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(GetComponent<Canvas>().enabled)
+        if(canvasMyGroup.enabled)
         {
-            GetRoomDataAsync();
-            GetInductorDataAsync();
+            ShowRoomData();
+            ShowInductorData();
         }
-    }
+    }   
 
-    async void  GetRoomDataAsync()
+    async void ShowRoomData ()
     {
-        roomId = await RoomsManager.instance.SearchRoomByInductor("Rooms", AuthManager.instance.GetUserId());
-        datosRoom = await RoomsManager.instance.GetRoomAsync("Rooms", roomId);
+        Dictionary<string, object> datosRoom = await GroupManager.instance.GetRoomDataAsync();
         foreach (KeyValuePair<string, object> pair in datosRoom)
         {
             if (pair.Key == "room")
@@ -43,14 +45,14 @@ public class EditGroup : MonoBehaviour
             }
             else if (pair.Key == "currentSize")
             {
-                sizeRoomLabel.text = pair.Value.ToString();
+                inputInductorName.text = pair.Value.ToString();
             }
         }
     }
 
-    async void GetInductorDataAsync()
+    async void ShowInductorData()
     {
-        datosInductor = await UsersManager.instance.GetUserAsync("Inductors", AuthManager.instance.GetUserId());
+        Dictionary<string,object> datosInductor = await GroupManager.instance.GetInductorDataAsync(inductorNameLabel);
         foreach(KeyValuePair<string, object> pair in datosInductor)
         {
             if (pair.Key == "name")
