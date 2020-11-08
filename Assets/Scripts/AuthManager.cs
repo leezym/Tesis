@@ -24,6 +24,8 @@ public class AuthManager : MonoBehaviour
     public InputField inputFieldDocument, inputFieldName;
     public Text textUserName;
 
+    public List<Canvas> canvasViewStudent = new List<Canvas>();
+
     // UserData
     private bool isInductor;
 
@@ -67,6 +69,10 @@ public class AuthManager : MonoBehaviour
             {
                 DeleteUser();
                 GameObject.Find("PanelGeneralSessions").GetComponent<Canvas>().enabled = true;
+                foreach(Canvas canvas in canvasViewStudent)
+                {
+                    canvas.enabled = false;
+                }
             }
         }
     }
@@ -200,7 +206,7 @@ public class AuthManager : MonoBehaviour
             }
             else if (GetSnapshot() != null)
             {
-                    await UsersManager.instance.DeleteUserAsync("Students", userFirebase.UserId);
+                await UsersManager.instance.DeleteUserAsync("Students", userFirebase.UserId);
             }
 
             await userFirebase.DeleteAsync().ContinueWith(task =>
@@ -216,7 +222,7 @@ public class AuthManager : MonoBehaviour
                     return;
                 }
 
-                //authFirebase.SignOut(); // cerrar sesion
+                authFirebase.SignOut(); // cerrar sesion
             });
         }
     }
