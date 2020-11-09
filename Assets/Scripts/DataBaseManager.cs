@@ -103,7 +103,7 @@ public class DataBaseManager : MonoBehaviour
                 }
             }
 
-            if (currentSize < size && size > 0) 
+            if (currentSize < size) 
             {
                 await reference.Collection(dbRoom).Document(documentSnapshot.Id).UpdateAsync(new Dictionary<string, object>
                 {

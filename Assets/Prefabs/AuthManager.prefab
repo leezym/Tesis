@@ -50,6 +50,11 @@ MonoBehaviour:
   canvasMenuStudent: {fileID: 0}
   inputFieldUser: {fileID: 0}
   inputFieldPassword: {fileID: 0}
+  inputRoomName: {fileID: 0}
   inputFieldDocument: {fileID: 0}
   inputFieldName: {fileID: 0}
+  inputInductorRoomSize: {fileID: 0}
   textUserName: {fileID: 0}
+  canvasViewStudent:
+  - {fileID: 0}
+  - {fileID: 0}

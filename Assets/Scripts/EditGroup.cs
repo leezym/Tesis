@@ -9,9 +9,9 @@ using UnityEngine.UI;
 public class EditGroup : MonoBehaviour
 {
     public Text groupNameLabel, inductorNameLabel;
-    public Canvas canvasMyGroup, canvasNombreInductor, canvasMenuInductor;
+    public Canvas canvasMyGroup, canvasEditGroup, canvasNombreInductor, canvasMenuInductor;
     public InputField inputRoomSize, inputInductorName;
-    //public InputField newInputRoomSize, newInputRoomName;
+    public InputField newInputRoomSize, newInputRoomName;
     
     void Start()
     {
@@ -23,6 +23,8 @@ public class EditGroup : MonoBehaviour
         inductorNameLabel.text = "";
         inputRoomSize.text = "";
         inputInductorName.text = "";
+        newInputRoomSize.text = "";
+        newInputRoomName.text = "";
     }
 
     void Update()
@@ -31,6 +33,16 @@ public class EditGroup : MonoBehaviour
         {
             ShowRoomData();
             ShowInductorData();
+        }
+
+        if (canvasEditGroup.enabled)
+        {
+            
+        }
+        else
+        {
+            newInputRoomName.text = groupNameLabel.text;
+            newInputRoomSize.text = inputRoomSize.text;
         }
     }   
 
@@ -43,9 +55,9 @@ public class EditGroup : MonoBehaviour
             {
                 groupNameLabel.text = pair.Value.ToString();
             }
-            else if (pair.Key == "currentSize")
+            else if (pair.Key == "size")
             {
-                inputInductorName.text = pair.Value.ToString();
+                inputRoomSize.text = pair.Value.ToString();
             }
         }
     }
