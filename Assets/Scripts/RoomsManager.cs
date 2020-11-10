@@ -19,9 +19,9 @@ public class RoomsManager : MonoBehaviour
         DataBaseManager.instance.InsertWithoutId("Rooms", element.ConvertJson());
     }
 
-    public async Task PutRoomAsync(string db, string roomId, string atribute, string value)
+    public async Task PutRoomAsync(string db, string roomId, Dictionary<string,object> data)
     {
-        await DataBaseManager.instance.UpdateUserAsync(db, roomId, atribute, value);
+        await DataBaseManager.instance.UpdateAsync("Rooms", roomId, data);
     }
 
     public async Task<Dictionary<string, object>> GetRoomAsync(string db, string roomId)

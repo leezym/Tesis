@@ -7,7 +7,8 @@ using UnityEngine.UIElements;
 using UnityEngine.UI;
 
 public class EditGroup : MonoBehaviour
-{
+{ 
+    private int roomCurrentSize;
     public Text groupNameLabel, inductorNameLabel;
     public Canvas canvasMyGroup, canvasEditGroup, canvasNombreInductor, canvasMenuInductor;
     public InputField inputRoomSize, inputInductorName;
@@ -29,20 +30,12 @@ public class EditGroup : MonoBehaviour
 
     void Update()
     {
-        if(canvasMyGroup.enabled)
+        if(canvasMyGroup.enabled && !canvasEditGroup.enabled)
         {
             ShowRoomData();
             ShowInductorData();
-        }
 
-        if (canvasEditGroup.enabled)
-        {
             
-        }
-        else
-        {
-            newInputRoomName.text = groupNameLabel.text;
-            newInputRoomSize.text = inputRoomSize.text;
         }
     }   
 
@@ -54,10 +47,16 @@ public class EditGroup : MonoBehaviour
             if (pair.Key == "room")
             {
                 groupNameLabel.text = pair.Value.ToString();
+                newInputRoomName.text = pair.Value.ToString();
             }
             else if (pair.Key == "size")
             {
                 inputRoomSize.text = pair.Value.ToString();
+                newInputRoomSize.text = pair.Value.ToString();
+            }
+            else if (pair.Key == "currentsize")
+            {
+                roomCurrentSize = Convert.ToInt32(pair.Value);
             }
         }
     }
@@ -88,10 +87,38 @@ public class EditGroup : MonoBehaviour
     {
         if (CheckNewData())
         {
-            UsersManager.instance.PutUserAsync("Inductors", AuthManager.instance.GetUserId(), "name", inputInductorName.text);
+            Dictionary<string, object> data = new Dictionary<string, object>
+            {
+                { "name" , inputInductorName.text}
+            };
+            UsersManager.instance.PutUserAsync("Inductors", AuthManager.instance.GetUserId(), data);
             RoomsManager.instance.PostNewRoom("Sala de " + inputInductorName.text, Convert.ToInt32(inputRoomSize.text), AuthManager.instance.GetUserId());
             ScenesManager.instance.DeleteCurrentCanvas(canvasNombreInductor);
             ScenesManager.instance.LoadNewCanvas(canvasMenuInductor);
+        }
+    }
+
+    public async void SendNewRoomInfo()
+    {
+        if (roomCurrentSize >= Convert.ToInt32(newInputRoomSize.text))
+        {
+            string inductorId = AuthManager.instance.GetUserId().ToString();
+            string roomId = await RoomsManager.instance.SearchRoomByInductor("Rooms", inductorId);
+
+            Dictionary<string, object> newRoomData = new Dictionary<string, object>
+            {
+                { "size" , Convert.ToInt32(newInputRoomSize.text)},
+                { "room" , newInputRoomName.text}
+            };
+
+            await RoomsManager.instance.PutRoomAsync("Rooms", roomId, newRoomData);
+        }else
+        {
+            /*advertencia = cosas de advertencia;
+            WarningGenerator(advertencia);
+            ScenesManager.instance.DeleteCurrentCanvas(canvasNombreInductor);
+            ScenesManager.instance.LoadNewCanvas(canvasMenuInductor);
+            */
         }
     }
 }
