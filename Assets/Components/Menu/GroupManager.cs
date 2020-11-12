@@ -81,6 +81,6 @@ public class GroupManager : MonoBehaviour
         return new Dictionary<string, string> () {
             {"nameInductor", nameInductor},
             {"nameRoom", nameRoom}
-        }
+        };
     }
 }

@@ -61,13 +61,10 @@ public class DataBaseManager : MonoBehaviour
         colRef.AddAsync(json);
     }
 
-    public async Task UpdateUserAsync(string db, string id, string attribute, string value)
+    public async Task UpdateAsync(string db, string id, Dictionary<string,object> data)
     {
         DocumentReference docRef = reference.Collection(db).Document(id);
-        Dictionary<string, object> data = new Dictionary<string, object>
-        {
-            { attribute, value }
-        };
+        
         await docRef.UpdateAsync(data);
     }
 

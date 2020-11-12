@@ -26,9 +26,9 @@ public class UsersManager : MonoBehaviour
         DataBaseManager.instance.InsertWithId("Students", uid, element.ConvertJson());
     }
 
-    public async Task PutUserAsync(string db, string userId, string atribute, string value)
+    public async Task PutUserAsync(string db, string userId, Dictionary<string,object> data)
     {
-        await DataBaseManager.instance.UpdateUserAsync(db, userId, atribute, value);
+        await DataBaseManager.instance.UpdateAsync(db, userId, data);
     }
 
     public async Task<Dictionary<string, object>> GetUserAsync(string db, string userId)
