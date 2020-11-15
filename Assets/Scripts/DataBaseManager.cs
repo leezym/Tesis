@@ -32,7 +32,8 @@ public class DataBaseManager : MonoBehaviour
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
         {
             Dictionary<string, object> dic = documentSnapshot.ToDictionary();
-            data.Add(dic);
+            if (dic != null)
+                data.Add(dic);
         }
         return data;
     }
