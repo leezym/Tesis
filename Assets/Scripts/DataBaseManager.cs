@@ -28,9 +28,11 @@ public class DataBaseManager : MonoBehaviour
         CollectionReference colRef = reference.Collection(db);
         QuerySnapshot querySnapshot = await colRef.GetSnapshotAsync();
         List<Dictionary<string, object>> data = null;
+
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
         {
-            data.Add(documentSnapshot.ToDictionary());
+            Dictionary<string, object> dic = documentSnapshot.ToDictionary();
+            data.Add(dic);
         }
         return data;
     }

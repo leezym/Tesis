@@ -16,10 +16,10 @@ public class EditGroup : MonoBehaviour
     
     void Start()
     {
-        initializeAttributes();
+        InitializeAttributes();
     }
 
-    public void initializeAttributes()
+    public void InitializeAttributes()
     {
         groupNameLabel.text = "";
         inductorNameLabel.text = "";

@@ -40,10 +40,10 @@ public class AuthManager : MonoBehaviour
     {
         instance = this;
         InitializeFirebase();
-        initializeAttributes();
+        InitializeAttributes();
     }
 
-    public void initializeAttributes() 
+    public void InitializeAttributes() 
     {
         inputFieldUser.text = "";
         inputFieldPassword.text = "";
@@ -125,7 +125,6 @@ public class AuthManager : MonoBehaviour
     void OnDestroy()
     {
         authFirebase.StateChanged -= AuthStateChanged;
-        //auth = null;
         DeleteUser();
     }
 
@@ -202,7 +201,7 @@ public class AuthManager : MonoBehaviour
     }
 
 
-    public async Task DeleteUser() {
+    public async void DeleteUser() {
         userFirebase = authFirebase.CurrentUser;
         if (userFirebase != null)
         {
@@ -230,6 +229,8 @@ public class AuthManager : MonoBehaviour
                 {
                     await RoomsManager.instance.DeleteStudentInRoom(idUser);
                 }
+                
+                authFirebase = null;
             });
         }
     }
