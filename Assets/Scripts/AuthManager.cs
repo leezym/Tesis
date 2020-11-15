@@ -222,7 +222,6 @@ public class AuthManager : MonoBehaviour
                     return;
                 }
 
-                authFirebase.SignOut();
 
                 if (GetIsInductor())
                 {
@@ -233,7 +232,8 @@ public class AuthManager : MonoBehaviour
                     await RoomsManager.instance.DeleteStudentInRoom(idUser);
                 }
                 
-                authFirebase = null;
+                //authFirebase = null;
+                authFirebase.SignOut();
             });
         }
     }

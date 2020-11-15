@@ -55,8 +55,8 @@ public class GroupManager : MonoBehaviour
     public async Task<Dictionary<string, string>> GetOtherGroupsDataAsync()
     {
         string nameInductor = "", nameRoom  = "";
-        List<Dictionary<string, object>> rooms = await DataBaseManager.instance.SearchByCollection("Rooms");
-        foreach (Dictionary<string, object> room in rooms)
+        Dictionary<string, object> rooms = await DataBaseManager.instance.SearchByCollection("Rooms");
+        /*foreach (Dictionary<string, object> room in rooms)
         {
             foreach (KeyValuePair<string, object> pairRoom in room)
             {
@@ -76,7 +76,7 @@ public class GroupManager : MonoBehaviour
                     }
                 }
             }
-        }
+        }*/
         
         return new Dictionary<string, string> () {
             {"nameInductor", nameInductor},
