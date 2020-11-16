@@ -23,28 +23,17 @@ public class DataBaseManager : MonoBehaviour
         reference = FirebaseFirestore.DefaultInstance;
     }
 
-    public async Task<Dictionary<string, object>> SearchByCollection(string db)
+    public async Task<List<Dictionary<string, object>>> SearchByCollection(string db)
     {
         CollectionReference colRef = reference.Collection(db);
         QuerySnapshot querySnapshot = await colRef.GetSnapshotAsync();
-        List<Dictionary<string, object>> data = null;
+        List<Dictionary<string, object>> data = new List<Dictionary<string, object>>();
 
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
         {
-            Dictionary<string, object> dic = documentSnapshot.ToDictionary();
-            return dic;
-            /*if (dic != null)
-            {
-                Debug.Log("Dic NO es null");
-                data.Add(dic);
-            }
-            else
-            {
-                Debug.Log("Dic es null");
-            }*/
+            data.Add(documentSnapshot.ToDictionary());
         }
-        return null;
-        //return data;
+        return data;
     }
 
     public async Task<Dictionary<string, object>> SearchById(string db, string id)

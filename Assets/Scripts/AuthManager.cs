@@ -233,7 +233,7 @@ public class AuthManager : MonoBehaviour
                 }
                 
                 //authFirebase = null;
-                authFirebase.SignOut();
+                //authFirebase.SignOut();
             });
         }
     }

@@ -9,7 +9,8 @@ using UnityEngine.UIElements;
 public class ListGroups : MonoBehaviour
 {
     public Canvas canvasOtherGroups;
-    public GameObject infoGroup, content;
+    public Text content;
+    int newSizeGroups = 0, currentSizeGroups = 0;
 
     void Update()
     {
@@ -21,17 +22,19 @@ public class ListGroups : MonoBehaviour
 
     async void ShowGroupsData()
     {
-        Dictionary<string, string> data = await GroupManager.instance.GetOtherGroupsDataAsync();
-        foreach(KeyValuePair<string, string> pair in data)
+        List<Dictionary<string, string>> groups = await GroupManager.instance.GetOtherGroupsDataAsync();
+        content.text = "";
+        foreach(Dictionary<string, string> data in groups)
         {
-            GameObject instantiate = Instantiate(infoGroup, content.transform);
-            Text nameInductor = instantiate.transform.Find("TextGroup").GetComponent<Text>();
-            Text nameRoom = instantiate.transform.Find("TextInductor").GetComponent<Text>();
-            
-            if(pair.Key == "nameInductor")
-                nameInductor.text = pair.Value;
-            else if (pair.Key == "nameRoom")
-                nameRoom.text = pair.Value;
+            string nameInductor = "", nameRoom = "";
+            foreach(KeyValuePair<string, string> pair in data)
+            {
+                if(pair.Key == "nameInductor")
+                    nameInductor = pair.Value;
+                else if (pair.Key == "nameRoom")
+                    nameRoom = pair.Value;
+            }
+            content.text += nameRoom.ToUpper() + "\n" + nameInductor + "\n\n";
         }
     }
 }

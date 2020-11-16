@@ -52,11 +52,12 @@ public class GroupManager : MonoBehaviour
         return await UsersManager.instance.GetUserAsync("Inductors", AuthManager.instance.GetUserId());        
     }
 
-    public async Task<Dictionary<string, string>> GetOtherGroupsDataAsync()
+    public async Task<List<Dictionary<string, string>>> GetOtherGroupsDataAsync()
     {
         string nameInductor = "", nameRoom  = "";
-        Dictionary<string, object> rooms = await DataBaseManager.instance.SearchByCollection("Rooms");
-        /*foreach (Dictionary<string, object> room in rooms)
+        List<Dictionary<string, string>> Salas = new List<Dictionary<string, string>>();
+        List<Dictionary<string, object>> rooms = await DataBaseManager.instance.SearchByCollection("Rooms");
+        foreach (Dictionary<string, object> room in rooms)
         {
             foreach (KeyValuePair<string, object> pairRoom in room)
             {
@@ -69,18 +70,19 @@ public class GroupManager : MonoBehaviour
                     Dictionary<string, object> inductor = await UsersManager.instance.GetUserAsync("Inductors", pairRoom.Value.ToString());
                     foreach (KeyValuePair<string, object> pairInductor in inductor)
                     {   
-                        if (pairRoom.Key == "name")
+                        if (pairInductor.Key == "name")
                         {
                             nameInductor = pairInductor.Value.ToString();
                         }
                     }
                 }
             }
-        }*/
-        
-        return new Dictionary<string, string> () {
-            {"nameInductor", nameInductor},
-            {"nameRoom", nameRoom}
-        };
+
+            Salas.Add(new Dictionary<string, string> () {
+                {"nameInductor", nameInductor},
+                {"nameRoom", nameRoom}
+            });
+        }        
+        return Salas;
     }
 }
