@@ -100,8 +100,9 @@ public class EditGroup : MonoBehaviour
 
     public async void SendNewRoomInfo()
     {
-        if (roomCurrentSize >= Convert.ToInt32(newInputRoomSize.text))
+        if (Convert.ToInt32(newInputRoomSize.text) >= roomCurrentSize)
         {
+            Debug.Log("Se entró al if del SendNewRoomInfo");
             string inductorId = AuthManager.instance.GetUserId().ToString();
             string roomId = await RoomsManager.instance.SearchRoomByInductor("Rooms", inductorId);
 
@@ -110,15 +111,16 @@ public class EditGroup : MonoBehaviour
                 { "size" , Convert.ToInt32(newInputRoomSize.text)},
                 { "room" , newInputRoomName.text}
             };
+            Debug.Log("New room name: " + newInputRoomName.text);
 
             await RoomsManager.instance.PutRoomAsync("Rooms", roomId, newRoomData);
-        }else
+        }
+        /*else
         {
-            /*advertencia = cosas de advertencia;
+            advertencia = cosas de advertencia;
             WarningGenerator(advertencia);
             ScenesManager.instance.DeleteCurrentCanvas(canvasNombreInductor);
             ScenesManager.instance.LoadNewCanvas(canvasMenuInductor);
-            */
-        }
+        }*/
     }
 }
