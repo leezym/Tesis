@@ -23,8 +23,8 @@ public class ListGroups : MonoBehaviour
     async void ShowGroupsData()
     {
         List<Dictionary<string, string>> groups = await GroupManager.instance.GetOtherGroupsDataAsync();
-        if (groups.Count != 0)
-        {
+        /*if (groups.Count != 0)
+        {*/
             content.text = "";
             foreach(Dictionary<string, string> data in groups)
             {
@@ -38,6 +38,6 @@ public class ListGroups : MonoBehaviour
                 }
                 content.text += nameRoom.ToUpper() + "\n" + nameInductor + "\n\n";
             }
-        }
+        //}
     }
 }

@@ -69,11 +69,14 @@ public class GroupManager : MonoBehaviour
                 {
                     idInductor = pairRoom.Value.ToString();
                     Dictionary<string, object> inductor = await UsersManager.instance.GetUserAsync("Inductors", idInductor);
-                    foreach (KeyValuePair<string, object> pairInductor in inductor)
-                    {   
-                        if (pairInductor.Key == "name")
-                        {
-                            nameInductor = pairInductor.Value.ToString();
+                    if (inductor != null)
+                    {
+                        foreach (KeyValuePair<string, object> pairInductor in inductor)
+                        {   
+                            if (pairInductor.Key == "name")
+                            {
+                                nameInductor = pairInductor.Value.ToString();
+                            }
                         }
                     }
                 }
