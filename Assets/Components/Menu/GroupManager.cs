@@ -54,20 +54,21 @@ public class GroupManager : MonoBehaviour
 
     public async Task<List<Dictionary<string, string>>> GetOtherGroupsDataAsync()
     {
-        string nameInductor = "", nameRoom  = "";
+        string nameInductor = "", nameRoom  = "", idInductor = "";
         List<Dictionary<string, string>> Salas = new List<Dictionary<string, string>>();
         List<Dictionary<string, object>> rooms = await DataBaseManager.instance.SearchByCollection("Rooms");
         foreach (Dictionary<string, object> room in rooms)
         {
             foreach (KeyValuePair<string, object> pairRoom in room)
-            {
+            {  
                 if (pairRoom.Key == "room")
                 {
                     nameRoom = pairRoom.Value.ToString();
                 }
                 else if (pairRoom.Key == "idInductor")
                 {
-                    Dictionary<string, object> inductor = await UsersManager.instance.GetUserAsync("Inductors", pairRoom.Value.ToString());
+                    idInductor = pairRoom.Value.ToString();
+                    Dictionary<string, object> inductor = await UsersManager.instance.GetUserAsync("Inductors", idInductor);
                     foreach (KeyValuePair<string, object> pairInductor in inductor)
                     {   
                         if (pairInductor.Key == "name")
@@ -78,10 +79,13 @@ public class GroupManager : MonoBehaviour
                 }
             }
 
-            Salas.Add(new Dictionary<string, string> () {
-                {"nameInductor", nameInductor},
-                {"nameRoom", nameRoom}
-            });
+            if (idInductor != AuthManager.instance.GetUserId())
+            {
+                Salas.Add(new Dictionary<string, string> () {
+                    {"nameInductor", nameInductor},
+                    {"nameRoom", nameRoom}
+                });
+            }
         }        
         return Salas;
     }
