@@ -23,18 +23,21 @@ public class ListGroups : MonoBehaviour
     async void ShowGroupsData()
     {
         List<Dictionary<string, string>> groups = await GroupManager.instance.GetOtherGroupsDataAsync();
-        content.text = "";
-        foreach(Dictionary<string, string> data in groups)
+        if (groups.Count != 0)
         {
-            string nameInductor = "", nameRoom = "";
-            foreach(KeyValuePair<string, string> pair in data)
+            content.text = "";
+            foreach(Dictionary<string, string> data in groups)
             {
-                if(pair.Key == "nameInductor")
-                    nameInductor = pair.Value;
-                else if (pair.Key == "nameRoom")
-                    nameRoom = pair.Value;
+                string nameInductor = "", nameRoom = "";
+                foreach(KeyValuePair<string, string> pair in data)
+                {
+                    if(pair.Key == "nameInductor")
+                        nameInductor = pair.Value;
+                    else if (pair.Key == "nameRoom")
+                        nameRoom = pair.Value;
+                }
+                content.text += nameRoom.ToUpper() + "\n" + nameInductor + "\n\n";
             }
-            content.text += nameRoom.ToUpper() + "\n" + nameInductor + "\n\n";
         }
     }
 }
