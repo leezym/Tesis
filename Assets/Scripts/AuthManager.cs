@@ -133,6 +133,7 @@ public class AuthManager : MonoBehaviour
     public void SignInInductor() {
         string user = inputFieldUser.text;
         string password = inputFieldPassword.text;
+        string message; 
 
         string email = user + "@javerianacali.edu.co";
         authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
@@ -144,10 +145,14 @@ public class AuthManager : MonoBehaviour
             if (task.IsFaulted)
             {
                 //Firebase.FirebaseException error 
-                Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+                //Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+                message = NotificationsManager.instance.GetErrorMessage(task.Exception);
+                Debug.Log("El error es: " + message);
                 return;
             }
             
+
+
             UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);
         });
 
