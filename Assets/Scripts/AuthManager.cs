@@ -28,7 +28,7 @@ public class AuthManager : MonoBehaviour
     public List<Canvas> canvasViewStudent = new List<Canvas>();
 
     // UserData
-    private bool isInductor;
+    private bool isInductor = true;
 
     public Dictionary<string, object> GetSnapshot() { return snapshot; }
     public void SetSnapshot(Dictionary<string, object> snapshot) { this.snapshot = snapshot; }
@@ -40,10 +40,10 @@ public class AuthManager : MonoBehaviour
     {
         instance = this;
         InitializeFirebase();
-        initializeAttributes();
+        InitializeAttributes();
     }
 
-    public void initializeAttributes() 
+    public void InitializeAttributes() 
     {
         inputFieldUser.text = "";
         inputFieldPassword.text = "";
@@ -109,11 +109,13 @@ public class AuthManager : MonoBehaviour
             {
                 if (GetIsInductor())
                 {
+                    Debug.Log("Entró el inductor");
                     ScenesManager.instance.DeleteCurrentCanvas(canvasLoginInductor);
                     ScenesManager.instance.LoadNewCanvas(canvasNombreInductor);
                 }
                 else
                 {
+                    Debug.Log("Entró el neo");
                     ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
                     ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
                 }     
@@ -125,7 +127,6 @@ public class AuthManager : MonoBehaviour
     void OnDestroy()
     {
         authFirebase.StateChanged -= AuthStateChanged;
-        //auth = null;
         DeleteUser();
     }
 
@@ -202,8 +203,9 @@ public class AuthManager : MonoBehaviour
     }
 
 
-    public async Task DeleteUser() {
+    public async void DeleteUser() {
         userFirebase = authFirebase.CurrentUser;
+        Debug.Log("Eliminando a " + GetUserId());
         if (userFirebase != null)
         {
             string idUser = userFirebase.UserId;
@@ -220,7 +222,6 @@ public class AuthManager : MonoBehaviour
                     return;
                 }
 
-                authFirebase.SignOut();
 
                 if (GetIsInductor())
                 {
@@ -230,6 +231,9 @@ public class AuthManager : MonoBehaviour
                 {
                     await RoomsManager.instance.DeleteStudentInRoom(idUser);
                 }
+                
+                //authFirebase = null;
+                //authFirebase.SignOut();
             });
         }
     }

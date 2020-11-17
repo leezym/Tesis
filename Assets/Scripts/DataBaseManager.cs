@@ -23,9 +23,18 @@ public class DataBaseManager : MonoBehaviour
         reference = FirebaseFirestore.DefaultInstance;
     }
 
-    /*
-    Nombre: 
-    */
+    public async Task<List<Dictionary<string, object>>> SearchByCollection(string db)
+    {
+        CollectionReference colRef = reference.Collection(db);
+        QuerySnapshot querySnapshot = await colRef.GetSnapshotAsync();
+        List<Dictionary<string, object>> data = new List<Dictionary<string, object>>();
+
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            data.Add(documentSnapshot.ToDictionary());
+        }
+        return data;
+    }
 
     public async Task<Dictionary<string, object>> SearchById(string db, string id)
     {
@@ -126,28 +135,19 @@ public class DataBaseManager : MonoBehaviour
         return null;
     }
 
-    public async Task<List<string>> ListNameStudents(string db, string idInductor)
+    public async Task<Dictionary<string, object>> ListStudentsByGroup(string db, string idInductor)
     {  
         string RoomId = await SearchRoomByInductor("Rooms", idInductor);        
 
         Query MembersQuery = reference.Collection(db).WhereEqualTo("idRoom", RoomId);
         QuerySnapshot MembersQuerySnapshot = await MembersQuery.GetSnapshotAsync();
 
-        List<string> Estudiantes = new List<string>();
-
         foreach (DocumentSnapshot documentSnapshotMembers in MembersQuerySnapshot.Documents)
         {
-            Dictionary<string, object> NeoJaverian = documentSnapshotMembers.ToDictionary();
-            foreach (KeyValuePair<string, object> pair in NeoJaverian)
-            {
-                if (pair.Key == "name")
-                {
-                    Estudiantes.Add(pair.Value.ToString());
-                }
-        
-            }
+            return documentSnapshotMembers.ToDictionary();
+            
         }
-        return Estudiantes;     
+        return null;     
     }
 
     public async Task DeleteSession(string idInductor)

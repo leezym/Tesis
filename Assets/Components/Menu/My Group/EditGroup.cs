@@ -16,9 +16,10 @@ public class EditGroup : MonoBehaviour
     
     void Start()
     {
-        initializeAttributes();
+        InitializeAttributes();
     }
-    public void initializeAttributes()
+
+    public void InitializeAttributes()
     {
         groupNameLabel.text = "";
         inductorNameLabel.text = "";
@@ -33,9 +34,7 @@ public class EditGroup : MonoBehaviour
         if(canvasMyGroup.enabled && !canvasEditGroup.enabled)
         {
             ShowRoomData();
-            ShowInductorData();
-
-            
+            ShowInductorData();           
         }
     }   
 
