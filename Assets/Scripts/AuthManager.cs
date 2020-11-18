@@ -5,6 +5,7 @@ using Firebase.Firestore;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
+using Firebase;
 
 public class AuthManager : MonoBehaviour
 {
@@ -104,7 +105,7 @@ public class AuthManager : MonoBehaviour
                     Debug.Log("Se salio el neo");
                 }
             }
-            userFirebase = authFirebase.CurrentUser;
+            //userFirebase = authFirebase.CurrentUser;
             if (signedIn)
             {
                 if (GetIsInductor())
@@ -133,44 +134,37 @@ public class AuthManager : MonoBehaviour
     public void SignInInductor() {
         string user = inputFieldUser.text;
         string password = inputFieldPassword.text;
-        string message; 
+        string message = ""; 
 
         string email = user + "@javerianacali.edu.co";
-        authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
-            if (task.IsCanceled)
+        authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(taskCreate => {
+            if (taskCreate.IsFaulted)
             {
-                Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
-                return;
-            }
-            if (task.IsFaulted)
-            {
-                //Firebase.FirebaseException error 
-                //Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
-                message = NotificationsManager.instance.GetErrorMessage(task.Exception);
+                message = NotificationsManager.instance.GetErrorMessage(taskCreate.Exception);
                 Debug.Log("El error es: " + message);
+                
+                /*foreach (System.Exception exception in taskCreate.Exception.InnerExceptions)
+                {
+                    //Firebase.FirebaseException exception = e as Firebase.FirebaseException;
+                    Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + exception);
+                    message = NotificationsManager.instance.GetErrorMessage(exception);
+                    Debug.Log("El error es: " + message);
+                }*/
                 return;
-            }
-            
-
-
+            }         
+                              
             UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);
-        });
-
-        authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
-            if (task.IsCanceled)
-            {
-                Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");
-                return;
-            }
-            if (task.IsFaulted)
-            {
-                Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
-                return;
-            }
-            
-            //SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
-            RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
-        });
+            authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
+                if (taskSignIn.IsFaulted)
+                {
+                    Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + taskSignIn.Exception);
+                    return;
+                }
+                
+                //SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
+                RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
+            });
+        });        
     }
 
     public async Task SignInStudent()
@@ -238,7 +232,7 @@ public class AuthManager : MonoBehaviour
                 }
                 
                 //authFirebase = null;
-                //authFirebase.SignOut();
+                authFirebase.SignOut();
             });
         }
     }

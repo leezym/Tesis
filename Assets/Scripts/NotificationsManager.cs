@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using Firebase.Auth;
+using Firebase;
 
 public class NotificationsManager : MonoBehaviour
 {
     public static NotificationsManager instance;
 
-    private void Awake()
+    void Awake()
     {
         instance = this;
     }
@@ -19,19 +20,20 @@ public class NotificationsManager : MonoBehaviour
     public string GetErrorMessage(Exception exception)
     {
         Debug.Log(exception.ToString());
-        Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
+        FirebaseException firebaseEx = exception as FirebaseException;
         if (firebaseEx != null)
         {
+            Debug.Log("Entra");
             var errorCode = (AuthError)firebaseEx.ErrorCode;
             return TranslateErrorMessage(errorCode);
         }
-
-        return exception.ToString();
+        Debug.Log("No Entra");
+        return firebaseEx.ToString();
     }
 
     private static string TranslateErrorMessage(AuthError errorCode)
     {
-        var message = "";
+        string message = "";
         switch (errorCode)
         {
             case AuthError.AccountExistsWithDifferentCredentials:
