@@ -20,11 +20,9 @@ public class NotificationsManager : MonoBehaviour
     {
         if (firebaseEx != null)
         {
-            Debug.Log("Entra");
             var errorCode = (AuthError)firebaseEx.ErrorCode;
             return TranslateErrorMessage(errorCode);
         }
-        Debug.Log("No Entra");
         return firebaseEx.ToString();
     }
 
@@ -33,15 +31,15 @@ public class NotificationsManager : MonoBehaviour
         string message = "";
         switch (errorCode)
         {
-            case AuthError.AccountExistsWithDifferentCredentials:
+            /*case AuthError.AccountExistsWithDifferentCredentials:
                 message = "Ya existe la cuenta con credenciales diferentes";
-                break;
+                break;*/
             case AuthError.MissingPassword:
                 message = "Hace falta la contraseña";
                 break;
-            case AuthError.WeakPassword:
+            /*case AuthError.WeakPassword:
                 message = "La contraseña es débil";
-                break;
+                break;*/
             case AuthError.WrongPassword:
                 message = "La contraseña es incorrecta";
                 break;

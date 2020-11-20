@@ -133,31 +133,42 @@ public class AuthManager : MonoBehaviour
     public void SignInInductor() {
         string user = inputFieldUser.text;
         string password = inputFieldPassword.text;
-        string message = ""; 
 
         string email = user + "@javerianacali.edu.co";
         authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(taskCreate => {
             if (taskCreate.IsFaulted)
-            {    
-                foreach (System.Exception exception in taskCreate.Exception.InnerExceptions)
+            {
+                Firebase.FirebaseException firebaseEx = taskCreate.Exception.InnerException as Firebase.FirebaseException;
+                string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
+                Debug.Log("El error es: " + message);
+                /*foreach (System.Exception exception in taskCreate.Exception.InnerExceptions)
                 {
                     Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
-                    message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
-                }
+                    string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
+                    Debug.Log("El error es: " + message);
+                }*/
                 return;
-            }         
-                              
-            UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);
-            authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
-                if (taskSignIn.IsFaulted)
-                {
-                    Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + taskSignIn.Exception);
-                    return;
-                }
-                
-                //SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
-                RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
-            });
+            }
+
+            if (taskCreate.IsCompleted)
+            {
+                UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);
+                authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
+                    if (taskSignIn.IsFaulted)
+                    {
+                        foreach (System.Exception exception in taskSignIn.Exception.InnerExceptions)
+                        {
+                            Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
+                            string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
+                            Debug.Log("El error es: " + message);
+                        }
+                        return;
+                    } 
+                    
+                    //SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
+                    RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
+                });
+            }                                     
         });        
     }
 
@@ -174,14 +185,14 @@ public class AuthManager : MonoBehaviour
             {
                 await authFirebase.SignInAnonymouslyAsync().ContinueWith(task =>
                 {
-                    if (task.IsCanceled)
-                    {
-                        Debug.LogError("SignInAnonymouslyAsync was canceled.");
-                        return;
-                    }
                     if (task.IsFaulted)
                     {
-                        Debug.LogError("SignInAnonymouslyAsync encountered an error: " + task.Exception);
+                        foreach (System.Exception exception in task.Exception.InnerExceptions)
+                        {
+                            Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
+                            string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
+                            Debug.Log("El error es: " + message);
+                        }
                         return;
                     }
                     
