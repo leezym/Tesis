@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using Firebase.Auth;
-using Firebase;
 
 public class NotificationsManager : MonoBehaviour
 {
@@ -17,10 +16,8 @@ public class NotificationsManager : MonoBehaviour
         instance = this;
     }
 
-    public string GetErrorMessage(Exception exception)
+    public string GetErrorMessage(Firebase.FirebaseException firebaseEx)
     {
-        Debug.Log(exception.ToString());
-        FirebaseException firebaseEx = exception as FirebaseException;
         if (firebaseEx != null)
         {
             Debug.Log("Entra");
@@ -40,19 +37,19 @@ public class NotificationsManager : MonoBehaviour
                 message = "Ya existe la cuenta con credenciales diferentes";
                 break;
             case AuthError.MissingPassword:
-                message = "Hace falta el Password";
+                message = "Hace falta la contraseña";
                 break;
             case AuthError.WeakPassword:
-                message = "El password es debil";
+                message = "La contraseña es débil";
                 break;
             case AuthError.WrongPassword:
-                message = "El password es Incorrecto";
+                message = "La contraseña es incorrecta";
                 break;
             case AuthError.EmailAlreadyInUse:
                 message = "Ya existe la cuenta con ese correo electrónico";
                 break;
             case AuthError.InvalidEmail:
-                message = "Correo electronico invalido";
+                message = "Correo electrónico inválido";
                 break;
             case AuthError.MissingEmail:
                 message = "Hace falta el correo electrónico";

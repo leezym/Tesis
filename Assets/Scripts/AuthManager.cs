@@ -5,7 +5,6 @@ using Firebase.Firestore;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
-using Firebase;
 
 public class AuthManager : MonoBehaviour
 {
@@ -139,17 +138,12 @@ public class AuthManager : MonoBehaviour
         string email = user + "@javerianacali.edu.co";
         authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(taskCreate => {
             if (taskCreate.IsFaulted)
-            {
-                message = NotificationsManager.instance.GetErrorMessage(taskCreate.Exception);
-                Debug.Log("El error es: " + message);
-                
-                /*foreach (System.Exception exception in taskCreate.Exception.InnerExceptions)
+            {    
+                foreach (System.Exception exception in taskCreate.Exception.InnerExceptions)
                 {
-                    //Firebase.FirebaseException exception = e as Firebase.FirebaseException;
-                    Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + exception);
-                    message = NotificationsManager.instance.GetErrorMessage(exception);
-                    Debug.Log("El error es: " + message);
-                }*/
+                    Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
+                    message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
+                }
                 return;
             }         
                               
