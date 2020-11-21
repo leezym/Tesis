@@ -82,7 +82,7 @@ public class EditGroup : MonoBehaviour
         return false;
     }
 
-    public async Task SendInductorNameAsync()
+    public void SendInductorName()
     {
         if (CheckNewData())
         {
@@ -90,7 +90,7 @@ public class EditGroup : MonoBehaviour
             {
                 { "name" , inputInductorName.text}
             };
-            await UsersManager.instance.PutUserAsync("Inductors", AuthManager.instance.GetUserId(), data);
+            UsersManager.instance.PutUserAsync("Inductors", AuthManager.instance.GetUserId(), data);
             RoomsManager.instance.PostNewRoom("Sala de " + inputInductorName.text, Convert.ToInt32(inputRoomSize.text), AuthManager.instance.GetUserId());
             ScenesManager.instance.DeleteCurrentCanvas(canvasNombreInductor);
             ScenesManager.instance.LoadNewCanvas(canvasMenuInductor);
