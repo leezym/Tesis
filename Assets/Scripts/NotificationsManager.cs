@@ -10,10 +10,36 @@ using Firebase.Auth;
 public class NotificationsManager : MonoBehaviour
 {
     public static NotificationsManager instance;
-
+    public Canvas canvasNotificationFailure, canvasNotificationSuccess;
+    public Text NotificationFailureText, NotificationSuccessText;
     void Awake()
     {
         instance = this;
+    }
+    private void Start()
+    {
+        NotificationFailureText.text = "";
+        NotificationSuccessText.text = "";
+    }
+
+    private void Update()
+    {
+        if (NotificationFailureText.text!="")
+        {
+            LoadFailureNotificationCanvas(NotificationFailureText.text);
+        }
+        if (NotificationSuccessText.text != "")
+        {
+            LoadSuccessNotificationCanvas(NotificationSuccessText.text);
+        }
+    }
+    public void SetFailureNotificationMessage(string message)
+    {
+        NotificationFailureText.text = message;
+    }
+    public void SetSuccessNotificationMessage(string message)
+    {
+        NotificationSuccessText.text = message;
     }
 
     public string GetErrorMessage(Firebase.FirebaseException firebaseEx)
@@ -60,5 +86,19 @@ public class NotificationsManager : MonoBehaviour
                 break;
         }
         return message;
+    }
+
+    public void LoadFailureNotificationCanvas(string message){
+        NotificationFailureText.enabled = false;
+        NotificationFailureText.enabled = true;
+        NotificationFailureText.text = message;
+        ScenesManager.instance.LoadNewCanvas(canvasNotificationFailure);
+    }
+
+    public void LoadSuccessNotificationCanvas(string message){
+        NotificationSuccessText.enabled = false;
+        NotificationSuccessText.enabled = true;
+        NotificationSuccessText.text = message;
+        ScenesManager.instance.LoadNewCanvas(canvasNotificationSuccess);
     }
 }

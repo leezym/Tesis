@@ -121,14 +121,14 @@ public class AuthManager : MonoBehaviour
     void OnDestroy()
     {
         authFirebase.StateChanged -= AuthStateChanged;
-        authFirebase = null;
-        //DeleteUser();
+        //authFirebase = null;
+        DeleteUser();
     }
 
     public void SignInInductor() {
         string user = inputFieldUser.text;
         string password = inputFieldPassword.text;
-        string email = user + "@javeyrianacali.edu.co";
+        string email = user + "@javerianacali.edu.co";
 
         authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
             if (taskSignIn.IsFaulted)
@@ -137,13 +137,13 @@ public class AuthManager : MonoBehaviour
                 {
                     Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
                     string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
-                    Debug.Log("El error es: " + message);
+                    NotificationsManager.instance.SetFailureNotificationMessage(message);
+                    //Debug.Log("El error es: " + message);
                 }
                 return;
             } 
             if (taskSignIn.IsCompleted)
             {
-                //SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
                 UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);       
                 RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
             }
@@ -203,7 +203,7 @@ public class AuthManager : MonoBehaviour
                         {
                             Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
                             string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
-                            Debug.Log("El error es: " + message);
+                            NotificationsManager.instance.SetFailureNotificationMessage(message);
                         }
                         return;
                     }
