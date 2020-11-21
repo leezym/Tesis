@@ -26,7 +26,7 @@ public class AuthManager : MonoBehaviour
     public Text textUserName;
 
     // UserData
-    private bool isInductor;
+    private bool isInductor = true;
 
     public Dictionary<string, object> GetSnapshot() { return snapshot; }
     public void SetSnapshot(Dictionary<string, object> snapshot) { this.snapshot = snapshot; }
@@ -56,6 +56,7 @@ public class AuthManager : MonoBehaviour
     private void InitializeFirebase()
     {
         authFirebase = Firebase.Auth.FirebaseAuth.DefaultInstance;
+        authFirebase.SignOut();
         authFirebase.StateChanged += AuthStateChanged;
         AuthStateChanged(this, null);
     }
@@ -68,7 +69,7 @@ public class AuthManager : MonoBehaviour
             SetSnapshot(await UsersManager.instance.GetUserAsync("Students", GetUserId()));
             if (GetSnapshot() == null)
             {
-                DeleteUser();
+                SignOut();
                 GameObject.Find("PanelGeneralSessions").GetComponent<Canvas>().enabled = true;
             }
         }
@@ -94,6 +95,8 @@ public class AuthManager : MonoBehaviour
                 if (GetIsInductor())
                 {
                     Debug.Log("Se salio el inductor");
+                    //ScenesManager.instance.DeleteCurrentCanvas(canvasNombreInductor);
+                    //ScenesManager.instance.LoadNewCanvas(canvasLoginInductor);
                 }
                 else
                 {
@@ -121,16 +124,16 @@ public class AuthManager : MonoBehaviour
     void OnDestroy()
     {
         authFirebase.StateChanged -= AuthStateChanged;
-        authFirebase = null;
-        //DeleteUser();
+        //authFirebase = null;
+        SignOut();
     }
 
     public void SignInInductor() {
         string user = inputFieldUser.text;
         string password = inputFieldPassword.text;
-        string email = user + "@javeyrianacali.edu.co";
+        string email = user + "@javerianacali.edu.co";
 
-        authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
+        /*authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
             if (taskSignIn.IsFaulted)
             {
                 foreach (System.Exception exception in taskSignIn.Exception.InnerExceptions)
@@ -147,9 +150,9 @@ public class AuthManager : MonoBehaviour
                 UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);       
                 RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
             }
-        });
+        });*/
 
-        /*authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(taskCreate => {
+        authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(taskCreate => {
             if (taskCreate.IsFaulted)
             {
                 foreach (System.Exception exception in taskCreate.Exception.InnerExceptions)
@@ -163,7 +166,6 @@ public class AuthManager : MonoBehaviour
 
             if (taskCreate.IsCompleted)
             {
-                Debug.Log("se supone que entra");
                 UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);
                 authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
                     if (taskSignIn.IsFaulted)
@@ -181,7 +183,7 @@ public class AuthManager : MonoBehaviour
                     RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
                 });
             }                                     
-        });*/      
+        });
     }
 
     public async void SignInStudent()
@@ -219,21 +221,23 @@ public class AuthManager : MonoBehaviour
     }
 
 
-    public async void DeleteUser() {
+    public async void SignOut() {
+
         userFirebase = authFirebase.CurrentUser;
         if (userFirebase != null)
         {
-            string idUser = userFirebase.UserId;
             if (GetIsInductor())
-                {
-                    await UsersManager.instance.DeleteSession(idUser);
-                }
-                else if (GetSnapshot() != null)
-                {
-                    await RoomsManager.instance.DeleteStudentInRoom(idUser);
-                }
-            //authFirebase = null;    
+            {
+                await UsersManager.instance.DeleteSession(userFirebase.UserId);
+            }
+            else if (GetSnapshot() != null)
+            {
+                await RoomsManager.instance.DeleteStudentInRoom(userFirebase.UserId);
+            }
+            
+            //authFirebase = null;
             authFirebase.SignOut();
+           
                 //authFirebase = null;
             /*await userFirebase.DeleteAsync().ContinueWith(async task =>
             {
