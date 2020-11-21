@@ -21,7 +21,7 @@ public class AuthManager : MonoBehaviour
     // Canvas
     public Canvas canvasLoginInductor, canvasNombreInductor, canvasMenuInductor;
     public Canvas canvasLoginStudent, canvasMenuStudent;
-    public InputField inputFieldUser, inputFieldPassword, inputInductorName;
+    public InputField inputFieldUser, inputFieldPassword, inputRoomName;
     public InputField inputFieldDocument, inputFieldName, inputInductorRoomSize;
     public Text textUserName;
 
@@ -49,7 +49,7 @@ public class AuthManager : MonoBehaviour
         inputFieldPassword.text = "";
         inputFieldDocument.text = "";
         inputFieldName.text = "";
-        inputInductorName.text = "";
+        inputRoomName.text = "";
         inputInductorRoomSize.text = "0";
     }
 
@@ -128,7 +128,7 @@ public class AuthManager : MonoBehaviour
     public void SignInInductor() {
         string user = inputFieldUser.text;
         string password = inputFieldPassword.text;
-        string email = user + "@javerianacali.edu.co";
+        string email = user + "@javeyrianacali.edu.co";
 
         authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
             if (taskSignIn.IsFaulted)
