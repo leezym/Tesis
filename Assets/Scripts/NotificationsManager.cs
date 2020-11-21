@@ -18,6 +18,7 @@ public class NotificationsManager : MonoBehaviour
 
     public string GetErrorMessage(Exception exception)
     {
+        Debug.Log("Estoy en GetErrorMessage");
         Debug.Log(exception.ToString());
         Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
         if (firebaseEx != null)
