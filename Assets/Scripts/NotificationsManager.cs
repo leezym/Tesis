@@ -20,11 +20,9 @@ public class NotificationsManager : MonoBehaviour
     {
         if (firebaseEx != null)
         {
-            Debug.Log("Entra");
             var errorCode = (AuthError)firebaseEx.ErrorCode;
             return TranslateErrorMessage(errorCode);
         }
-        Debug.Log("No Entra");
         return firebaseEx.ToString();
     }
 
@@ -53,6 +51,9 @@ public class NotificationsManager : MonoBehaviour
                 break;
             case AuthError.MissingEmail:
                 message = "Hace falta el correo electrónico";
+                break;
+            case AuthError.InvalidCredential:
+                message = "Credencial inválida";
                 break;
             default:
                 message = "Ocurrió un error";

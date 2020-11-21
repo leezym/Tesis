@@ -34,6 +34,8 @@ public class AuthManager : MonoBehaviour
     public void SetIsInductor(bool isInductor) { this.isInductor = isInductor; }
     public bool GetIsInductor() { return isInductor; }
 
+    private Dictionary<string, Inductor> inductorsData = new Dictionary<string, Inductor>();
+
     public void Awake() 
     {
         instance = this;
@@ -119,46 +121,67 @@ public class AuthManager : MonoBehaviour
     void OnDestroy()
     {
         authFirebase.StateChanged -= AuthStateChanged;
-        //auth = null;
-        DeleteUser();
+        authFirebase = null;
+        //DeleteUser();
     }
 
     public void SignInInductor() {
         string user = inputFieldUser.text;
         string password = inputFieldPassword.text;
-
         string email = user + "@javerianacali.edu.co";
-        authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
-            if (task.IsCanceled)
+
+        authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
+            if (taskSignIn.IsFaulted)
             {
-                Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
+                foreach (System.Exception exception in taskSignIn.Exception.InnerExceptions)
+                {
+                    Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
+                    string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
+                    Debug.Log("El error es: " + message);
+                }
                 return;
-            }
-            if (task.IsFaulted)
+            } 
+            if (taskSignIn.IsCompleted)
             {
-                //Firebase.FirebaseException error 
-                Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
-                return;
+                //SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
+                UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);       
+                RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
             }
-            
-            UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputInductorName.text);
         });
 
-        authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async task => {
-            if (task.IsCanceled)
+        /*authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(taskCreate => {
+            if (taskCreate.IsFaulted)
             {
-                Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");
+                foreach (System.Exception exception in taskCreate.Exception.InnerExceptions)
+                {
+                    Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
+                    string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
+                    Debug.Log("El error es: " + message);
+                }
                 return;
             }
-            if (task.IsFaulted)
+
+            if (taskCreate.IsCompleted)
             {
-                Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
-                return;
-            }
-            
-            SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
-           
-        });
+                Debug.Log("se supone que entra");
+                UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);
+                authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
+                    if (taskSignIn.IsFaulted)
+                    {
+                        foreach (System.Exception exception in taskSignIn.Exception.InnerExceptions)
+                        {
+                            Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
+                            string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
+                            Debug.Log("El error es: " + message);
+                        }
+                        return;
+                    } 
+                    
+                    //SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
+                    RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
+                });
+            }                                     
+        });*/      
     }
 
     public async void SignInStudent()
@@ -170,22 +193,28 @@ public class AuthManager : MonoBehaviour
         if (!await DataBaseManager.instance.IsEmptyTable("Rooms"))
         {            
             idRoom = await RoomsManager.instance.SearchAvailableRoom();
-            await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task =>
-             {
-                 if (task.IsCanceled)
-                 {
-                     Debug.LogError("SignInAnonymouslyAsync was canceled.");
-                     return;
-                 }
-                 if (task.IsFaulted)
-                 {
-                     Debug.LogError("SignInAnonymouslyAsync encountered an error: " + task.Exception);
-                     return;
-                 }
-
-                 UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
-
-             });
+            if(idRoom != null)
+            {
+                await authFirebase.SignInAnonymouslyAsync().ContinueWith(task =>
+                {
+                    if (task.IsFaulted)
+                    {
+                        foreach (System.Exception exception in task.Exception.InnerExceptions)
+                        {
+                            Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
+                            string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
+                            Debug.Log("El error es: " + message);
+                        }
+                        return;
+                    }
+                    
+                    UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
+                    //SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
+                    
+                    //ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
+                    //ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
+                });
+            }
         }
     }
 
@@ -194,30 +223,39 @@ public class AuthManager : MonoBehaviour
         userFirebase = authFirebase.CurrentUser;
         if (userFirebase != null)
         {
+            string idUser = userFirebase.UserId;
             if (GetIsInductor())
-            {
-                await UsersManager.instance.DeleteSession(userFirebase.UserId);
-            }
-            else if (GetSnapshot() != null)
-            {
-                    await UsersManager.instance.DeleteUserAsync("Students", userFirebase.UserId);
-            }
-
-            await userFirebase.DeleteAsync().ContinueWith(task =>
-            {
-                if (task.IsCanceled)
                 {
-                    Debug.LogError("DeleteAsync was canceled.");
-                    return;
+                    await UsersManager.instance.DeleteSession(idUser);
                 }
+                else if (GetSnapshot() != null)
+                {
+                    await RoomsManager.instance.DeleteStudentInRoom(idUser);
+                }
+            //authFirebase = null;    
+            authFirebase.SignOut();
+                //authFirebase = null;
+            /*await userFirebase.DeleteAsync().ContinueWith(async task =>
+            {
                 if (task.IsFaulted)
                 {
                     Debug.LogError("DeleteAsync encountered an error: " + task.Exception);
                     return;
                 }
 
-                //authFirebase.SignOut(); // cerrar sesion
-            });
+
+                if (GetIsInductor())
+                {
+                    await UsersManager.instance.DeleteSession(idUser);
+                }
+                else if (GetSnapshot() != null)
+                {
+                    await RoomsManager.instance.DeleteStudentInRoom(idUser);
+                }
+                
+                //authFirebase = null;
+                authFirebase.SignOut();
+            });*/
         }
     }
 }
