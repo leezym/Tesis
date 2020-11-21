@@ -25,10 +25,8 @@ public class AuthManager : MonoBehaviour
     public InputField inputFieldDocument, inputFieldName, inputInductorRoomSize;
     public Text textUserName;
 
-    public List<Canvas> canvasViewStudent = new List<Canvas>();
-
     // UserData
-    private bool isInductor = true;
+    private bool isInductor;
 
     public Dictionary<string, object> GetSnapshot() { return snapshot; }
     public void SetSnapshot(Dictionary<string, object> snapshot) { this.snapshot = snapshot; }
@@ -42,17 +40,17 @@ public class AuthManager : MonoBehaviour
     {
         instance = this;
         InitializeFirebase();
-        InitializeAttributes();
+        InitializeAtributes();
     }
 
-    public void InitializeAttributes() 
+    public void InitializeAtributes() 
     {
         inputFieldUser.text = "";
         inputFieldPassword.text = "";
         inputFieldDocument.text = "";
         inputFieldName.text = "";
         inputRoomName.text = "";
-        inputInductorRoomSize.text = "";
+        inputInductorRoomSize.text = "0";
     }
 
     private void InitializeFirebase()
@@ -62,20 +60,16 @@ public class AuthManager : MonoBehaviour
         AuthStateChanged(this, null);
     }
 
-    public async Task Update()
+    public async void Update()
     {
 
         if (signedIn && !GetIsInductor())
         {
             SetSnapshot(await UsersManager.instance.GetUserAsync("Students", GetUserId()));
-            if (GetSnapshot() == null && signedIn)
+            if (GetSnapshot() == null)
             {
                 DeleteUser();
                 GameObject.Find("PanelGeneralSessions").GetComponent<Canvas>().enabled = true;
-                foreach(Canvas canvas in canvasViewStudent)
-                {
-                    canvas.enabled = false;
-                }
             }
         }
     }
@@ -106,18 +100,16 @@ public class AuthManager : MonoBehaviour
                     Debug.Log("Se salio el neo");
                 }
             }
-            //userFirebase = authFirebase.CurrentUser;
+            userFirebase = authFirebase.CurrentUser;
             if (signedIn)
             {
                 if (GetIsInductor())
                 {
-                    Debug.Log("Entró el inductor");
                     ScenesManager.instance.DeleteCurrentCanvas(canvasLoginInductor);
                     ScenesManager.instance.LoadNewCanvas(canvasNombreInductor);
                 }
                 else
                 {
-                    Debug.Log("Entró el neo");
                     ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
                     ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
                 }     
@@ -136,7 +128,7 @@ public class AuthManager : MonoBehaviour
     public void SignInInductor() {
         string user = inputFieldUser.text;
         string password = inputFieldPassword.text;
-        string email = user + "@javerianacali.edu.co";
+        string email = user + "@javeyrianacali.edu.co";
 
         authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
             if (taskSignIn.IsFaulted)
@@ -192,7 +184,7 @@ public class AuthManager : MonoBehaviour
         });*/      
     }
 
-    public async Task SignInStudent()
+    public async void SignInStudent()
     {
         string name = inputFieldName.text;
         string document = inputFieldDocument.text;
@@ -229,7 +221,6 @@ public class AuthManager : MonoBehaviour
 
     public async void DeleteUser() {
         userFirebase = authFirebase.CurrentUser;
-        Debug.Log("Eliminando a " + GetUserId());
         if (userFirebase != null)
         {
             string idUser = userFirebase.UserId;
