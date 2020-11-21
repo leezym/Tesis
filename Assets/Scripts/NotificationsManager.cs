@@ -11,47 +11,45 @@ public class NotificationsManager : MonoBehaviour
 {
     public static NotificationsManager instance;
 
-    private void Awake()
+    void Awake()
     {
         instance = this;
     }
 
-    public string GetErrorMessage(Exception exception)
+    public string GetErrorMessage(Firebase.FirebaseException firebaseEx)
     {
-        Debug.Log("Estoy en GetErrorMessage");
-        Debug.Log(exception.ToString());
-        Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
         if (firebaseEx != null)
         {
+            Debug.Log("Entra");
             var errorCode = (AuthError)firebaseEx.ErrorCode;
             return TranslateErrorMessage(errorCode);
         }
-
-        return exception.ToString();
+        Debug.Log("No Entra");
+        return firebaseEx.ToString();
     }
 
     private static string TranslateErrorMessage(AuthError errorCode)
     {
-        var message = "";
+        string message = "";
         switch (errorCode)
         {
             case AuthError.AccountExistsWithDifferentCredentials:
                 message = "Ya existe la cuenta con credenciales diferentes";
                 break;
             case AuthError.MissingPassword:
-                message = "Hace falta el Password";
+                message = "Hace falta la contraseña";
                 break;
             case AuthError.WeakPassword:
-                message = "El password es debil";
+                message = "La contraseña es débil";
                 break;
             case AuthError.WrongPassword:
-                message = "El password es Incorrecto";
+                message = "La contraseña es incorrecta";
                 break;
             case AuthError.EmailAlreadyInUse:
                 message = "Ya existe la cuenta con ese correo electrónico";
                 break;
             case AuthError.InvalidEmail:
-                message = "Correo electronico invalido";
+                message = "Correo electrónico inválido";
                 break;
             case AuthError.MissingEmail:
                 message = "Hace falta el correo electrónico";
