@@ -43,3 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01bc1ff79f6af24cad1ab2b94bbc12b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasNotificationFailure: {fileID: 0}
+  canvasNotificationSuccess: {fileID: 0}
+  NotificationFailureText: {fileID: 0}
+  NotificationSuccessText: {fileID: 0}

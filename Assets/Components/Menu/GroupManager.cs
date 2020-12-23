@@ -19,12 +19,14 @@ public class GroupManager : MonoBehaviour
     {
         Dictionary<string, object> data = await DataBaseManager.instance.ListStudentsByGroup("Students", idInductor);
         List<string> Estudiantes = new List<string>();
-        foreach (KeyValuePair<string, object> pair in data)
-        {
-            if (pair.Key == "name")
+        if (Estudiantes.Count > 0){
+            foreach (KeyValuePair<string, object> pair in data)
             {
-                Estudiantes.Add(pair.Value.ToString());
-            }        
+                if (pair.Key == "name")
+                {
+                    Estudiantes.Add(pair.Value.ToString());
+                }        
+            }
         }
         return Estudiantes;
     }

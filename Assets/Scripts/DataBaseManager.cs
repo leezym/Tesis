@@ -48,6 +48,19 @@ public class DataBaseManager : MonoBehaviour
         return null;
     }
 
+    public async Task<Dictionary<string, object>> SearchByDocument(string db, string document)
+    {
+        CollectionReference colRef = reference.Collection(db);
+        Query queryDocument = colRef.WhereEqualTo("document", document);
+        QuerySnapshot querySnapshot = await queryDocument.GetSnapshotAsync();
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            Dictionary<string, object> data = documentSnapshot.ToDictionary();
+            return data;
+        }
+        return null;
+    }
+
     // Recuperar las puntuaciones https://firebase.google.com/docs/database/unity/retrieve-data?hl=es
     
     public void InsertWithId(string db, string id, Dictionary<string, object> json)

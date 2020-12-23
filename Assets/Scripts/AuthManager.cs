@@ -133,26 +133,25 @@ public class AuthManager : MonoBehaviour
         string password = inputFieldPassword.text;
         string email = user + "@javerianacali.edu.co";
 
-        /*authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
+        authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
             if (taskSignIn.IsFaulted)
             {
                 foreach (System.Exception exception in taskSignIn.Exception.InnerExceptions)
                 {
                     Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
                     string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
-                    Debug.Log("El error es: " + message);
+                    NotificationsManager.instance.SetFailureNotificationMessage(message);
                 }
                 return;
             } 
             if (taskSignIn.IsCompleted)
             {
-                //SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
                 UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);       
                 RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
             }
-        });*/
+        });
 
-        authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(taskCreate => {
+       /* authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(taskCreate => {
             if (taskCreate.IsFaulted)
             {
                 foreach (System.Exception exception in taskCreate.Exception.InnerExceptions)
@@ -163,27 +162,23 @@ public class AuthManager : MonoBehaviour
                 }
                 return;
             }
-
-            if (taskCreate.IsCompleted)
-            {
-                UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);
-                authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
-                    if (taskSignIn.IsFaulted)
+            UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);
+            authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
+                if (taskSignIn.IsFaulted)
+                {
+                    foreach (System.Exception exception in taskSignIn.Exception.InnerExceptions)
                     {
-                        foreach (System.Exception exception in taskSignIn.Exception.InnerExceptions)
-                        {
-                            Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
-                            string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
-                            Debug.Log("El error es: " + message);
-                        }
-                        return;
-                    } 
-                    
-                    //SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
-                    RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
-                });
-            }                                     
-        });
+                        Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
+                        string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
+                        Debug.Log("El error es: " + message);
+                    }
+                    return;
+                }
+                
+                //SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
+                RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
+            });                                  
+        });*/
     }
 
     public async void SignInStudent()
@@ -197,29 +192,32 @@ public class AuthManager : MonoBehaviour
             idRoom = await RoomsManager.instance.SearchAvailableRoom();
             if(idRoom != null)
             {
-                await authFirebase.SignInAnonymouslyAsync().ContinueWith(task =>
-                {
-                    if (task.IsFaulted)
+                if (UsersManager.instance.GetUserByDocument("Students", document) != null){
+                    await authFirebase.SignInAnonymouslyAsync().ContinueWith(task =>
                     {
-                        foreach (System.Exception exception in task.Exception.InnerExceptions)
+                        if (task.IsFaulted)
                         {
-                            Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
-                            string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
-                            Debug.Log("El error es: " + message);
+                            foreach (System.Exception exception in task.Exception.InnerExceptions)
+                            {
+                                Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
+                                string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
+                                NotificationsManager.instance.SetFailureNotificationMessage(message);
+                            }
+                            return;
                         }
-                        return;
-                    }
-                    
-                    UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
-                    //SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
-                    
-                    //ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
-                    //ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
-                });
+                        
+                        UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
+                        //SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
+                        
+                        //ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
+                        //ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
+                    });
+                }else{
+                    NotificationsManager.instance.SetFailureNotificationMessage("Ya existe un usuario con ese documento.");
+                }
             }
         }
     }
-
 
     public async void SignOut() {
 
@@ -235,8 +233,8 @@ public class AuthManager : MonoBehaviour
                 await RoomsManager.instance.DeleteStudentInRoom(userFirebase.UserId);
             }
             
-            //authFirebase = null;
             authFirebase.SignOut();
+            //authFirebase = null;
            
                 //authFirebase = null;
             /*await userFirebase.DeleteAsync().ContinueWith(async task =>
