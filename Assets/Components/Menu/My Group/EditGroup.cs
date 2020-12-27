@@ -41,21 +41,24 @@ public class EditGroup : MonoBehaviour
     async void ShowRoomData ()
     {
         Dictionary<string, object> datosRoom = await GroupManager.instance.GetRoomDataAsync();
-        foreach (KeyValuePair<string, object> pair in datosRoom)
+        if (datosRoom != null)
         {
-            if (pair.Key == "room")
+            foreach (KeyValuePair<string, object> pair in datosRoom)
             {
-                groupNameLabel.text = pair.Value.ToString();
-                newInputRoomName.text = pair.Value.ToString();
-            }
-            else if (pair.Key == "size")
-            {
-                inputRoomSize.text = pair.Value.ToString();
-                newInputRoomSize.text = pair.Value.ToString();
-            }
-            else if (pair.Key == "currentsize")
-            {
-                roomCurrentSize = Convert.ToInt32(pair.Value);
+                if (pair.Key == "room")
+                {
+                    groupNameLabel.text = pair.Value.ToString();
+                    newInputRoomName.text = pair.Value.ToString();
+                }
+                else if (pair.Key == "size")
+                {
+                    inputRoomSize.text = pair.Value.ToString();
+                    newInputRoomSize.text = pair.Value.ToString();
+                }
+                else if (pair.Key == "currentsize")
+                {
+                    roomCurrentSize = Convert.ToInt32(pair.Value);
+                }
             }
         }
     }

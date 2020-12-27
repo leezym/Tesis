@@ -19,7 +19,8 @@ public class GroupManager : MonoBehaviour
     {
         Dictionary<string, object> data = await DataBaseManager.instance.ListStudentsByGroup("Students", idInductor);
         List<string> Estudiantes = new List<string>();
-        if (Estudiantes.Count > 0){
+        if (data != null)
+        {
             foreach (KeyValuePair<string, object> pair in data)
             {
                 if (pair.Key == "name")
