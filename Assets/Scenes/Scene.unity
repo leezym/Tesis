@@ -1364,11 +1364,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1021448885616411490, guid: ab2e211d3dfe1b747bc928149d5f7feb,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1021448885616411501, guid: ab2e211d3dfe1b747bc928149d5f7feb,
         type: 3}
       propertyPath: m_Name
@@ -1422,7 +1417,7 @@ PrefabInstance:
     - target: {fileID: 8410297848614179738, guid: ab2e211d3dfe1b747bc928149d5f7feb,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -428.97705
+      value: -518.1569
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab2e211d3dfe1b747bc928149d5f7feb, type: 3}
@@ -1612,7 +1607,7 @@ PrefabInstance:
     - target: {fileID: 6243433897050884505, guid: 958dbfb03615ca74aa3178741e901bfe,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -428.97705
+      value: -518.1569
       objectReference: {fileID: 0}
     - target: {fileID: 8267644053055525891, guid: 958dbfb03615ca74aa3178741e901bfe,
         type: 3}
@@ -2497,6 +2492,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PanelInductorMenu
       objectReference: {fileID: 0}
+    - target: {fileID: 6899644887340272936, guid: 878f7ab760e0ba449b1ed862b0ee8ad7,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6899644887340272939, guid: 878f7ab760e0ba449b1ed862b0ee8ad7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2835,10 +2835,35 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 723842550}
     m_Modifications:
-    - target: {fileID: 6185868663843004597, guid: 304f48c295c992347b3f8ce56b2b7903,
+    - target: {fileID: 3627025403443047607, guid: 304f48c295c992347b3f8ce56b2b7903,
         type: 3}
-      propertyPath: m_Enabled
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 361099673}
+    - target: {fileID: 4281908496164602342, guid: 304f48c295c992347b3f8ce56b2b7903,
+        type: 3}
+      propertyPath: m_AnchorMax.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281908496164602342, guid: 304f48c295c992347b3f8ce56b2b7903,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281908496164602342, guid: 304f48c295c992347b3f8ce56b2b7903,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4667455093232413587, guid: 304f48c295c992347b3f8ce56b2b7903,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4667455093232413587, guid: 304f48c295c992347b3f8ce56b2b7903,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 850.4166
       objectReference: {fileID: 0}
     - target: {fileID: 6185868663843004598, guid: 304f48c295c992347b3f8ce56b2b7903,
         type: 3}
@@ -2949,6 +2974,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PanelHints
+      objectReference: {fileID: 0}
+    - target: {fileID: 7871342025619599685, guid: 304f48c295c992347b3f8ce56b2b7903,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7871342025619599685, guid: 304f48c295c992347b3f8ce56b2b7903,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7871342025619599685, guid: 304f48c295c992347b3f8ce56b2b7903,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 304f48c295c992347b3f8ce56b2b7903, type: 3}
