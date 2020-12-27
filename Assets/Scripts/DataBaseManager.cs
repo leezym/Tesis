@@ -151,11 +151,10 @@ public class DataBaseManager : MonoBehaviour
 
         Query MembersQuery = reference.Collection(db).WhereEqualTo("idRoom", RoomId);
         QuerySnapshot MembersQuerySnapshot = await MembersQuery.GetSnapshotAsync();
-
+        
         foreach (DocumentSnapshot documentSnapshotMembers in MembersQuerySnapshot.Documents)
         {
-            return documentSnapshotMembers.ToDictionary();
-            
+            return documentSnapshotMembers.ToDictionary();            
         }
         return null;     
     }
@@ -192,10 +191,13 @@ public class DataBaseManager : MonoBehaviour
     {
         Dictionary<string, object> data = await SearchById("Students", idStudent);
         string idRoom = "";
-        foreach (KeyValuePair<string, object> pair in data)
+        if (data != null)
         {
-            if(pair.Key == "idRoom")      
-                idRoom = pair.Value.ToString();    
+            foreach (KeyValuePair<string, object> pair in data)
+            {
+                if(pair.Key == "idRoom")      
+                    idRoom = pair.Value.ToString();    
+            }
         }
 
         DocumentReference docRef = reference.Collection("Students").Document(idStudent);
