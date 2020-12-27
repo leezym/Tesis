@@ -48,17 +48,16 @@ public class DataBaseManager : MonoBehaviour
         return null;
     }
 
-    public async Task<Dictionary<string, object>> SearchByDocument(string db, string document)
+    public async Task<bool> SearchByDocument(string db, string document)
     {
         CollectionReference colRef = reference.Collection(db);
         Query queryDocument = colRef.WhereEqualTo("document", document);
         QuerySnapshot querySnapshot = await queryDocument.GetSnapshotAsync();
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
         {
-            Dictionary<string, object> data = documentSnapshot.ToDictionary();
-            return data;
+            return true;
         }
-        return null;
+        return false;
     }
 
     // Recuperar las puntuaciones https://firebase.google.com/docs/database/unity/retrieve-data?hl=es
@@ -128,8 +127,6 @@ public class DataBaseManager : MonoBehaviour
                 {
                     { "currentSize", currentSize+1 }
                 });
-
-                Debug.Log("DataBaseManager.SearchRoom " + documentSnapshot.Id);
                 return documentSnapshot.Id;
             }
         }

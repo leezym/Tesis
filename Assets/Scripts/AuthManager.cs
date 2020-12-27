@@ -26,13 +26,13 @@ public class AuthManager : MonoBehaviour
     public Text textUserName;
 
     // UserData
-    private bool isInductor = true;
+    public string userType;
 
     public Dictionary<string, object> GetSnapshot() { return snapshot; }
     public void SetSnapshot(Dictionary<string, object> snapshot) { this.snapshot = snapshot; }
 
-    public void SetIsInductor(bool isInductor) { this.isInductor = isInductor; }
-    public bool GetIsInductor() { return isInductor; }
+    public void SetUserType(string userType) { this.userType = userType; }
+    public string GetUserType() { return userType; }
 
     private Dictionary<string, Inductor> inductorsData = new Dictionary<string, Inductor>();
 
@@ -45,6 +45,7 @@ public class AuthManager : MonoBehaviour
 
     public void InitializeAtributes() 
     {
+        userType = "";
         inputFieldUser.text = "";
         inputFieldPassword.text = "";
         inputFieldDocument.text = "";
@@ -64,7 +65,7 @@ public class AuthManager : MonoBehaviour
     public async void Update()
     {
 
-        if (signedIn && !GetIsInductor())
+        if (signedIn && GetUserType() == "student")
         {
             SetSnapshot(await UsersManager.instance.GetUserAsync("Students", GetUserId()));
             if (GetSnapshot() == null)
@@ -92,13 +93,13 @@ public class AuthManager : MonoBehaviour
             signedIn = userFirebase != authFirebase.CurrentUser && authFirebase.CurrentUser != null;
             if (!signedIn && userFirebase != null)
             {
-                if (GetIsInductor())
+                Debug.Log("salir " + GetUserType());
+
+                if (GetUserType() == "inductor")
                 {
                     Debug.Log("Se salio el inductor");
-                    //ScenesManager.instance.DeleteCurrentCanvas(canvasNombreInductor);
-                    //ScenesManager.instance.LoadNewCanvas(canvasLoginInductor);
                 }
-                else
+                else if (GetUserType() == "student")
                 {
                     Debug.Log("Se salio el neo");
                 }
@@ -106,13 +107,17 @@ public class AuthManager : MonoBehaviour
             userFirebase = authFirebase.CurrentUser;
             if (signedIn)
             {
-                if (GetIsInductor())
+                Debug.Log("inicio " + GetUserType());
+                if (GetUserType() == "inductor")
                 {
+                    Debug.Log("spy un inductor");
                     ScenesManager.instance.DeleteCurrentCanvas(canvasLoginInductor);
                     ScenesManager.instance.LoadNewCanvas(canvasNombreInductor);
+                    
                 }
-                else
+                else if (GetUserType() == "student")
                 {
+                    Debug.Log("spy un estu");
                     ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
                     ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
                 }     
@@ -143,12 +148,9 @@ public class AuthManager : MonoBehaviour
                     NotificationsManager.instance.SetFailureNotificationMessage(message);
                 }
                 return;
-            } 
-            if (taskSignIn.IsCompleted)
-            {
-                UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);       
-                RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
             }
+            UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);       
+            RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);            
         });
 
        /* authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(taskCreate => {
@@ -187,12 +189,14 @@ public class AuthManager : MonoBehaviour
         string document = inputFieldDocument.text;
         string idRoom = null;
 
-        if (!await DataBaseManager.instance.IsEmptyTable("Rooms"))
-        {            
-            idRoom = await RoomsManager.instance.SearchAvailableRoom();
-            if(idRoom != null)
-            {
-                if (UsersManager.instance.GetUserByDocument("Students", document) != null){
+        if (!await UsersManager.instance.ExistUserByDocument("Students", document))
+        {
+            if (!await DataBaseManager.instance.IsEmptyTable("Rooms"))
+            {            
+                idRoom = await RoomsManager.instance.SearchAvailableRoom();
+                Debug.Log(idRoom);
+                if(idRoom != null)
+                {
                     await authFirebase.SignInAnonymouslyAsync().ContinueWith(task =>
                     {
                         if (task.IsFaulted)
@@ -205,17 +209,22 @@ public class AuthManager : MonoBehaviour
                             }
                             return;
                         }
-                        
+
                         UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
+
                         //SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
                         
                         //ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
                         //ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
                     });
                 }else{
-                    NotificationsManager.instance.SetFailureNotificationMessage("Ya existe un usuario con ese documento.");
+                    NotificationsManager.instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");
                 }
+            }else{
+                NotificationsManager.instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");
             }
+        }else{
+            NotificationsManager.instance.SetFailureNotificationMessage("Ya existe un usuario con ese documento.");
         }
     }
 
@@ -224,11 +233,11 @@ public class AuthManager : MonoBehaviour
         userFirebase = authFirebase.CurrentUser;
         if (userFirebase != null)
         {
-            if (GetIsInductor())
+            if (GetUserType() == "inductor")
             {
                 await UsersManager.instance.DeleteSession(userFirebase.UserId);
             }
-            else if (GetSnapshot() != null)
+            else if (GetSnapshot() != null || GetUserType() == "student")
             {
                 await RoomsManager.instance.DeleteStudentInRoom(userFirebase.UserId);
             }

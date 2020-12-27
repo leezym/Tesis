@@ -36,7 +36,7 @@ public class UsersManager : MonoBehaviour
         return await DataBaseManager.instance.SearchById(db, userId);
     }
 
-    public async Task<Dictionary<string, object>> GetUserByDocument(string db, string document)
+    public async Task<bool> ExistUserByDocument(string db, string document)
     {
         return await DataBaseManager.instance.SearchByDocument(db, document);
     }
