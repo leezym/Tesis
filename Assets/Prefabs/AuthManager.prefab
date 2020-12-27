@@ -55,6 +55,4 @@ MonoBehaviour:
   inputFieldName: {fileID: 0}
   inputInductorRoomSize: {fileID: 0}
   textUserName: {fileID: 0}
-  canvasViewStudent:
-  - {fileID: 0}
-  - {fileID: 0}
+  userType: 0

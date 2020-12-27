@@ -63,11 +63,13 @@ public class EditGroup : MonoBehaviour
     async void ShowInductorData()
     {
         Dictionary<string,object> datosInductor = await GroupManager.instance.GetInductorDataAsync(inductorNameLabel);
-        foreach(KeyValuePair<string, object> pair in datosInductor)
-        {
-            if (pair.Key == "name")
+        if (datosInductor != null){
+            foreach(KeyValuePair<string, object> pair in datosInductor)
             {
-                inductorNameLabel.text = pair.Value.ToString();
+                if (pair.Key == "name")
+                {
+                    inductorNameLabel.text = pair.Value.ToString();
+                }
             }
         }
     }
@@ -101,7 +103,6 @@ public class EditGroup : MonoBehaviour
     {
         if (Convert.ToInt32(newInputRoomSize.text) >= roomCurrentSize)
         {
-            Debug.Log("Se entró al if del SendNewRoomInfo");
             string inductorId = AuthManager.instance.GetUserId().ToString();
             string roomId = await RoomsManager.instance.SearchRoomByInductor("Rooms", inductorId);
 

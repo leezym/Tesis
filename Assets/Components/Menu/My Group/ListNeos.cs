@@ -11,17 +11,18 @@ public class ListNeos : MonoBehaviour
 {
     public Text content;
     private string idInductor;
+    public Canvas canvasMyGroup;
     public List<string> NeoJaverianos = new List<string>();
     int currentSizeStudents = 0, newSizeStudents = 0;
 
-    async Task UpdateAsync()
+    async void Update()
     {
-        if (GetComponent<Canvas>().enabled)
+        if (canvasMyGroup.enabled)
             await DetectStudent();
     }
 
     async Task DetectStudent()
-    {     
+    {
         if (idInductor == null){
             idInductor = AuthManager.instance.GetUserId();
             currentSizeStudents = await GroupManager.instance.SearchCurrentSizeRoom(idInductor);

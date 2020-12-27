@@ -57,8 +57,14 @@ public class NotificationsManager : MonoBehaviour
         string message = "";
         switch (errorCode)
         {
+            case AuthError.EmailAlreadyInUse:
+                message = "Ya existe la cuenta con ese correo electrónico";
+                break;
             case AuthError.AccountExistsWithDifferentCredentials:
                 message = "Ya existe la cuenta con credenciales diferentes";
+                break;
+            case AuthError.MissingEmail:
+                message = "Hace falta el correo electrónico";
                 break;
             case AuthError.MissingPassword:
                 message = "Hace falta la contraseña";
@@ -68,18 +74,9 @@ public class NotificationsManager : MonoBehaviour
                 break;
             case AuthError.WrongPassword:
                 message = "La contraseña es incorrecta";
-                break;
-            case AuthError.EmailAlreadyInUse:
-                message = "Ya existe la cuenta con ese correo electrónico";
-                break;
+                break;            
             case AuthError.InvalidEmail:
-                message = "Correo electrónico inválido";
-                break;
-            case AuthError.MissingEmail:
-                message = "Hace falta el correo electrónico";
-                break;
-            case AuthError.InvalidCredential:
-                message = "Credencial inválida";
+                message = "Usuario inválido";
                 break;
             default:
                 message = "Ocurrió un error";

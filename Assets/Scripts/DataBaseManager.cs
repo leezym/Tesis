@@ -48,6 +48,18 @@ public class DataBaseManager : MonoBehaviour
         return null;
     }
 
+    public async Task<bool> SearchByDocument(string db, string document)
+    {
+        CollectionReference colRef = reference.Collection(db);
+        Query queryDocument = colRef.WhereEqualTo("document", document);
+        QuerySnapshot querySnapshot = await queryDocument.GetSnapshotAsync();
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            return true;
+        }
+        return false;
+    }
+
     // Recuperar las puntuaciones https://firebase.google.com/docs/database/unity/retrieve-data?hl=es
     
     public void InsertWithId(string db, string id, Dictionary<string, object> json)
@@ -115,8 +127,6 @@ public class DataBaseManager : MonoBehaviour
                 {
                     { "currentSize", currentSize+1 }
                 });
-
-                Debug.Log("DataBaseManager.SearchRoom " + documentSnapshot.Id);
                 return documentSnapshot.Id;
             }
         }
