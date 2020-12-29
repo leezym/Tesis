@@ -4,29 +4,26 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
 
-public class HintsManager : MonoBehaviour
+public class ListHints : MonoBehaviour
 {
-    public static HintsManager instance;
-
     public GameObject hintPrefab;
     public Transform hintContent;
     public Canvas canvasConfigHints;
-    //public Dropdown BuildingsDropdown;
-    List<Dictionary<string,object>> BuildingsList = new List<Dictionary<string,object>>();
     List<Dictionary<string,object>> hintsList = new List<Dictionary<string,object>>();
     public List<GameObject> currentHints = new List<GameObject>();
-
-
     int currentSizeHints = 0, newSizeHints = 0;
 
-    void Awake() {
-        instance = this;
-    }
+    public InputField inputHintName, inputDescriptionHint, inputAnswerHint;
+
+    //public Dropdown BuildingsDropdown;
+    //List<Dictionary<string,object>> BuildingsList = new List<Dictionary<string,object>>();
     
     // Nombre de la DB - Buildings
-    async void Start()
+    void Start()
     {
-        //await SearchBuildingByCollection();
+        inputHintName.text = "";
+        inputDescriptionHint.text = "";
+        inputAnswerHint.text = "";
     }
 
     async void Update()
@@ -35,7 +32,7 @@ public class HintsManager : MonoBehaviour
             await SearchHint();
     }
 
-    async Task SearchBuildingByCollection(){
+    /*async Task SearchBuildingByCollection(){
         BuildingsList = await DataBaseManager.instance.SearchByCollection("Buildings");
         foreach(Dictionary<string,object> Buildings in BuildingsList){
             foreach(KeyValuePair<string,object> pair in Buildings){
@@ -46,7 +43,7 @@ public class HintsManager : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 
     async Task SearchHint()
     {
@@ -85,4 +82,20 @@ public class HintsManager : MonoBehaviour
             currentSizeHints = newSizeHints;
         }       
     }
+
+    public bool CheckNewData()
+    {
+        if( inputHintName.text != "" && inputDescriptionHint.text != "" && inputAnswerHint.text != "")
+        {            
+            return true;
+        }
+        return false;
+    }
+
+    public void SaveHint()
+    {    
+        if (CheckNewData())    
+            HintsManager.instance.PostNewHint(inputHintName.text, inputDescriptionHint.text, inputAnswerHint.text);
+    }
 }
+
