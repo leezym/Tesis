@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 474933190}
   - component: {fileID: 474933189}
   m_Layer: 0
-  m_Name: Group.Component
+  m_Name: MyGroup.Component
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -837,8 +837,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d0df55d048ee2d41ada765a516f3c6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BuildingsDropdown: {fileID: 0}
-  canvasHints: {fileID: 3460932817154197903}
+  hintPrefab: {fileID: 2260708394794656056, guid: 338a099a29f53084392879f0b757a78f,
+    type: 3}
+  hintContent: {fileID: 7340632964614777147}
+  canvasConfigHints: {fileID: 3460932817154197903}
+  currentHints: []
 --- !u!114 &1654662461 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6703201373191935439, guid: 0a1d023cdffdfc34ea3c800563790b46,
@@ -1463,7 +1466,7 @@ PrefabInstance:
     - target: {fileID: 8410297848614179738, guid: ab2e211d3dfe1b747bc928149d5f7feb,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -514.7187
+      value: -14877.165
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab2e211d3dfe1b747bc928149d5f7feb, type: 3}
@@ -1653,7 +1656,7 @@ PrefabInstance:
     - target: {fileID: 6243433897050884505, guid: 958dbfb03615ca74aa3178741e901bfe,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -514.7187
+      value: -14877.165
       objectReference: {fileID: 0}
     - target: {fileID: 8267644053055525891, guid: 958dbfb03615ca74aa3178741e901bfe,
         type: 3}
@@ -2765,7 +2768,7 @@ PrefabInstance:
     - target: {fileID: 1438895892825361616, guid: a6a7759c680c5c546b57b472ef5c8271,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2557298616296023936, guid: a6a7759c680c5c546b57b472ef5c8271,
         type: 3}
@@ -2911,11 +2914,6 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4667455093232413587, guid: 304f48c295c992347b3f8ce56b2b7903,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 849.5992
-      objectReference: {fileID: 0}
     - target: {fileID: 6185868663843004598, guid: 304f48c295c992347b3f8ce56b2b7903,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3043,6 +3041,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 304f48c295c992347b3f8ce56b2b7903, type: 3}
+--- !u!224 &7340632964614777147 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4667455093232413587, guid: 304f48c295c992347b3f8ce56b2b7903,
+    type: 3}
+  m_PrefabInstance: {fileID: 7340632964614777146}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7509810816876409161
 PrefabInstance:
   m_ObjectHideFlags: 0
