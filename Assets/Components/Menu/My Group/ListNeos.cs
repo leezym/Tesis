@@ -19,6 +19,8 @@ public class ListNeos : MonoBehaviour
     {
         if (canvasMyGroup.enabled)
             await DetectStudent();
+        else
+            currentSizeStudents = 0;
     }
 
     async Task DetectStudent()

@@ -19,14 +19,14 @@ public class RoomsManager : MonoBehaviour
         DataBaseManager.instance.InsertWithoutId("Rooms", element.ConvertJson());
     }
 
-    public async Task PutRoomAsync(string db, string roomId, Dictionary<string,object> data)
+    public async Task PutRoomAsync(string roomId, Dictionary<string,object> data)
     {
         await DataBaseManager.instance.UpdateAsync("Rooms", roomId, data);
     }
 
-    public async Task<Dictionary<string, object>> GetRoomAsync(string db, string roomId)
+    public async Task<Dictionary<string, object>> GetRoomAsync(string roomId)
     {
-        return await DataBaseManager.instance.SearchById(db, roomId);
+        return await DataBaseManager.instance.SearchById("Rooms", roomId);
     }
 
     public async Task<string> SearchAvailableRoom() 
@@ -35,9 +35,9 @@ public class RoomsManager : MonoBehaviour
         return await DataBaseManager.instance.SearchAvailableRoom("Rooms");
     }
 
-    public async Task<string> SearchRoomByInductor(string db, string idInductor)
+    public async Task<string> SearchRoomByInductor(string idInductor)
     {
-        return await DataBaseManager.instance.SearchRoomByInductor(db, idInductor);
+        return await DataBaseManager.instance.SearchRoomByInductor("Rooms", idInductor);
 
     }
 

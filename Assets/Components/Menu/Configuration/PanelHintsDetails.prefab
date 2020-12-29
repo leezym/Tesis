@@ -115,7 +115,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 942033760340918778}
   m_TextComponent: {fileID: 7344324580110448417}
   m_Placeholder: {fileID: 9087910038537594117}
@@ -335,7 +335,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5526058175274374097}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: SaveInput
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 971271780111102149}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1511307632065035165
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,7 +542,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 738699556696364032}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: EnableInput
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1850015306087357321}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1902555158268679372
 GameObject:
   m_ObjectHideFlags: 0
@@ -649,7 +671,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2659889523906371554}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: SaveInput
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 1902555158268679372}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3020313796394449892
 GameObject:
   m_ObjectHideFlags: 0
@@ -724,7 +757,7 @@ MonoBehaviour:
     m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 0
-    m_HorizontalOverflow: 1
+    m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 
@@ -1255,7 +1288,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8828028739388019364}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: DisableInput
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 5271878857688547317}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5461797335433367220
 GameObject:
   m_ObjectHideFlags: 0
@@ -1371,7 +1415,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1041385305923334967}
   m_TextComponent: {fileID: 8836197311609308053}
   m_Placeholder: {fileID: 6195097755759338384}
@@ -1379,7 +1423,7 @@ MonoBehaviour:
   m_InputType: 0
   m_AsteriskChar: 42
   m_KeyboardType: 0
-  m_LineType: 0
+  m_LineType: 1
   m_HideMobileInput: 0
   m_CharacterValidation: 0
   m_CharacterLimit: 0
@@ -1513,7 +1557,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5904735041906336469}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: DisableInput
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 5896915313024434133}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6048677394904322160
 GameObject:
   m_ObjectHideFlags: 0
@@ -2017,7 +2072,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2185367347417915336}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: EnableInput
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 6473065059158281934}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7551631049387548759
 GameObject:
   m_ObjectHideFlags: 0
@@ -2135,7 +2201,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 32572231133037472}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: SaveInput
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 7551631049387548759}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7974391370843529707
 GameObject:
   m_ObjectHideFlags: 0
@@ -2253,7 +2330,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9107749840659027934}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: EnableInput
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 7974391370843529707}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8045862524685610247
 GameObject:
   m_ObjectHideFlags: 0
@@ -2369,7 +2457,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 4753226851967700845}
   m_TextComponent: {fileID: 3730818996686145911}
   m_Placeholder: {fileID: 4462579903666145804}
@@ -2511,7 +2599,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5872164112001113839}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: DisableInput
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 8935270892437640355}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8939855360312048833
 GameObject:
   m_ObjectHideFlags: 0

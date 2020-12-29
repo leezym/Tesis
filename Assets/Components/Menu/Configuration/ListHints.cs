@@ -8,7 +8,7 @@ public class ListHints : MonoBehaviour
 {
     public GameObject hintPrefab;
     public Transform hintContent;
-    public Canvas canvasConfigHints;
+    public Canvas canvasConfigHints, canvasAddHints;
     List<Dictionary<string,object>> hintsList = new List<Dictionary<string,object>>();
     public List<GameObject> currentHints = new List<GameObject>();
     int currentSizeHints = 0, newSizeHints = 0;
@@ -21,6 +21,11 @@ public class ListHints : MonoBehaviour
     // Nombre de la DB - Buildings
     void Start()
     {
+        InitializeAtributes();
+    }
+
+    public void InitializeAtributes() 
+    {
         inputHintName.text = "";
         inputDescriptionHint.text = "";
         inputAnswerHint.text = "";
@@ -30,6 +35,8 @@ public class ListHints : MonoBehaviour
     {
         if (canvasConfigHints.enabled)
             await SearchHint();
+        else
+            currentSizeHints = 0;
     }
 
     /*async Task SearchBuildingByCollection(){
@@ -45,6 +52,16 @@ public class ListHints : MonoBehaviour
         }
     }*/
 
+    void ClearCurrentHints()
+    {
+        // Vaciar lista y borrar pistas actuales
+        foreach(GameObject hint in currentHints)
+        {
+            Destroy(hint);
+        }
+        currentHints.Clear();
+    }
+
     async Task SearchHint()
     {
 
@@ -53,13 +70,7 @@ public class ListHints : MonoBehaviour
 
         if (currentSizeHints != newSizeHints)
         {
-            // Vaciar lista y borrar pistas actuales
-            foreach(GameObject hint in currentHints)
-            {
-                Destroy(hint);
-            }
-            currentHints.Clear();
-
+            ClearCurrentHints();
             foreach(Dictionary<string,object> hint in hintsList)
             {
                 foreach(KeyValuePair<string,object> pair in hint)
@@ -94,8 +105,14 @@ public class ListHints : MonoBehaviour
 
     public void SaveHint()
     {    
-        if (CheckNewData())    
+        if (CheckNewData())
+        {
             HintsManager.instance.PostNewHint(inputHintName.text, inputDescriptionHint.text, inputAnswerHint.text);
-    }
+            ScenesManager.instance.LoadNewCanvas(canvasConfigHints);
+            ScenesManager.instance.DeleteCurrentCanvas(canvasAddHints);
+        }else
+            NotificationsManager.instance.SetFailureNotificationMessage("Campos Incompletos. Por favor llene todos los campos.");
+    }    
+
 }
 
