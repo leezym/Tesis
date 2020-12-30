@@ -10,7 +10,7 @@ public class ListHints : MonoBehaviour
     public Transform hintContent;
     public Canvas canvasConfigHints, canvasAddHints;
     List<Dictionary<string,object>> hintsList = new List<Dictionary<string,object>>();
-    public List<GameObject> currentHints = new List<GameObject>();
+    List<GameObject> currentHints = new List<GameObject>();
     int currentSizeHints = 0, newSizeHints = 0;
 
     public InputField inputHintName, inputDescriptionHint, inputAnswerHint;
