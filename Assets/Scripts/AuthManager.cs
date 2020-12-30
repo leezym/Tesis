@@ -19,6 +19,7 @@ public class AuthManager : MonoBehaviour
     private Dictionary<string, object> snapshot;
 
     // Canvas
+    public Canvas canvasGeneralSessions;
     public Canvas canvasLoginInductor, canvasNombreInductor, canvasMenuInductor;
     public Canvas canvasLoginStudent, canvasMenuStudent;
     public InputField inputFieldUser, inputFieldPassword, inputRoomName;
@@ -41,6 +42,8 @@ public class AuthManager : MonoBehaviour
         instance = this;
         InitializeFirebase();
         InitializeAtributes();
+        //string dateAndTimeVar = System.DateTime.Now.ToString(("yyyy/mm/dd HH:mm:ss"));
+        //string dateAndTimeVar = System.DateTime.Now.ToString(("HH:mm"));
     }
 
     public void InitializeAtributes() 
@@ -228,22 +231,31 @@ public class AuthManager : MonoBehaviour
         }
     }
 
-    public async void SignOut() {
+    public void SignOut() 
+    {
+        NotificationsManager.instance.SetQuestionNotificationMessage("¿Está seguro que desea cerrar sesión?");
+        NotificationsManager.instance.acceptQuestionButton.onClick.AddListener(Exit);
+    }
 
+    public async void Exit()
+    {
         userFirebase = authFirebase.CurrentUser;
         if (userFirebase != null)
         {
             if (GetUserType() == "inductor")
             {
                 await UsersManager.instance.DeleteSession(userFirebase.UserId);
+                ScenesManager.instance.LoadNewCanvas(canvasGeneralSessions);
+                ScenesManager.instance.DeleteCurrentCanvas(canvasMenuInductor);
             }
             else if (GetSnapshot() != null || GetUserType() == "student")
             {
                 await RoomsManager.instance.DeleteStudentInRoom(userFirebase.UserId);
+                ScenesManager.instance.LoadNewCanvas(canvasGeneralSessions);
+                ScenesManager.instance.DeleteCurrentCanvas(canvasMenuStudent);
             }
             
-            authFirebase.SignOut();
-            //authFirebase = null;
+            authFirebase.SignOut();            
            
                 //authFirebase = null;
             /*await userFirebase.DeleteAsync().ContinueWith(async task =>
@@ -267,6 +279,7 @@ public class AuthManager : MonoBehaviour
                 //authFirebase = null;
                 authFirebase.SignOut();
             });*/
-        }
+        }        
     }
+
 }

@@ -34,7 +34,7 @@ public class GroupManager : MonoBehaviour
 
     public async Task<int> SearchCurrentSizeRoom(string idInductor)
     {
-        string idRoom = await RoomsManager.instance.SearchRoomByInductor("Rooms", idInductor);
+        string idRoom = await RoomsManager.instance.SearchRoomByInductor(idInductor);
         Dictionary<string, object> data = await DataBaseManager.instance.SearchById("Rooms", idRoom);
         foreach (KeyValuePair<string, object> pair in data)
         {
@@ -46,8 +46,8 @@ public class GroupManager : MonoBehaviour
 
     public async Task<Dictionary<string,object>> GetRoomDataAsync()
     {
-        string roomId = await RoomsManager.instance.SearchRoomByInductor("Rooms", AuthManager.instance.GetUserId());
-        return await RoomsManager.instance.GetRoomAsync("Rooms", roomId);
+        string roomId = await RoomsManager.instance.SearchRoomByInductor(AuthManager.instance.GetUserId());
+        return await RoomsManager.instance.GetRoomAsync(roomId);
     }
 
     public async Task<Dictionary<string,object>> GetInductorDataAsync(Text inductorNameLabel)

@@ -107,7 +107,7 @@ public class EditGroup : MonoBehaviour
         if (Convert.ToInt32(newInputRoomSize.text) >= roomCurrentSize)
         {
             string inductorId = AuthManager.instance.GetUserId().ToString();
-            string roomId = await RoomsManager.instance.SearchRoomByInductor("Rooms", inductorId);
+            string roomId = await RoomsManager.instance.SearchRoomByInductor(inductorId);
 
             Dictionary<string, object> newRoomData = new Dictionary<string, object>
             {
@@ -116,7 +116,7 @@ public class EditGroup : MonoBehaviour
             };
             Debug.Log("New room name: " + newInputRoomName.text);
 
-            await RoomsManager.instance.PutRoomAsync("Rooms", roomId, newRoomData);
+            await RoomsManager.instance.PutRoomAsync(roomId, newRoomData);
         }
         /*else
         {

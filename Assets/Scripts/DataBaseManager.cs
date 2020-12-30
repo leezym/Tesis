@@ -48,16 +48,28 @@ public class DataBaseManager : MonoBehaviour
         return null;
     }
 
-    public async Task<bool> SearchByDocument(string db, string document)
+    public async Task<Dictionary<string, object>> SearchByAttribute(string db, string attribute, string value)
     {
         CollectionReference colRef = reference.Collection(db);
-        Query queryDocument = colRef.WhereEqualTo("document", document);
+        Query queryDocument = colRef.WhereEqualTo(attribute, value);
         QuerySnapshot querySnapshot = await queryDocument.GetSnapshotAsync();
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
         {
-            return true;
+            return documentSnapshot.ToDictionary();
         }
-        return false;
+        return null;
+    }
+
+    public async Task<string> SearchId(string db, string attribute, string value)
+    {
+        CollectionReference colRef = reference.Collection(db);
+        Query queryDocument = colRef.WhereEqualTo(attribute, value);
+        QuerySnapshot querySnapshot = await queryDocument.GetSnapshotAsync();
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            return documentSnapshot.Id;
+        }
+        return null;
     }
 
     // Recuperar las puntuaciones https://firebase.google.com/docs/database/unity/retrieve-data?hl=es
@@ -81,7 +93,7 @@ public class DataBaseManager : MonoBehaviour
         await docRef.UpdateAsync(data);
     }
 
-    public async Task DeleteUserAsync(string db, string id) 
+    public async Task DeleteAsync(string db, string id) 
     {
         DocumentReference docRef = reference.Collection(db).Document(id);
         await docRef.DeleteAsync();
@@ -132,7 +144,6 @@ public class DataBaseManager : MonoBehaviour
         }
         return null;
     }
-
     
     public async Task<string> SearchRoomByInductor(string db, string idInductor)
     {

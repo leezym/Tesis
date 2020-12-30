@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class HintsManager : MonoBehaviour
 {
@@ -14,6 +15,27 @@ public class HintsManager : MonoBehaviour
     {
         Hint element = new Hint(name, description, answer);
         DataBaseManager.instance.InsertWithoutId("Hints", element.ConvertJson());
+    }
+
+    public async Task PutHintAsync(string nameHint, Dictionary<string,object> data)
+    {
+        string idHint = await DataBaseManager.instance.SearchId("Hints", "name", nameHint);
+        await DataBaseManager.instance.UpdateAsync("Hints", idHint, data);
+    }
+
+    public async Task<Dictionary<string, object>> GetHintAsync(string idHint)
+    {
+        return await DataBaseManager.instance.SearchById("Hints", idHint);
+    }
+
+    public async Task<Dictionary<string, object>> GetHintByName(string name)
+    {
+        return await DataBaseManager.instance.SearchByAttribute("Hints", "name", name);
+    }
+
+    public async Task DeleteHint(string idHint)
+    {
+        await DataBaseManager.instance.DeleteAsync("Hints", idHint);
     }
 }
 

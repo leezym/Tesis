@@ -38,12 +38,16 @@ public class UsersManager : MonoBehaviour
 
     public async Task<bool> ExistUserByDocument(string db, string document)
     {
-        return await DataBaseManager.instance.SearchByDocument(db, document);
+        if (await DataBaseManager.instance.SearchByAttribute(db, "document", document) != null)
+        {
+            return true;
+        }
+        return false;
     }
 
-    public async Task DeleteUserAsync(string db, string userId) 
+    public async Task DeleteAsync(string db, string userId) 
     {
-        await DataBaseManager.instance.DeleteUserAsync(db, userId);
+        await DataBaseManager.instance.DeleteAsync(db, userId);
 
     }    
 
