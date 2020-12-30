@@ -10,12 +10,15 @@ using Firebase.Auth;
 public class NotificationsManager : MonoBehaviour
 {
     public static NotificationsManager instance;
-    public Canvas canvasNotificationFailure, canvasNotificationSuccess;
-    public Text NotificationFailureText, NotificationSuccessText;
+    public Canvas canvasNotificationFailure, canvasNotificationSuccess, canvasNotificationQuestion;
+    public Text NotificationFailureText, NotificationSuccessText, NotificationQuestionText;
+    public Button acceptQuestionButton;
+
     void Awake()
     {
         instance = this;
     }
+
     private void Start()
     {
         NotificationFailureText.text = "";
@@ -32,14 +35,24 @@ public class NotificationsManager : MonoBehaviour
         {
             LoadSuccessNotificationCanvas(NotificationSuccessText.text);
         }
+        if (NotificationQuestionText.text != "")
+        {
+            LoadQuestionNotificationCanvas(NotificationQuestionText.text);
+        }
     }
     public void SetFailureNotificationMessage(string message)
     {
         NotificationFailureText.text = message;
     }
+
     public void SetSuccessNotificationMessage(string message)
     {
         NotificationSuccessText.text = message;
+    }
+
+    public void SetQuestionNotificationMessage(string message)
+    {
+        NotificationQuestionText.text = message;
     }
 
     public string GetErrorMessage(Firebase.FirebaseException firebaseEx)
@@ -58,28 +71,28 @@ public class NotificationsManager : MonoBehaviour
         switch (errorCode)
         {
             case AuthError.EmailAlreadyInUse:
-                message = "Ya existe la cuenta con ese correo electrónico";
+                message = "Ya existe la cuenta con ese correo electrónico.";
                 break;
             case AuthError.AccountExistsWithDifferentCredentials:
-                message = "Ya existe la cuenta con credenciales diferentes";
+                message = "Ya existe la cuenta con credenciales diferentes.";
                 break;
             case AuthError.MissingEmail:
-                message = "Hace falta el correo electrónico";
+                message = "Hace falta el correo electrónico.";
                 break;
             case AuthError.MissingPassword:
-                message = "Hace falta la contraseña";
+                message = "Hace falta la contraseña.";
                 break;
             case AuthError.WeakPassword:
-                message = "La contraseña es débil";
+                message = "La contraseña es débil.";
                 break;
             case AuthError.WrongPassword:
-                message = "La contraseña es incorrecta";
+                message = "La contraseña es incorrecta.";
                 break;            
             case AuthError.InvalidEmail:
-                message = "Usuario inválido";
+                message = "Usuario inválido.";
                 break;
             default:
-                message = "Ocurrió un error";
+                message = "No existe el usuario.";
                 break;
         }
         return message;
@@ -97,5 +110,12 @@ public class NotificationsManager : MonoBehaviour
         NotificationSuccessText.enabled = true;
         NotificationSuccessText.text = message;
         ScenesManager.instance.LoadNewCanvas(canvasNotificationSuccess);
+    }
+
+    public void LoadQuestionNotificationCanvas(string message){
+        NotificationQuestionText.enabled = false;
+        NotificationQuestionText.enabled = true;
+        NotificationQuestionText.text = message;
+        ScenesManager.instance.LoadNewCanvas(canvasNotificationQuestion);
     }
 }
