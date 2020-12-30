@@ -41,9 +41,7 @@ public class AuthManager : MonoBehaviour
     {
         instance = this;
         InitializeFirebase();
-        InitializeAtributes();
-        //string dateAndTimeVar = System.DateTime.Now.ToString(("yyyy/mm/dd HH:mm:ss"));
-        //string dateAndTimeVar = System.DateTime.Now.ToString(("HH:mm"));
+        InitializeAtributes();       
     }
 
     public void InitializeAtributes() 

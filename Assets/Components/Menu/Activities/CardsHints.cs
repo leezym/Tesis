@@ -8,6 +8,7 @@ public class CardsHints : MonoBehaviour
 {
     public Canvas canvasActHint;
     public GameObject hintCardPrefab;
+    public Sprite[] backgroundCardHint, backgroundCircleCardHint;
     List<Dictionary<string,object>> hintsList = new List<Dictionary<string,object>>();
     List<GameObject> currentHints = new List<GameObject>();
     int currentSizeHints = 0, newSizeHints = 0;
@@ -43,28 +44,42 @@ public class CardsHints : MonoBehaviour
 
         hintsList = await DataBaseManager.instance.SearchByCollection("Hints");
         newSizeHints = hintsList.Count;
+        int backgroundCount = 0;
 
         if (currentSizeHints != newSizeHints)
         {
             ClearCurrentHints();
             foreach(Dictionary<string,object> hint in hintsList)
             {
+                // Reinicar contador de background
+                if (backgroundCount == backgroundCardHint.Length)
+                    backgroundCount = 0;
+
+                // Instanciar prefab
+                GameObject hintElement = Instantiate (hintCardPrefab, new Vector3(contentCards.position.x,contentCards.position.y, contentCards.position.z) , Quaternion.identity);
+                hintElement.transform.parent = contentCards.transform;
+                
+                // Editar background
+                hintCardPrefab.GetComponent<Image>().sprite = backgroundCardHint[backgroundCount];
+                hintCardPrefab.transform.Find("PositionCircle").GetComponent<Image>().sprite = backgroundCircleCardHint[backgroundCount];
+                backgroundCount ++;
+
                 foreach(KeyValuePair<string,object> pair in hint)
                 {
-                    if(pair.Key == "name"){
-
-                        // Instanciar prefab
-                        GameObject hintElement = Instantiate (hintCardPrefab, new Vector3(contentCards.position.x,contentCards.position.y, contentCards.position.z) , Quaternion.identity);
-                        hintElement.transform.parent = contentCards.transform;
+                    //Editar text
+                    if(pair.Key == "name"){                       
                         
-                        // Editar texto
-                        /*Text hintText = hintCardPrefab.GetComponentInChildren<Text>();
-                        hintText.text = pair.Value.ToString();*/
-
-                        // Añadir a Lista
-                        currentHints.Add(hintElement);
+                        Text hintNameLabel = hintCardPrefab.transform.Find("HintNameLabel").GetComponent<Text>();
+                        hintNameLabel.text = pair.Value.ToString();                        
+                    }
+                    if (pair.Key == "answer"){
+                        Text hintAnswerLabel = hintCardPrefab.transform.Find("HintAnswerLabel").GetComponent<Text>();
+                        hintAnswerLabel.text = pair.Value.ToString();  
                     }
                 }
+
+                // Añadir a Lista
+                currentHints.Add(hintElement);
             }
             currentSizeHints = newSizeHints;
         }       
