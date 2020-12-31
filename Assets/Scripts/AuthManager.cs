@@ -131,7 +131,7 @@ public class AuthManager : MonoBehaviour
     {
         authFirebase.StateChanged -= AuthStateChanged;
         //authFirebase = null;
-        SignOut();
+        Exit();
     }
 
     public void SignInInductor() {
@@ -243,16 +243,16 @@ public class AuthManager : MonoBehaviour
             if (GetUserType() == "inductor")
             {
                 await UsersManager.instance.DeleteSession(userFirebase.UserId);
-                ScenesManager.instance.LoadNewCanvas(canvasGeneralSessions);
                 ScenesManager.instance.DeleteCurrentCanvas(canvasMenuInductor);
             }
             else if (GetSnapshot() != null || GetUserType() == "student")
             {
                 await RoomsManager.instance.DeleteStudentInRoom(userFirebase.UserId);
-                ScenesManager.instance.LoadNewCanvas(canvasGeneralSessions);
                 ScenesManager.instance.DeleteCurrentCanvas(canvasMenuStudent);
             }
             
+            ScenesManager.instance.LoadNewCanvas(canvasGeneralSessions);
+            InitializeAtributes();
             authFirebase.SignOut();            
            
                 //authFirebase = null;

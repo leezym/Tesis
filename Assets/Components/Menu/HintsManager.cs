@@ -44,7 +44,9 @@ public class Hint
     public string name;
     public string description;
     public string answer;
-    //public DateTime = new System.DateTime(0);
+    public string hour = "";
+    public int score;
+    public int position;
 
     public Hint() { }
 
@@ -53,7 +55,6 @@ public class Hint
         this.name = name;
         this.description = description;
         this.answer = answer;
-        //this.idInductor = idInductor;
     }
 
     public Dictionary<string, object> ConvertJson()
@@ -62,7 +63,9 @@ public class Hint
             { "name", this.name },
             { "description", this.description },
             { "answer", this.answer },
-            //{ "hour", this.hour }
+            { "hour", this.hour },
+            { "score", this.score },
+            { "position", this.position }
         };
     }
 }

@@ -14,9 +14,6 @@ public class ListHints : MonoBehaviour
     int currentSizeHints = 0, newSizeHints = 0;
 
     public InputField inputHintName, inputDescriptionHint, inputAnswerHint;
-
-    //public Dropdown BuildingsDropdown;
-    //List<Dictionary<string,object>> BuildingsList = new List<Dictionary<string,object>>();
     
     // Nombre de la DB - Buildings
     void Start()
@@ -37,20 +34,7 @@ public class ListHints : MonoBehaviour
             await SearchHint();
         else
             currentSizeHints = 0;
-    }
-
-    /*async Task SearchBuildingByCollection(){
-        BuildingsList = await DataBaseManager.instance.SearchByCollection("Buildings");
-        foreach(Dictionary<string,object> Buildings in BuildingsList){
-            foreach(KeyValuePair<string,object> pair in Buildings){
-                if(pair.Key == "name"){
-                    Dropdown.OptionData option = new Dropdown.OptionData();
-                    option.text = pair.Value.ToString();
-                    //BuildingsDropdown.options.Add(option);
-                }
-            }
-        }
-    }*/
+    }    
 
     void ClearCurrentHints()
     {
@@ -110,6 +94,7 @@ public class ListHints : MonoBehaviour
             HintsManager.instance.PostNewHint(inputHintName.text, inputDescriptionHint.text, inputAnswerHint.text);
             ScenesManager.instance.LoadNewCanvas(canvasConfigHints);
             ScenesManager.instance.DeleteCurrentCanvas(canvasAddHints);
+            ClearCurrentHints();
         }else
             NotificationsManager.instance.SetFailureNotificationMessage("Campos Incompletos. Por favor llene todos los campos.");
     }    
