@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using System;
 
 public class CardsHints : MonoBehaviour
 {
@@ -76,7 +77,29 @@ public class CardsHints : MonoBehaviour
                         Text hintAnswerLabel = hintCardPrefab.transform.Find("HintAnswerLabel").GetComponent<Text>();
                         hintAnswerLabel.text = pair.Value.ToString();  
                     }
+                    if(pair.Key == "hour")
+                    {
+                        Text hintTimeLabel = hintCardPrefab.transform.Find("HintTimeLabel").GetComponent<Text>();
+                        hintTimeLabel.text = pair.Value.ToString();
+                        if(pair.Value.ToString() != "")
+                            hintCardPrefab.transform.Find("FinishButton").GetComponent<Button>().interactable = false;
+                        else
+                            hintCardPrefab.transform.Find("FinishButton").GetComponent<Button>().interactable = true;
+
+                    }
+                    if(pair.Key == "score")
+                    {
+                        InputField hintScoreInput = hintCardPrefab.transform.Find("HintScoreInput").GetComponent<InputField>();
+                        hintScoreInput.text = pair.Value.ToString();
+                    }
+                    if(pair.Key == "position")
+                    {
+                        InputField hintPositionNumberInput = hintCardPrefab.transform.Find("HintPositionNumberInput").GetComponent<InputField>();
+                        hintPositionNumberInput.text = pair.Value.ToString();
+                    }
                 }
+
+               
 
                 // Añadir a Lista
                 currentHints.Add(hintElement);
