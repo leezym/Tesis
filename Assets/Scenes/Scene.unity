@@ -2578,6 +2578,21 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 5615250915123064667}
+    - target: {fileID: 1662035146541900953, guid: 546d9729dee235041be0d390a492090e,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662035146541900953, guid: 546d9729dee235041be0d390a492090e,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662035146541900953, guid: 546d9729dee235041be0d390a492090e,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5123974784412819179, guid: 546d9729dee235041be0d390a492090e,
         type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -5039,7 +5054,7 @@ PrefabInstance:
     - target: {fileID: 4667455093232413587, guid: 304f48c295c992347b3f8ce56b2b7903,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -0.00000008150868
       objectReference: {fileID: 0}
     - target: {fileID: 6185868663843004598, guid: 304f48c295c992347b3f8ce56b2b7903,
         type: 3}
