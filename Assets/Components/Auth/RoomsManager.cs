@@ -13,10 +13,10 @@ public class RoomsManager : MonoBehaviour
         instance = this;
     }
 
-    public void PostNewRoom(string room, int size, string idInductor)
+    public async Task PostNewRoom(string room, int size, string idInductor)
     {
         Room element = new Room(room, size, idInductor);
-        DataBaseManager.instance.InsertWithoutId("Rooms", element.ConvertJson());
+        await DataBaseManager.instance.InsertWithoutId("Rooms", element.ConvertJson());
     }
 
     public async Task PutRoomAsync(string roomId, Dictionary<string,object> data)

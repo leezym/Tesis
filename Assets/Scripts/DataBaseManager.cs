@@ -75,22 +75,21 @@ public class DataBaseManager : MonoBehaviour
 
     // Recuperar las puntuaciones https://firebase.google.com/docs/database/unity/retrieve-data?hl=es
     
-    public void InsertWithId(string db, string id, Dictionary<string, object> json)
+    public async Task InsertWithId(string db, string id, Dictionary<string, object> json)
     {
         CollectionReference colRef = reference.Collection(db);
-        colRef.Document(id).SetAsync(json, SetOptions.MergeAll);
+        await colRef.Document(id).SetAsync(json, SetOptions.MergeAll);
     }
 
-    public void InsertWithoutId(string db, Dictionary<string, object> json)
+    public async Task InsertWithoutId(string db, Dictionary<string, object> json)
     {
         CollectionReference colRef = reference.Collection(db);
-        colRef.AddAsync(json);
+        await colRef.AddAsync(json);
     }
 
     public async Task UpdateAsync(string db, string id, Dictionary<string,object> data)
     {
-        DocumentReference docRef = reference.Collection(db).Document(id);
-        
+        DocumentReference docRef = reference.Collection(db).Document(id);        
         await docRef.UpdateAsync(data);
     }
 

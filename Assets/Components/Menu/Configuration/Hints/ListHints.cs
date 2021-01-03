@@ -94,7 +94,7 @@ public class ListHints : MonoBehaviour
             List<Dictionary<string, object>> newHint = await HintsManager.instance.GetHintByName(inputHintName.text);
             if (newHint.Count == 0)
             {
-                HintsManager.instance.PostNewHint(inputHintName.text, inputHintDescription.text, inputHintAnswer.text);
+                await HintsManager.instance.PostNewHint(inputHintName.text, inputHintDescription.text, inputHintAnswer.text);
                 ScenesManager.instance.LoadNewCanvas(canvasConfigHints);
                 ScenesManager.instance.DeleteCurrentCanvas(canvasAddHints);
                 ClearCurrentHints();

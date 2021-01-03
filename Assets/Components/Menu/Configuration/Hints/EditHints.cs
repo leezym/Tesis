@@ -124,7 +124,7 @@ public class EditHints : MonoBehaviour
                     { "description" , inputHintDescriptionDetail.text},
                     { "answer" , inputHintAnswerDetail.text}
                 };
-                await HintsManager.instance.PutHintAsync(idHint, newHintData);
+                HintsManager.instance.PutHintAsync(idHint, newHintData);
                 NotificationsManager.instance.SetSuccessNotificationMessage("Datos guardados.");
                 hintName = inputHintNameDetail.text;
             }

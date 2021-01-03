@@ -14,16 +14,16 @@ public class UsersManager : MonoBehaviour
         instance = this;
     }
 
-    public void PostNewInductor(string uid, string user, string email, string name)
+    public async Task PostNewInductor(string uid, string user, string email, string name)
     {
         Inductor element = new Inductor(user, email, name);
-        DataBaseManager.instance.InsertWithId("Inductors", uid, element.ConvertJson());
+        await DataBaseManager.instance.InsertWithId("Inductors", uid, element.ConvertJson());
     }
 
-    public void PostNewStudent(string uid, string name, string document, string idRoom)
+    public async Task PostNewStudent(string uid, string name, string document, string idRoom)
     {
         Student element = new Student(name, document, idRoom);
-        DataBaseManager.instance.InsertWithId("Students", uid, element.ConvertJson());
+        await DataBaseManager.instance.InsertWithId("Students", uid, element.ConvertJson());
     }
 
     public async Task PutUserAsync(string db, string userId, Dictionary<string,object> data)
@@ -49,13 +49,11 @@ public class UsersManager : MonoBehaviour
     public async Task DeleteAsync(string db, string userId) 
     {
         await DataBaseManager.instance.DeleteAsync(db, userId);
-
     }    
 
     public async Task DeleteSession(string idInductor) 
     {
         await DataBaseManager.instance.DeleteSession(idInductor);
-
     }
 }
 

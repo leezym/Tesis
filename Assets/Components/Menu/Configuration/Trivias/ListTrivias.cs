@@ -22,6 +22,7 @@ public class ListTrivias : MonoBehaviour
     public Text textTriviaAnswerOne, textTriviaAnswerTwo, textTriviaAnswerThree;
     public Text placeholderTriviaAnswerOne, placeholderTriviaAnswerTwo, placeholderTriviaAnswerThree;
     public Sprite backgroundCorrectAnswer, backgroundRegularAnswer;
+    
     string buildingName = "";
 
     async void Start()
@@ -204,7 +205,16 @@ public class ListTrivias : MonoBehaviour
             if (newTrivia.Count == 0)
             {
                 string idBuilding = await DataBaseManager.instance.SearchId("Buildings", "name", buildingName);
-                TriviasManager.instance.PostNewTrivia(idBuilding, inputTriviaQuestion.text, inputTriviaAnswerOne.text, inputTriviaAnswerTwo.text, inputTriviaAnswerThree.text, DetectCorrectAnswer());
+
+                // Actualizar Edificios
+                Dictionary<string, object> newBuildingData = new Dictionary<string, object>
+                {
+                    {"amongQuestions", currentSizeTrivias + 1 }
+                };
+                await DataBaseManager.instance.UpdateAsync("Buildings", idBuilding, newBuildingData);
+
+                // Actualizar Trivias
+                await TriviasManager.instance.PostNewTrivia(idBuilding, inputTriviaQuestion.text, inputTriviaAnswerOne.text, inputTriviaAnswerTwo.text, inputTriviaAnswerThree.text, DetectCorrectAnswer());
                 ScenesManager.instance.LoadNewCanvas(canvasConfigTrivias);
                 ScenesManager.instance.DeleteCurrentCanvas(canvasAddTrivias);
                 ClearCurrentTrivias();

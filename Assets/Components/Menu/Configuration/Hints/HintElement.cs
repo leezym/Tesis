@@ -39,7 +39,7 @@ public class HintElement : MonoBehaviour
             {"position", Convert.ToInt32(this.transform.Find("HintPositionNumberInput").GetComponent<InputField>().text)}
         };
 
-        await HintsManager.instance.PutHintAsync(hintName, newCardData);
+        HintsManager.instance.PutHintAsync(hintName, newCardData);
         
         if(this.transform.Find("HintTimeLabel").GetComponent<Text>().text != "")
             this.transform.Find("FinishButton").GetComponent<Button>().interactable = false;

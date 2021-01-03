@@ -139,7 +139,7 @@ public class AuthManager : MonoBehaviour
         string password = inputFieldPassword.text;
         string email = user + "@javerianacali.edu.co";
 
-        authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
+        authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async taskSignIn => {                
             if (taskSignIn.IsFaulted)
             {
                 foreach (System.Exception exception in taskSignIn.Exception.InnerExceptions)
@@ -150,8 +150,8 @@ public class AuthManager : MonoBehaviour
                 }
                 return;
             }
-            UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);       
-            RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);            
+            await UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);       
+            await RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);            
         });
 
        /* authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(taskCreate => {
@@ -198,7 +198,7 @@ public class AuthManager : MonoBehaviour
                 Debug.Log(idRoom);
                 if(idRoom != null)
                 {
-                    await authFirebase.SignInAnonymouslyAsync().ContinueWith(task =>
+                    await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task =>
                     {
                         if (task.IsFaulted)
                         {
@@ -211,7 +211,7 @@ public class AuthManager : MonoBehaviour
                             return;
                         }
 
-                        UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
+                        await UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
 
                         //SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
                         

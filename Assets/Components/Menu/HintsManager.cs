@@ -11,10 +11,10 @@ public class HintsManager : MonoBehaviour
         instance = this;
     }
 
-    public void PostNewHint(string name, string description, string answer)
+    public async Task PostNewHint(string name, string description, string answer)
     {
         Hint element = new Hint(name, description, answer);
-        DataBaseManager.instance.InsertWithoutId("Hints", element.ConvertJson());
+        await DataBaseManager.instance.InsertWithoutId("Hints", element.ConvertJson());
     }
 
     public async Task PutHintAsync(string idHint, Dictionary<string,object> data)

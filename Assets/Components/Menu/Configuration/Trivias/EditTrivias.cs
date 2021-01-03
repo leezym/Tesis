@@ -212,7 +212,7 @@ public class EditTrivias : MonoBehaviour
                     { "answerThree" , inputTriviaAnswerThreeDetail.text},
                     { "correctAnswer", DetectCorrectAnswer()}
                 };
-                await TriviasManager.instance.PutTriviaAsync(idTrivia, newTriviaData);
+                TriviasManager.instance.PutTriviaAsync(idTrivia, newTriviaData);
                 NotificationsManager.instance.SetSuccessNotificationMessage("Datos guardados.");
                 triviaQuestion = inputTriviaQuestionDetail.text;
             }

@@ -11,10 +11,10 @@ public class TriviasManager : MonoBehaviour
         instance = this;
     }
 
-    public void PostNewTrivia(string idBuilding, string question, string answerOne, string answerTwo, string answerThree, string correctAnswer)
+    public async Task PostNewTrivia(string idBuilding, string question, string answerOne, string answerTwo, string answerThree, string correctAnswer)
     {
         Trivia element = new Trivia(idBuilding, question, answerOne, answerTwo, answerThree, correctAnswer);
-        DataBaseManager.instance.InsertWithoutId("Trivias", element.ConvertJson());
+        await DataBaseManager.instance.InsertWithoutId("Trivias", element.ConvertJson());
     }
 
     public async Task PutTriviaAsync(string idTrivia, Dictionary<string,object> data)
