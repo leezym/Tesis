@@ -61,8 +61,8 @@ public class CardsHints : MonoBehaviour
                 hintElement.transform.parent = contentCards.transform;
                 
                 // Editar background
-                hintCardPrefab.GetComponent<Image>().sprite = backgroundCardHint[backgroundCount];
-                hintCardPrefab.transform.Find("PositionCircle").GetComponent<Image>().sprite = backgroundCircleCardHint[backgroundCount];
+                hintElement.GetComponent<Image>().sprite = backgroundCardHint[backgroundCount];
+                hintElement.transform.Find("PositionCircle").GetComponent<Image>().sprite = backgroundCircleCardHint[backgroundCount];
                 backgroundCount ++;
 
                 foreach(KeyValuePair<string,object> pair in hint)
@@ -70,31 +70,31 @@ public class CardsHints : MonoBehaviour
                     //Editar text
                     if(pair.Key == "name"){                       
                         
-                        Text hintNameLabel = hintCardPrefab.transform.Find("HintNameLabel").GetComponent<Text>();
+                        Text hintNameLabel = hintElement.transform.Find("HintNameLabel").GetComponent<Text>();
                         hintNameLabel.text = pair.Value.ToString();                        
                     }
                     if (pair.Key == "answer"){
-                        Text hintAnswerLabel = hintCardPrefab.transform.Find("HintAnswerLabel").GetComponent<Text>();
+                        Text hintAnswerLabel = hintElement.transform.Find("HintAnswerLabel").GetComponent<Text>();
                         hintAnswerLabel.text = pair.Value.ToString();  
                     }
                     if(pair.Key == "hour")
                     {
-                        Text hintTimeLabel = hintCardPrefab.transform.Find("HintTimeLabel").GetComponent<Text>();
+                        Text hintTimeLabel = hintElement.transform.Find("HintTimeLabel").GetComponent<Text>();
                         hintTimeLabel.text = pair.Value.ToString();
                         if(pair.Value.ToString() != "")
-                            hintCardPrefab.transform.Find("FinishButton").GetComponent<Button>().interactable = false;
+                            hintElement.transform.Find("FinishButton").GetComponent<Button>().interactable = false;
                         else
-                            hintCardPrefab.transform.Find("FinishButton").GetComponent<Button>().interactable = true;
+                            hintElement.transform.Find("FinishButton").GetComponent<Button>().interactable = true;
 
                     }
                     if(pair.Key == "score")
                     {
-                        InputField hintScoreInput = hintCardPrefab.transform.Find("HintScoreInput").GetComponent<InputField>();
+                        InputField hintScoreInput = hintElement.transform.Find("HintScoreInput").GetComponent<InputField>();
                         hintScoreInput.text = pair.Value.ToString();
                     }
                     if(pair.Key == "position")
                     {
-                        InputField hintPositionNumberInput = hintCardPrefab.transform.Find("HintPositionNumberInput").GetComponent<InputField>();
+                        InputField hintPositionNumberInput = hintElement.transform.Find("HintPositionNumberInput").GetComponent<InputField>();
                         hintPositionNumberInput.text = pair.Value.ToString();
                     }
                 }

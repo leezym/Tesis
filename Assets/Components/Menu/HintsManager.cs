@@ -17,9 +17,9 @@ public class HintsManager : MonoBehaviour
         DataBaseManager.instance.InsertWithoutId("Hints", element.ConvertJson());
     }
 
-    public async Task PutHintAsync(string nameHint, Dictionary<string,object> data)
+    public async Task PutHintAsync(string idHint, Dictionary<string,object> data)
     {
-        string idHint = await DataBaseManager.instance.SearchId("Hints", "name", nameHint);
+        //string idHint = await DataBaseManager.instance.SearchId("Hints", "name", nameHint);
         await DataBaseManager.instance.UpdateAsync("Hints", idHint, data);
     }
 
@@ -28,7 +28,7 @@ public class HintsManager : MonoBehaviour
         return await DataBaseManager.instance.SearchById("Hints", idHint);
     }
 
-    public async Task<Dictionary<string, object>> GetHintByName(string name)
+    public async Task<List<Dictionary<string, object>>> GetHintByName(string name)
     {
         return await DataBaseManager.instance.SearchByAttribute("Hints", "name", name);
     }
