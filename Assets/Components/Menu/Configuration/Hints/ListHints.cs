@@ -13,7 +13,7 @@ public class ListHints : MonoBehaviour
     List<GameObject> currentHints = new List<GameObject>();
     int currentSizeHints = 0, newSizeHints = 0;
 
-    public InputField inputHintName, inputDescriptionHint, inputAnswerHint;
+    public InputField inputHintName, inputHintDescription, inputHintAnswer;
     
     // Nombre de la DB - Buildings
     void Start()
@@ -24,8 +24,8 @@ public class ListHints : MonoBehaviour
     public void InitializeAtributes() 
     {
         inputHintName.text = "";
-        inputDescriptionHint.text = "";
-        inputAnswerHint.text = "";
+        inputHintDescription.text = "";
+        inputHintAnswer.text = "";
     }
 
     async void Update()
@@ -66,7 +66,7 @@ public class ListHints : MonoBehaviour
                         hintElement.transform.parent = hintContent.transform;
                         
                         // Editar texto
-                        Text hintText = hintPrefab.GetComponentInChildren<Text>();
+                        Text hintText = hintElement.GetComponentInChildren<Text>();
                         hintText.text = pair.Value.ToString();
 
                         // Añadir a Lista
@@ -80,24 +80,30 @@ public class ListHints : MonoBehaviour
 
     public bool CheckNewData()
     {
-        if( inputHintName.text != "" && inputDescriptionHint.text != "" && inputAnswerHint.text != "")
+        if( inputHintName.text != "" && inputHintDescription.text != "" && inputHintAnswer.text != "")
         {            
             return true;
         }
         return false;
     }
 
-    public void SaveHint()
+    public async void SaveHint()
     {    
         if (CheckNewData())
         {
-            HintsManager.instance.PostNewHint(inputHintName.text, inputDescriptionHint.text, inputAnswerHint.text);
-            ScenesManager.instance.LoadNewCanvas(canvasConfigHints);
-            ScenesManager.instance.DeleteCurrentCanvas(canvasAddHints);
-            ClearCurrentHints();
+            List<Dictionary<string, object>> newHint = await HintsManager.instance.GetHintByName(inputHintName.text);
+            if (newHint.Count == 0)
+            {
+                HintsManager.instance.PostNewHint(inputHintName.text, inputHintDescription.text, inputHintAnswer.text);
+                ScenesManager.instance.LoadNewCanvas(canvasConfigHints);
+                ScenesManager.instance.DeleteCurrentCanvas(canvasAddHints);
+                ClearCurrentHints();
+                NotificationsManager.instance.SetSuccessNotificationMessage("Pista creada.");
+            }
+            else
+                NotificationsManager.instance.SetFailureNotificationMessage("Ya existe una pista con ese nombre. Por favor intenta con otro.");
         }else
             NotificationsManager.instance.SetFailureNotificationMessage("Campos Incompletos. Por favor llene todos los campos.");
-    }    
-
+    }
 }
 

@@ -48,16 +48,17 @@ public class DataBaseManager : MonoBehaviour
         return null;
     }
 
-    public async Task<Dictionary<string, object>> SearchByAttribute(string db, string attribute, string value)
+    public async Task<List<Dictionary<string, object>>> SearchByAttribute(string db, string attribute, string value)
     {
         CollectionReference colRef = reference.Collection(db);
         Query queryDocument = colRef.WhereEqualTo(attribute, value);
         QuerySnapshot querySnapshot = await queryDocument.GetSnapshotAsync();
+        List<Dictionary<string,object>> data = new List<Dictionary<string, object>>();
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
         {
-            return documentSnapshot.ToDictionary();
+            data.Add(documentSnapshot.ToDictionary());
         }
-        return null;
+        return data;
     }
 
     public async Task<string> SearchId(string db, string attribute, string value)
