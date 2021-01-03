@@ -926,6 +926,7 @@ Transform:
   m_Children:
   - {fileID: 3845563676692178734}
   - {fileID: 8721026152999562991}
+  - {fileID: 1547105295467469000}
   m_Father: {fileID: 723842550}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2068,16 +2069,16 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4333658065117703911, guid: b35dd11fef4339547bf81094a7b53ef3,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4333658065117703912, guid: b35dd11fef4339547bf81094a7b53ef3,
         type: 3}
       propertyPath: m_Name
       value: PanelActivities
       objectReference: {fileID: 0}
+    - target: {fileID: 4723564852114267681, guid: b35dd11fef4339547bf81094a7b53ef3,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1547105295467469003}
     - target: {fileID: 6604926503510057701, guid: b35dd11fef4339547bf81094a7b53ef3,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
