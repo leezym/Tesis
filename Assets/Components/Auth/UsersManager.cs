@@ -38,7 +38,8 @@ public class UsersManager : MonoBehaviour
 
     public async Task<bool> ExistUserByDocument(string db, string document)
     {
-        if (await DataBaseManager.instance.SearchByAttribute(db, "document", document) != null)
+        List<Dictionary<string, object>> data = await DataBaseManager.instance.SearchByAttribute(db, "document", document);
+        if (data.Count != 0)
         {
             return true;
         }
