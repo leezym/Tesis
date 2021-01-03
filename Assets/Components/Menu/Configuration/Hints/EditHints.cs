@@ -11,7 +11,8 @@ public class EditHints : MonoBehaviour
     public Image imageCancelName, imageCancelDescription, imageCancelAnswer;
     public Image imageEditName, imageEditDescription, imageEditAnswer;
 
-    string hintName = "";
+    string idHint = "";
+    string hintName= "";
 
     void Start() 
     {
@@ -33,7 +34,8 @@ public class EditHints : MonoBehaviour
 
     public async void SearchHintDetails(string hintText)
     {        
-        Dictionary<string, object> hint = await HintsManager.instance.GetHintByName(hintText);
+        idHint = await DataBaseManager.instance.SearchId("Hints", "name", hintText);
+        Dictionary<string, object> hint = await HintsManager.instance.GetHintAsync(idHint);
         foreach(KeyValuePair<string, object> pair in hint)
         {
             if (pair.Key == "name")
@@ -43,28 +45,26 @@ public class EditHints : MonoBehaviour
             if (pair.Key == "answer")
                 inputHintAnswerDetail.text = pair.Value.ToString();
         }
-
         hintName = inputHintNameDetail.text;
     }
 
     public void EnableInput(GameObject button)
     {
-        string nameButton = button.name;
-        if (nameButton == "HintNameEditButton")
+        if (button == imageEditName.gameObject)
         {
             imageEditName.enabled = false;
             imageCancelName.enabled = true;
             imageSaveName.enabled = true;
             inputHintNameDetail.interactable = true;
         }
-        else if (nameButton == "HintDescriptionEditButton")
+        else if (button == imageEditDescription.gameObject)
         {
             imageEditDescription.enabled = false;
             imageCancelDescription.enabled = true;
             imageSaveDescription.enabled = true;
             inputHintDescriptionDetail.interactable = true;
         }
-        else if (nameButton == "HintAnswerEditButton")
+        else if (button == imageEditAnswer.gameObject)
         {
             imageEditAnswer.enabled = false;
             imageCancelAnswer.enabled = true;
@@ -75,22 +75,21 @@ public class EditHints : MonoBehaviour
 
     public void DisableInput(GameObject button)
     {
-        string nameButton = button.name;
-        if (nameButton == "HintNameSaveButton" || nameButton == "HintNameCancelButton")
+        if (button == imageSaveName.gameObject || button == imageCancelName.gameObject)
         {
             imageEditName.enabled = true;
             imageCancelName.enabled = false;
             imageSaveName.enabled = false;
             inputHintNameDetail.interactable = false;
         }
-        else if (nameButton == "HintDescriptionSaveButton" || nameButton == "HintDescriptionCancelButton")
+        else if (button == imageSaveDescription.gameObject || button == imageCancelDescription.gameObject)
         {
             imageEditDescription.enabled = true;
             imageCancelDescription.enabled = false;
             imageSaveDescription.enabled = false;
             inputHintDescriptionDetail.interactable = false;
         }
-        else if (nameButton == "HintAnswerSaveButton" || nameButton == "HintAnswerCancelButton")
+        else if (button == imageSaveAnswer.gameObject || button == imageCancelAnswer.gameObject)
         {
             imageEditAnswer.enabled = true;
             imageCancelAnswer.enabled = false;
@@ -99,15 +98,40 @@ public class EditHints : MonoBehaviour
         }
     }
 
+    public bool CheckNewData()
+    {
+        if( inputHintNameDetail.text != "" && inputHintDescriptionDetail.text != "" && inputHintAnswerDetail.text != "")
+        {            
+            return true;
+        }
+        return false;
+    }
+
     public async void SaveInput(GameObject button)
     {
-        DisableInput(button);
-        Dictionary<string, object> newHintData = new Dictionary<string, object>
+        List<Dictionary<string, object>> hint = new List<Dictionary<string, object>>();
+        if (inputHintNameDetail.text != hintName)
+            hint = await HintsManager.instance.GetHintByName(inputHintNameDetail.text);
+
+        if (hint.Count == 0)
         {
-            { "name" , inputHintNameDetail.text},
-            { "description" , inputHintDescriptionDetail.text},
-            { "answer" , inputHintAnswerDetail.text}
-        };
-        await HintsManager.instance.PutHintAsync(hintName, newHintData);
+            if (CheckNewData())
+            {
+                DisableInput(button);
+                Dictionary<string, object> newHintData = new Dictionary<string, object>
+                {
+                    { "name" , inputHintNameDetail.text},
+                    { "description" , inputHintDescriptionDetail.text},
+                    { "answer" , inputHintAnswerDetail.text}
+                };
+                await HintsManager.instance.PutHintAsync(idHint, newHintData);
+                NotificationsManager.instance.SetSuccessNotificationMessage("Datos guardados.");
+                hintName = inputHintNameDetail.text;
+            }
+            else
+                NotificationsManager.instance.SetFailureNotificationMessage("Campos Incompletos. Por favor llene todos los campos.");
+        }
+        else 
+            NotificationsManager.instance.SetFailureNotificationMessage("Ya existe una pista con ese nombre. Por favor intenta con otro.");
     }
 }
