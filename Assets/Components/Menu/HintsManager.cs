@@ -19,7 +19,6 @@ public class HintsManager : MonoBehaviour
 
     public async Task PutHintAsync(string idHint, Dictionary<string,object> data)
     {
-        //string idHint = await DataBaseManager.instance.SearchId("Hints", "name", nameHint);
         await DataBaseManager.instance.UpdateAsync("Hints", idHint, data);
     }
 
@@ -33,6 +32,11 @@ public class HintsManager : MonoBehaviour
         return await DataBaseManager.instance.SearchByAttribute("Hints", "name", name);
     }
 
+    public async Task<string> GetIdHintByName(string name)
+    {
+        return await DataBaseManager.instance.SearchId("Hints", "name", name);
+    }
+
     public async Task DeleteHint(string idHint)
     {
         await DataBaseManager.instance.DeleteAsync("Hints", idHint);
@@ -44,9 +48,6 @@ public class Hint
     public string name;
     public string description;
     public string answer;
-    public string hour = "";
-    public int score;
-    public int position;
 
     public Hint() { }
 
@@ -62,10 +63,7 @@ public class Hint
         return new Dictionary<string, object>() {
             { "name", this.name },
             { "description", this.description },
-            { "answer", this.answer },
-            { "hour", this.hour },
-            { "score", this.score },
-            { "position", this.position }
+            { "answer", this.answer }
         };
     }
 }

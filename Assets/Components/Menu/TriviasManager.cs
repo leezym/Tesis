@@ -19,13 +19,17 @@ public class TriviasManager : MonoBehaviour
 
     public async Task PutTriviaAsync(string idTrivia, Dictionary<string,object> data)
     {
-        //string idTrivia = await DataBaseManager.instance.SearchId("Trivias", "name", nameTrivia);
         await DataBaseManager.instance.UpdateAsync("Trivias", idTrivia, data);
     }
 
     public async Task<Dictionary<string, object>> GetTriviaAsync(string idTrivia)
     {
         return await DataBaseManager.instance.SearchById("Trivias", idTrivia);
+    }
+
+    public async Task<string> GetIdTriviaByQuestion(string question)
+    {
+        return await DataBaseManager.instance.SearchId("Trivias", "question", question);
     }
 
     public async Task<List<Dictionary<string, object>>> GetTriviaByBuilding(string name)
@@ -49,11 +53,11 @@ public class Trivia
 {
     public string idBuilding;
     public string question;
-    public int score = 0;
     public string answerOne;
     public string answerTwo;
     public string answerThree;
     public string correctAnswer;
+    public int points = 10;
 
     public Trivia() { }
 
@@ -76,7 +80,7 @@ public class Trivia
             { "answerTwo", this.answerTwo },
             { "answerThree", this.answerThree },
             { "correctAnswer", this.correctAnswer },
-            { "score", this.score }
+            { "points", this.points }
         };
     }
 }

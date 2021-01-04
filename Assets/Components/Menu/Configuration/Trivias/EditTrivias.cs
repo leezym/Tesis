@@ -94,7 +94,7 @@ public class EditTrivias : MonoBehaviour
 
     public async void SearchTriviaDetails(string triviaText)
     {        
-        idTrivia = await DataBaseManager.instance.SearchId("Trivias", "question", triviaText);
+        idTrivia = await TriviasManager.instance.GetIdTriviaByQuestion(triviaText);
         Dictionary<string, object> trivia = await TriviasManager.instance.GetTriviaAsync(idTrivia);
         foreach(KeyValuePair<string, object> pair in trivia)
         {
@@ -212,7 +212,7 @@ public class EditTrivias : MonoBehaviour
                     { "answerThree" , inputTriviaAnswerThreeDetail.text},
                     { "correctAnswer", DetectCorrectAnswer()}
                 };
-                TriviasManager.instance.PutTriviaAsync(idTrivia, newTriviaData);
+                await TriviasManager.instance.PutTriviaAsync(idTrivia, newTriviaData);
                 NotificationsManager.instance.SetSuccessNotificationMessage("Datos guardados.");
                 triviaQuestion = inputTriviaQuestionDetail.text;
             }

@@ -61,6 +61,19 @@ public class DataBaseManager : MonoBehaviour
         return data;
     }
 
+    public async Task<List<Dictionary<string, object>>> SearchByTwoAttributes(string db, string attributeOne, string valueOne, string attributeTwo, string valueTwo)
+    {
+        CollectionReference colRef = reference.Collection(db);
+        Query queryDocument = colRef.WhereEqualTo(attributeOne, valueOne).WhereEqualTo(attributeTwo, valueTwo);
+        QuerySnapshot querySnapshot = await queryDocument.GetSnapshotAsync();
+        List<Dictionary<string,object>> data = new List<Dictionary<string, object>>();
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            data.Add(documentSnapshot.ToDictionary());
+        }
+        return data;
+    }
+
     public async Task<string> SearchId(string db, string attribute, string value)
     {
         CollectionReference colRef = reference.Collection(db);
@@ -89,6 +102,21 @@ public class DataBaseManager : MonoBehaviour
 
     public async Task UpdateAsync(string db, string id, Dictionary<string,object> data)
     {
+        DocumentReference docRef = reference.Collection(db).Document(id);        
+        await docRef.UpdateAsync(data);
+    }
+
+    public async Task UpdateByTwoAttributesAsync(string db, string attributeOne, string valueOne, string attributeTwo, string valueTwo, Dictionary<string,object> data)
+    {
+        CollectionReference colRef = reference.Collection(db);
+        Query queryDocument = colRef.WhereEqualTo(attributeOne, valueOne).WhereEqualTo(attributeTwo, valueTwo);
+        QuerySnapshot querySnapshot = await queryDocument.GetSnapshotAsync();
+        string id = "";
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            id = documentSnapshot.Id;
+        }
+
         DocumentReference docRef = reference.Collection(db).Document(id);        
         await docRef.UpdateAsync(data);
     }

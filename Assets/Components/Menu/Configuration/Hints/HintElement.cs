@@ -6,7 +6,7 @@ using System;
 
 public class HintElement : MonoBehaviour
 {
-    public async void SelectHint()
+    public void SelectHint()
     {
         Text hintText = this.gameObject.GetComponentInChildren<Text>();
         ScenesManager.instance.LoadNewCanvas(GameObject.Find("PanelHintsDetails").GetComponent<Canvas>());
@@ -32,14 +32,13 @@ public class HintElement : MonoBehaviour
         this.transform.Find("HintPositionNumberInput").GetComponent<InputField>().interactable = false;
 
         string hintName = this.transform.Find("HintNameLabel").GetComponent<Text>().text;
-        Dictionary<string, object> newCardData = new Dictionary<string, object>
-        {
-            {"hour", this.transform.Find("HintTimeLabel").GetComponent<Text>().text},
-            {"score", Convert.ToInt32(this.transform.Find("HintScoreInput").GetComponent<InputField>().text)},
-            {"position", Convert.ToInt32(this.transform.Find("HintPositionNumberInput").GetComponent<InputField>().text)}
-        };
+        string hour = this.transform.Find("HintTimeLabel").GetComponent<Text>().text;
+        int score = Convert.ToInt32(this.transform.Find("HintScoreInput").GetComponent<InputField>().text);
+        int  position = Convert.ToInt32(this.transform.Find("HintPositionNumberInput").GetComponent<InputField>().text);
 
-        HintsManager.instance.PutHintAsync(hintName, newCardData);
+        string idRoom = await RoomsManager.instance.SearchRoomByInductor(AuthManager.instance.GetUserId());
+        string idHint = await HintsManager.instance.GetIdHintByName(hintName);
+        await HintsChallengesManager.instance.PostNewHintChallenge(idRoom, idHint, score, position, hour);
         
         if(this.transform.Find("HintTimeLabel").GetComponent<Text>().text != "")
             this.transform.Find("FinishButton").GetComponent<Button>().interactable = false;

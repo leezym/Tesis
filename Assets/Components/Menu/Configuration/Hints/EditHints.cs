@@ -34,7 +34,7 @@ public class EditHints : MonoBehaviour
 
     public async void SearchHintDetails(string hintText)
     {        
-        idHint = await DataBaseManager.instance.SearchId("Hints", "name", hintText);
+        idHint = await HintsManager.instance.GetIdHintByName(hintText);
         Dictionary<string, object> hint = await HintsManager.instance.GetHintAsync(idHint);
         foreach(KeyValuePair<string, object> pair in hint)
         {
@@ -124,7 +124,7 @@ public class EditHints : MonoBehaviour
                     { "description" , inputHintDescriptionDetail.text},
                     { "answer" , inputHintAnswerDetail.text}
                 };
-                HintsManager.instance.PutHintAsync(idHint, newHintData);
+                await HintsManager.instance.PutHintAsync(idHint, newHintData);
                 NotificationsManager.instance.SetSuccessNotificationMessage("Datos guardados.");
                 hintName = inputHintNameDetail.text;
             }

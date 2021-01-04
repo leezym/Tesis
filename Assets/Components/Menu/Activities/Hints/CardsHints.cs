@@ -82,17 +82,25 @@ public class CardsHints : MonoBehaviour
                         Text hintTimeLabel = hintElement.transform.Find("HintTimeLabel").GetComponent<Text>();
                         hintTimeLabel.text = pair.Value.ToString();
                         if(pair.Value.ToString() != "")
+                        {
                             hintElement.transform.Find("FinishButton").GetComponent<Button>().interactable = false;
+                            hintElement.transform.Find("HintScoreInput").GetComponent<InputField>().interactable = false;
+                            hintElement.transform.Find("HintPositionNumberInput").GetComponent<InputField>().interactable = false;
+                        }       
                         else
+                        {
                             hintElement.transform.Find("FinishButton").GetComponent<Button>().interactable = true;
+                            hintElement.transform.Find("HintScoreInput").GetComponent<InputField>().interactable = true;
+                            hintElement.transform.Find("HintPositionNumberInput").GetComponent<InputField>().interactable = true;
+                        }
 
                     }
-                    if(pair.Key == "score")
+                    if(pair.Key == "score" && Convert.ToInt32(pair.Value) != 0)
                     {
                         InputField hintScoreInput = hintElement.transform.Find("HintScoreInput").GetComponent<InputField>();
                         hintScoreInput.text = pair.Value.ToString();
                     }
-                    if(pair.Key == "position")
+                    if(pair.Key == "position" && Convert.ToInt32(pair.Value) != 0)
                     {
                         InputField hintPositionNumberInput = hintElement.transform.Find("HintPositionNumberInput").GetComponent<InputField>();
                         hintPositionNumberInput.text = pair.Value.ToString();
