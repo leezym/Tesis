@@ -36,6 +36,19 @@ public class DataBaseManager : MonoBehaviour
         return data;
     }
 
+    public async Task<List<string>> SearchIdsByCollection(string db)
+    {
+        CollectionReference colRef = reference.Collection(db);
+        QuerySnapshot querySnapshot = await colRef.GetSnapshotAsync();
+        List<string> data = new List<string>();
+
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            data.Add(documentSnapshot.Id);
+        }
+        return data;
+    }
+
     public async Task<Dictionary<string, object>> SearchById(string db, string id)
     {
         DocumentReference docRef = reference.Collection(db).Document(id);
@@ -196,6 +209,30 @@ public class DataBaseManager : MonoBehaviour
             return documentSnapshotMembers.ToDictionary();            
         }
         return null;     
+    }
+
+    public async Task<List<Dictionary<string, object>>> SearchHintDataByRoom(string idRoom)
+    {
+        CollectionReference colRef = reference.Collection("Hints");
+        QuerySnapshot querySnapshot = await colRef.GetSnapshotAsync();
+        List<Dictionary<string, object>> dataHints = new List<Dictionary<string, object>>();
+
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            string idHint = documentSnapshot.Id;
+            Dictionary<string, object> hint = documentSnapshot.ToDictionary();
+            
+            List<Dictionary<string, object>> hintsChallengesList = await SearchByTwoAttributes("HintsChallenges", "idRoom", idRoom, "idHint", idHint) ;
+            foreach(Dictionary<string, object> hintChallenge in hintsChallengesList)
+            {
+                foreach(KeyValuePair<string, object> pair in hintChallenge)
+                {
+                    hint.Add(pair.Key, pair.Value);
+                }
+            }
+            dataHints.Add(hint);
+        }
+        return dataHints;
     }
 
     public async Task DeleteSession(string idInductor)

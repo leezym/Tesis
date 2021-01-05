@@ -13,7 +13,7 @@ public class CardsHints : MonoBehaviour
     List<Dictionary<string,object>> hintsList = new List<Dictionary<string,object>>();
     List<GameObject> currentHints = new List<GameObject>();
     int currentSizeHints = 0, newSizeHints = 0;
-    
+    string idRoom = "";
 
     public GameObject hintsScrollbar;
     public Transform contentCards;
@@ -42,8 +42,10 @@ public class CardsHints : MonoBehaviour
 
     async Task SearchHint()
     {
+        if (idRoom == "")
+            idRoom = await RoomsManager.instance.SearchRoomByInductor(AuthManager.instance.GetUserId());
 
-        hintsList = await DataBaseManager.instance.SearchByCollection("Hints");
+        hintsList = await HintsChallengesManager.instance.GetHintChallengeByRoom(idRoom);
         newSizeHints = hintsList.Count;
         int backgroundCount = 0;
 

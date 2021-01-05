@@ -27,9 +27,9 @@ public class HintsChallengesManager : MonoBehaviour
         return await DataBaseManager.instance.SearchById("HintsChallenges", idHintChallenge);
     }
 
-    public async Task<List<Dictionary<string, object>>> GetHintChallengeByIds(string idRoom, string idHint)
+    public async Task<List<Dictionary<string, object>>> GetHintChallengeByRoom(string idRoom)
     {
-        return await DataBaseManager.instance.SearchByTwoAttributes("HintsChallenges", "idRoom", idRoom, "idHint", idHint);
+        return await DataBaseManager.instance.SearchHintDataByRoom(idRoom);
     }
 
     public async Task DeleteHintChallenge(string idHintChallenge)
