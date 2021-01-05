@@ -1572,7 +1572,7 @@ PrefabInstance:
     - target: {fileID: 3305352491314577741, guid: 02ac79da0160e924ca15fc11b2848c05,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -193614.44
+      value: -218760.3
       objectReference: {fileID: 0}
     - target: {fileID: 4089347622545099364, guid: 02ac79da0160e924ca15fc11b2848c05,
         type: 3}
@@ -1975,6 +1975,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PanelStudentMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 526157094800213991, guid: bc3385dc6d024514790c94d60bb61bbc,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 526157094800213994, guid: bc3385dc6d024514790c94d60bb61bbc,
         type: 3}
@@ -2566,7 +2571,7 @@ PrefabInstance:
     - target: {fileID: 6211156956478931801, guid: d5b93a0bf3c941f459af129c0329a954,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 153860.27
+      value: 173688.73
       objectReference: {fileID: 0}
     - target: {fileID: 8919599151843629455, guid: d5b93a0bf3c941f459af129c0329a954,
         type: 3}
@@ -3359,7 +3364,7 @@ PrefabInstance:
     - target: {fileID: 8410297848614179738, guid: ab2e211d3dfe1b747bc928149d5f7feb,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 11724.42
+      value: 13018.589
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab2e211d3dfe1b747bc928149d5f7feb, type: 3}
@@ -3690,7 +3695,7 @@ PrefabInstance:
     - target: {fileID: 6243433897050884505, guid: 958dbfb03615ca74aa3178741e901bfe,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 11724.42
+      value: 13018.589
       objectReference: {fileID: 0}
     - target: {fileID: 8267644053055525891, guid: 958dbfb03615ca74aa3178741e901bfe,
         type: 3}
@@ -3858,7 +3863,7 @@ PrefabInstance:
     - target: {fileID: 1124929326226957378, guid: e07cda1c503b16c4fad422e63cdd3542,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -193614.44
+      value: -218760.3
       objectReference: {fileID: 0}
     - target: {fileID: 1124929326226957378, guid: e07cda1c503b16c4fad422e63cdd3542,
         type: 3}
@@ -5225,7 +5230,7 @@ PrefabInstance:
     - target: {fileID: 4667455093232413587, guid: 304f48c295c992347b3f8ce56b2b7903,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 153860.27
+      value: 173688.73
       objectReference: {fileID: 0}
     - target: {fileID: 6185868663843004598, guid: 304f48c295c992347b3f8ce56b2b7903,
         type: 3}
@@ -5676,6 +5681,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2038316232}
+    - target: {fileID: 6703201372796631720, guid: 0a1d023cdffdfc34ea3c800563790b46,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1502112455}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a1d023cdffdfc34ea3c800563790b46, type: 3}
 --- !u!224 &7789521461396350410 stripped
