@@ -43,7 +43,7 @@ public class CardsHints : MonoBehaviour
     async Task SearchHint()
     {
         if (idRoom == "")
-            idRoom = await RoomsManager.instance.SearchRoomByInductor(AuthManager.instance.GetUserId());
+            idRoom = await RoomsManager.instance.SearchRoomByInductor(await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()));
 
         hintsList = await HintsChallengesManager.instance.GetHintChallengeByRoom(idRoom);
         newSizeHints = hintsList.Count;

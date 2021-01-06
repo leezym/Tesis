@@ -36,7 +36,7 @@ public class HintElement : MonoBehaviour
         int score = Convert.ToInt32(this.transform.Find("HintScoreInput").GetComponent<InputField>().text);
         int  position = Convert.ToInt32(this.transform.Find("HintPositionNumberInput").GetComponent<InputField>().text);
 
-        string idRoom = await RoomsManager.instance.SearchRoomByInductor(AuthManager.instance.GetUserId());
+        string idRoom = await RoomsManager.instance.SearchRoomByInductor(await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()));
         string idHint = await HintsManager.instance.GetIdHintByName(hintName);
         await HintsChallengesManager.instance.PostNewHintChallenge(idRoom, idHint, score, position, hour);
         

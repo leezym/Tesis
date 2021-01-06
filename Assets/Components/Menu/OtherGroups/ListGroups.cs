@@ -9,7 +9,10 @@ using UnityEngine.UIElements;
 public class ListGroups : MonoBehaviour
 {
     public Canvas canvasOtherGroups;
-    public Text content;
+    public Transform groupsContent;
+    public GameObject otherGroupPrefab;
+    List<Dictionary<string, string>> groupsList = new List<Dictionary<string, string>>();
+    List<GameObject> currentGroups = new List<GameObject>();
     int newSizeGroups = 0, currentSizeGroups = 0;
 
     void Update()
@@ -20,24 +23,46 @@ public class ListGroups : MonoBehaviour
         }
     }
 
+    void ClearCurrentGroups()
+    {
+        // Vaciar lista y borrar pistas actuales
+        foreach(GameObject group in currentGroups)
+        {
+            Destroy(group);
+        }
+        currentGroups.Clear();
+    }
+
     async void ShowGroupsData()
     {
-        List<Dictionary<string, string>> groups = await GroupManager.instance.GetOtherGroupsDataAsync();
-        /*if (groups.Count != 0)
-        {*/
-            content.text = "";
-            foreach(Dictionary<string, string> data in groups)
+        groupsList = await GroupManager.instance.GetOtherGroupsDataAsync();
+        newSizeGroups = groupsList.Count;
+
+        if (currentSizeGroups != newSizeGroups)
+        {
+            ClearCurrentGroups();
+            foreach(Dictionary<string,string> group in groupsList)
             {
-                string nameInductor = "", nameRoom = "";
-                foreach(KeyValuePair<string, string> pair in data)
+                // Instanciar prefab
+                GameObject groupElement = Instantiate (otherGroupPrefab, new Vector3(groupsContent.position.x,groupsContent.position.y, groupsContent.position.z) , Quaternion.identity);
+                groupElement.transform.parent = groupsContent.transform;
+
+                foreach(KeyValuePair<string,string> pair in group)
                 {
+                    if(pair.Key == "nameRoom"){
+                        Text nameGrouptText = groupElement.transform.Find("GroupNameLabel").GetComponent<Text>();
+                        nameGrouptText.text = pair.Value;
+                    }
                     if(pair.Key == "nameInductor")
-                        nameInductor = pair.Value;
-                    else if (pair.Key == "nameRoom")
-                        nameRoom = pair.Value;
+                    {
+                        Text nameInductortText = groupElement.transform.Find("InductorNameLabel").GetComponent<Text>();
+                        nameInductortText.text = pair.Value;
+                    }
                 }
-                content.text += nameRoom.ToUpper() + "\n" + nameInductor + "\n\n";
+                // Añadir a Lista
+                currentGroups.Add(groupElement);
             }
-        //}
+            currentSizeGroups = newSizeGroups;
+        }
     }
 }

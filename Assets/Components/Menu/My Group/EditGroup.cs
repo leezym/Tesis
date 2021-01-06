@@ -95,8 +95,8 @@ public class EditGroup : MonoBehaviour
             {
                 { "name" , inputInductorName.text}
             };
-            await UsersManager.instance.PutUserAsync("Inductors", AuthManager.instance.GetUserId(), data);
-            await RoomsManager.instance.PostNewRoom("Sala de " + inputInductorName.text, Convert.ToInt32(inputRoomSize.text), AuthManager.instance.GetUserId());
+            await UsersManager.instance.PutUserAsync("Inductors", await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()), data);
+            await RoomsManager.instance.PostNewRoom("Sala de " + inputInductorName.text, Convert.ToInt32(inputRoomSize.text), await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()));
             ScenesManager.instance.DeleteCurrentCanvas(canvasNombreInductor);
             ScenesManager.instance.LoadNewCanvas(canvasMenuInductor);
         }
@@ -106,7 +106,7 @@ public class EditGroup : MonoBehaviour
     {
         if (Convert.ToInt32(newInputRoomSize.text) >= roomCurrentSize)
         {
-            string inductorId = AuthManager.instance.GetUserId().ToString();
+            string inductorId = await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId());
             string roomId = await RoomsManager.instance.SearchRoomByInductor(inductorId);
 
             Dictionary<string, object> newRoomData = new Dictionary<string, object>

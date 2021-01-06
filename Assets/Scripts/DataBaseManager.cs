@@ -235,6 +235,30 @@ public class DataBaseManager : MonoBehaviour
         return dataHints;
     }
 
+    public async Task<List<Dictionary<string, object>>> SearchTriviasDataByBuilding(string idInductor)
+    {
+        CollectionReference colRef = reference.Collection("Buildings");
+        QuerySnapshot querySnapshot = await colRef.GetSnapshotAsync();
+        List<Dictionary<string, object>> dataTrivias = new List<Dictionary<string, object>>();
+
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            string idBuilding = documentSnapshot.Id;
+            Dictionary<string, object> building = documentSnapshot.ToDictionary();
+            
+            List<Dictionary<string, object>> inductorTriviasChallengesList = await SearchByTwoAttributes("InductorTriviasChallenges", "idInductor", idInductor, "idBuilding", idBuilding) ;
+            foreach(Dictionary<string, object> triviaChallenge in inductorTriviasChallengesList)
+            {
+                foreach(KeyValuePair<string, object> pair in triviaChallenge)
+                {
+                    building.Add(pair.Key, pair.Value);
+                }
+            }
+            dataTrivias.Add(building);
+        }
+        return dataTrivias;
+    }
+
     public async Task DeleteSession(string idInductor)
     {
         // Eliminar inductor

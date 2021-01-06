@@ -42,7 +42,8 @@ public class CardsTrivias : MonoBehaviour
 
     async Task SearchTrivia()
     {
-        triviasList = await DataBaseManager.instance.SearchByCollection("Buildings");
+        string idInductor = await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId());
+        triviasList = await DataBaseManager.instance.SearchTriviasDataByBuilding(idInductor);
         newSizeTrivias = triviasList.Count;
 
         if (currentSizeTrivias != newSizeTrivias)
@@ -75,6 +76,14 @@ public class CardsTrivias : MonoBehaviour
                     {
                         Text triviaAmongQuestionsLabel = triviaElement.transform.Find("AmountQuestionsLabel").GetComponent<Text>();
                         triviaAmongQuestionsLabel.text = pair.Value.ToString();
+                    }
+                    if(pair.Key == "available")
+                    {
+                        Debug.Log("uenas "+Convert.ToBoolean(pair.Value));
+                        if (Convert.ToBoolean(pair.Value))
+                            triviaElement.transform.Find("InitializeTriviaButton").GetComponent<Button>().interactable = true;
+                        else
+                            triviaElement.transform.Find("InitializeTriviaButton").GetComponent<Button>().interactable = false;
                     }
                 }               
 

@@ -46,13 +46,13 @@ public class GroupManager : MonoBehaviour
 
     public async Task<Dictionary<string,object>> GetRoomDataAsync()
     {
-        string roomId = await RoomsManager.instance.SearchRoomByInductor(AuthManager.instance.GetUserId());
+        string roomId = await RoomsManager.instance.SearchRoomByInductor(await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()));
         return await RoomsManager.instance.GetRoomAsync(roomId);
     }
 
     public async Task<Dictionary<string,object>> GetInductorDataAsync(Text inductorNameLabel)
     {
-        return await UsersManager.instance.GetUserAsync("Inductors", AuthManager.instance.GetUserId());        
+        return await UsersManager.instance.GetUserAsync("Inductors", await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()));        
     }
 
     public async Task<List<Dictionary<string, string>>> GetOtherGroupsDataAsync()
@@ -85,7 +85,7 @@ public class GroupManager : MonoBehaviour
                 }
             }
 
-            if (idInductor != AuthManager.instance.GetUserId())
+            if (idInductor != await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()))
             {
                 Salas.Add(new Dictionary<string, string> () {
                     {"nameInductor", nameInductor},

@@ -16,8 +16,8 @@ public class UsersManager : MonoBehaviour
 
     public async Task PostNewInductor(string uid, string user, string email, string name)
     {
-        Inductor element = new Inductor(user, email, name);
-        await DataBaseManager.instance.InsertWithId("Inductors", uid, element.ConvertJson());
+        Inductor element = new Inductor(uid, user, email, name);
+        await DataBaseManager.instance.InsertWithoutId("Inductors", element.ConvertJson());
     }
 
     public async Task PostNewStudent(string uid, string name, string document, string idRoom)
@@ -34,6 +34,11 @@ public class UsersManager : MonoBehaviour
     public async Task<Dictionary<string, object>> GetUserAsync(string db, string userId)
     {
         return await DataBaseManager.instance.SearchById(db, userId);
+    }
+
+    public async Task<string> GetInductorIdByAuth(string idAuth)
+    {
+        return await DataBaseManager.instance.SearchId("Inductors", "idAuth", idAuth);
     }
 
     public async Task<bool> ExistUserByDocument(string db, string document)
@@ -59,14 +64,16 @@ public class UsersManager : MonoBehaviour
 
 public class Inductor
 {
+    public string idAuth;
     public string user;
     public string email;
     public string name;
 
     public Inductor() { }
 
-    public Inductor(string user, string email, string name)
+    public Inductor(string idAuth, string user, string email, string name)
     {
+        this.idAuth = idAuth;
         this.user = user;
         this.email = email;
         this.name = name;
@@ -74,6 +81,7 @@ public class Inductor
     public Dictionary<string, object> ConvertJson()
     {
         return new Dictionary<string, object>() {
+            { "idAuth", this.idAuth },
             { "user", this.user },
             { "email", this.email },
             { "name", this.name }

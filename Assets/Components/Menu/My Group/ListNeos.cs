@@ -26,7 +26,7 @@ public class ListNeos : MonoBehaviour
     async Task DetectStudent()
     {
         if (idInductor == null){
-            idInductor = AuthManager.instance.GetUserId();
+            idInductor = await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId());
             currentSizeStudents = await GroupManager.instance.SearchCurrentSizeRoom(idInductor);
         }
 
