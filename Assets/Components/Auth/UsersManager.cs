@@ -51,13 +51,14 @@ public class UsersManager : MonoBehaviour
         return false;
     }
 
-    public async Task DeleteAsync(string db, string userId) 
+    /*public async Task DeleteAsync(string db, string userId) 
     {
         await DataBaseManager.instance.DeleteAsync(db, userId);
-    }    
+    }  */
 
-    public async Task DeleteSession(string idInductor) 
+    public async Task DeleteSession(string idAuth) 
     {
+        string idInductor = await GetInductorIdByAuth(idAuth);
         await DataBaseManager.instance.DeleteSession(idInductor);
     }
 }

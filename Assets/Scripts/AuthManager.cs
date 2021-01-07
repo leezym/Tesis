@@ -193,7 +193,7 @@ public class AuthManager : MonoBehaviour
         if (!await UsersManager.instance.ExistUserByDocument("Students", document))
         {
             if (!await DataBaseManager.instance.IsEmptyTable("Rooms"))
-            {            
+            {
                 idRoom = await RoomsManager.instance.SearchAvailableRoom();
                 Debug.Log(idRoom);
                 if(idRoom != null)
