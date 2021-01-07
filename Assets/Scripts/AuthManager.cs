@@ -24,9 +24,9 @@ public class AuthManager : MonoBehaviour
     public Canvas canvasLoginStudent, canvasMenuStudent;
     public InputField inputFieldUser, inputFieldPassword, inputRoomName;
     public InputField inputFieldDocument, inputFieldName, inputInductorRoomSize;
-    public Text textUserName;
 
     // UserData
+    [HideInInspector]
     public string userType;
 
     public Dictionary<string, object> GetSnapshot() { return snapshot; }
