@@ -18,10 +18,10 @@ public class MyProfile : MonoBehaviour
         }
     }
 
-    void SearchGroupData()
+    async void SearchGroupData()
     {
-        object idRoom = DataBaseManager.instance.SearchAttribute("Students", AuthManager.instance.GetUserId(), "idRoom");
-        object myGroupScore = DataBaseManager.instance.SearchAttribute("Rooms", idRoom.ToString(), "score");
+        object idRoom = await DataBaseManager.instance.SearchAttribute("Students", AuthManager.instance.GetUserId(), "idRoom");
+        object myGroupScore = await DataBaseManager.instance.SearchAttribute("Rooms", idRoom.ToString(), "score");
 
         textMyGroupRanking.text = "";
 
@@ -31,9 +31,9 @@ public class MyProfile : MonoBehaviour
             textMyGroupScore.text = "0";
     }
 
-    void SearchMyData()
+    async void SearchMyData()
     {
-        object myScore = DataBaseManager.instance.SearchAttribute("Students", AuthManager.instance.GetUserId(), "score");
+        object myScore = await DataBaseManager.instance.SearchAttribute("Students", AuthManager.instance.GetUserId(), "score");
 
         textMyRanking.text = "";
         
