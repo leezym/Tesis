@@ -64,8 +64,8 @@ public class DataBaseManager : MonoBehaviour
     public async Task<List<Dictionary<string, object>>> SearchByAttribute(string db, string attribute, string value)
     {
         CollectionReference colRef = reference.Collection(db);
-        Query queryDocument = colRef.WhereEqualTo(attribute, value);
-        QuerySnapshot querySnapshot = await queryDocument.GetSnapshotAsync();
+        Query queryAttribute = colRef.WhereEqualTo(attribute, value);
+        QuerySnapshot querySnapshot = await queryAttribute.GetSnapshotAsync();
         List<Dictionary<string,object>> data = new List<Dictionary<string, object>>();
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
         {
@@ -77,8 +77,8 @@ public class DataBaseManager : MonoBehaviour
     public async Task<List<Dictionary<string, object>>> SearchByTwoAttributes(string db, string attributeOne, string valueOne, string attributeTwo, string valueTwo)
     {
         CollectionReference colRef = reference.Collection(db);
-        Query queryDocument = colRef.WhereEqualTo(attributeOne, valueOne).WhereEqualTo(attributeTwo, valueTwo);
-        QuerySnapshot querySnapshot = await queryDocument.GetSnapshotAsync();
+        Query queryAttributes = colRef.WhereEqualTo(attributeOne, valueOne).WhereEqualTo(attributeTwo, valueTwo);
+        QuerySnapshot querySnapshot = await queryAttributes.GetSnapshotAsync();
         List<Dictionary<string,object>> data = new List<Dictionary<string, object>>();
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
         {
@@ -99,7 +99,34 @@ public class DataBaseManager : MonoBehaviour
         return null;
     }
 
-    // Recuperar las puntuaciones https://firebase.google.com/docs/database/unity/retrieve-data?hl=es
+    public async Task<object> SearchAttribute(string db, string id, string attribute)
+    {
+        DocumentReference docRef = reference.Collection(db).Document(id);
+        DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+        if (snapshot.Exists)
+        {
+            Dictionary<string, object> data = snapshot.ToDictionary();
+            foreach(KeyValuePair<string, object> pair in data)
+            {
+                if(pair.Key == attribute)
+                    return pair.Value;
+            }
+        }
+        return null;
+    }
+
+    public async Task<List<Dictionary<string, object>>> SearchByOrder(string db, string attribute)
+    {
+        CollectionReference colRef = reference.Collection(db);
+        Query queryAttribute = colRef.OrderBy(attribute);
+        QuerySnapshot querySnapshot = await queryAttribute.GetSnapshotAsync();
+        List<Dictionary<string,object>> data = new List<Dictionary<string, object>>();
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            data.Add(documentSnapshot.ToDictionary());
+        }
+        return data;
+    }
     
     public async Task InsertWithId(string db, string id, Dictionary<string, object> json)
     {
@@ -153,7 +180,7 @@ public class DataBaseManager : MonoBehaviour
         else return false;
     }
 
-    public async Task<string> SearchAvailableRoom(string dbRoom) 
+    public async Task<string> GetAvailableRoom(string dbRoom) 
     {
         Query queryCol = reference.Collection(dbRoom);
         QuerySnapshot querySnapshot = await queryCol.GetSnapshotAsync();
@@ -186,7 +213,7 @@ public class DataBaseManager : MonoBehaviour
         return null;
     }
     
-    public async Task<string> SearchRoomByInductor(string db, string idInductor)
+    public async Task<string> GetRoomByInductor(string db, string idInductor)
     {
         Query RoomMembersQuery = reference.Collection(db).WhereEqualTo("idInductor", idInductor);
         QuerySnapshot RoomMembersQuerySnapshot = await RoomMembersQuery.GetSnapshotAsync();
@@ -199,7 +226,7 @@ public class DataBaseManager : MonoBehaviour
 
     public async Task<Dictionary<string, object>> ListStudentsByGroup(string db, string idInductor)
     {  
-        string RoomId = await SearchRoomByInductor("Rooms", idInductor);        
+        string RoomId = await GetRoomByInductor("Rooms", idInductor);        
 
         Query MembersQuery = reference.Collection(db).WhereEqualTo("idRoom", RoomId);
         QuerySnapshot MembersQuerySnapshot = await MembersQuery.GetSnapshotAsync();
@@ -235,7 +262,7 @@ public class DataBaseManager : MonoBehaviour
         return dataHints;
     }
 
-    public async Task<List<Dictionary<string, object>>> SearchTriviasDataByBuilding(string idInductor)
+    public async Task<List<Dictionary<string, object>>> SearchTriviaDataByBuilding(string idInductor)
     {
         CollectionReference colRef = reference.Collection("Buildings");
         QuerySnapshot querySnapshot = await colRef.GetSnapshotAsync();

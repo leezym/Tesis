@@ -107,7 +107,7 @@ public class EditGroup : MonoBehaviour
         if (Convert.ToInt32(newInputRoomSize.text) >= roomCurrentSize)
         {
             string inductorId = await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId());
-            string roomId = await RoomsManager.instance.SearchRoomByInductor(inductorId);
+            string roomId = await RoomsManager.instance.GetRoomByInductor(inductorId);
 
             Dictionary<string, object> newRoomData = new Dictionary<string, object>
             {

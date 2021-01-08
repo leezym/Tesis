@@ -43,7 +43,7 @@ public class CardsHints : MonoBehaviour
     async Task SearchHint()
     {
         if (idRoom == "")
-            idRoom = await RoomsManager.instance.SearchRoomByInductor(await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()));
+            idRoom = await RoomsManager.instance.GetRoomByInductor(await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()));
 
         hintsList = await HintsChallengesManager.instance.GetHintChallengeByRoom(idRoom);
         newSizeHints = hintsList.Count;
@@ -107,9 +107,7 @@ public class CardsHints : MonoBehaviour
                         InputField hintPositionNumberInput = hintElement.transform.Find("HintPositionNumberInput").GetComponent<InputField>();
                         hintPositionNumberInput.text = pair.Value.ToString();
                     }
-                }
-
-               
+                }   
 
                 // Añadir a Lista
                 currentHints.Add(hintElement);

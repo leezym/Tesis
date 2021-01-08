@@ -19,26 +19,31 @@ public class RoomsManager : MonoBehaviour
         await DataBaseManager.instance.InsertWithoutId("Rooms", element.ConvertJson());
     }
 
-    public async Task PutRoomAsync(string roomId, Dictionary<string,object> data)
+    public async Task PutRoomAsync(string idRoom, Dictionary<string,object> data)
     {
-        await DataBaseManager.instance.UpdateAsync("Rooms", roomId, data);
+        await DataBaseManager.instance.UpdateAsync("Rooms", idRoom, data);
     }
 
-    public async Task<Dictionary<string, object>> GetRoomAsync(string roomId)
+    public async Task<Dictionary<string, object>> GetRoomAsync(string idRoom)
     {
-        return await DataBaseManager.instance.SearchById("Rooms", roomId);
+        return await DataBaseManager.instance.SearchById("Rooms", idRoom);
     }
 
-    public async Task<string> SearchAvailableRoom() 
+    public async Task<string> GetAvailableRoom() 
     {
 
-        return await DataBaseManager.instance.SearchAvailableRoom("Rooms");
+        return await DataBaseManager.instance.GetAvailableRoom("Rooms");
     }
 
-    public async Task<string> SearchRoomByInductor(string idInductor)
+    public async Task<string> GetRoomByInductor(string idInductor)
     {
-        return await DataBaseManager.instance.SearchRoomByInductor("Rooms", idInductor);
+        return await DataBaseManager.instance.GetRoomByInductor("Rooms", idInductor);
 
+    }
+
+    public async Task<List<Dictionary<string, object>>> GetRoomsByOrderOfScore()
+    {
+        return await DataBaseManager.instance.SearchByOrder("Rooms", "score");
     }
 
     public async Task DeleteStudentInRoom(string idStudent)
@@ -52,6 +57,7 @@ public class Room
     public string room;
     public int size;
     public int currentSize;
+    public int score = 0;
     public string idInductor;
 
     public Room() { }
@@ -72,6 +78,7 @@ public class Room
             { "room", this.room },
             { "size", this.size },
             { "currentSize", this.currentSize },
+            { "score", this.score},
             { "idInductor", this.idInductor }
         };
     }

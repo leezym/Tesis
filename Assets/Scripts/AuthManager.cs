@@ -22,8 +22,8 @@ public class AuthManager : MonoBehaviour
     public Canvas canvasGeneralSessions;
     public Canvas canvasLoginInductor, canvasNombreInductor, canvasMenuInductor;
     public Canvas canvasLoginStudent, canvasMenuStudent;
-    public InputField inputFieldUser, inputFieldPassword, inputRoomName;
-    public InputField inputFieldDocument, inputFieldName, inputInductorRoomSize;
+    public InputField inputFieldUser, inputFieldPassword, inputRoomName, inputInductorRoomSize;
+    public InputField inputFieldDocument, inputFieldName;
 
     // UserData
     [HideInInspector]
@@ -153,49 +153,19 @@ public class AuthManager : MonoBehaviour
             await UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);       
             await RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);            
         });
-
-       /* authFirebase.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(taskCreate => {
-            if (taskCreate.IsFaulted)
-            {
-                foreach (System.Exception exception in taskCreate.Exception.InnerExceptions)
-                {
-                    Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
-                    string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
-                    Debug.Log("El error es: " + message);
-                }
-                return;
-            }
-            UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);
-            authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(taskSignIn => {                
-                if (taskSignIn.IsFaulted)
-                {
-                    foreach (System.Exception exception in taskSignIn.Exception.InnerExceptions)
-                    {
-                        Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
-                        string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
-                        Debug.Log("El error es: " + message);
-                    }
-                    return;
-                }
-                
-                //SetSnapshot(await UsersManager.instance.GetUserAsync("Inductors", userFirebase.UserId));
-                RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);
-            });                                  
-        });*/
     }
 
     public async void SignInStudent()
     {
-        string name = inputFieldName.text;
-        string document = inputFieldDocument.text;
+        string name = "inputFieldName.text";
+        string document = "inputFieldDocument.text";
         string idRoom = null;
 
         if (!await UsersManager.instance.ExistUserByDocument("Students", document))
         {
             if (!await DataBaseManager.instance.IsEmptyTable("Rooms"))
             {
-                idRoom = await RoomsManager.instance.SearchAvailableRoom();
-                Debug.Log(idRoom);
+                idRoom = await RoomsManager.instance.GetAvailableRoom();
                 if(idRoom != null)
                 {
                     await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task =>
@@ -214,9 +184,7 @@ public class AuthManager : MonoBehaviour
                         await UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
 
                         //SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
-                        
-                        //ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
-                        //ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
+
                     });
                 }else{
                     NotificationsManager.instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");

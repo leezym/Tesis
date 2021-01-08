@@ -36,9 +36,16 @@ public class HintElement : MonoBehaviour
         int score = Convert.ToInt32(this.transform.Find("HintScoreInput").GetComponent<InputField>().text);
         int  position = Convert.ToInt32(this.transform.Find("HintPositionNumberInput").GetComponent<InputField>().text);
 
-        string idRoom = await RoomsManager.instance.SearchRoomByInductor(await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()));
+        // Crear la pista con puntuaciones
+        string idRoom = await RoomsManager.instance.GetRoomByInductor(await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()));
         string idHint = await HintsManager.instance.GetIdHintByName(hintName);
         await HintsChallengesManager.instance.PostNewHintChallenge(idRoom, idHint, score, position, hour);
+
+        // Asignar puntuaciones totales a la sala
+        object currentRoomScore = await DataBaseManager.instance.SearchAttribute("Rooms", idRoom, "score");
+        await RoomsManager.instance.PutRoomAsync(idRoom, new Dictionary<string, object> {
+            {"score", Convert.ToInt32(currentRoomScore) + score}
+        });
         
         if(this.transform.Find("HintTimeLabel").GetComponent<Text>().text != "")
             this.transform.Find("FinishButton").GetComponent<Button>().interactable = false;

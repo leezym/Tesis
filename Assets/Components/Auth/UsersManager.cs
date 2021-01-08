@@ -94,6 +94,7 @@ public class Student
 {
     public string name;
     public string document;
+    public int score = 0;
     public string idRoom;
 
     public Student() { }
@@ -109,6 +110,7 @@ public class Student
         return new Dictionary<string, object>() {
             { "name", this.name },
             { "document", this.document },
+            { "score", this.score},
             { "idRoom", this.idRoom }
         };
     }
