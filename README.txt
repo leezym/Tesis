@@ -50,4 +50,18 @@ Subir los cambios a la rama
 - git commit -m "<nombre rama>:<mensaje>"
 - git push
 
+-----------------------------------------------------------
+
+RESET (sin push)
+git reset --hard HEAD~1
+git reset --soft HEAD~1
+
+Nota: Si tienes un código específico de commit, en lugar de HEAD~1 va el código de commit al que quieres devolverte.
+
+-----------------------------------------------------------
+
+REVERT (con push)
+git revert HEAD
+
+
 ///////////////////////////////////////////////////////////

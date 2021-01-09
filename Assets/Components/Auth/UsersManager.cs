@@ -9,59 +9,83 @@ public class UsersManager : MonoBehaviour
 {
     public static UsersManager instance;
 
-    private void Awake()
+    public void Awake()
     {
         instance = this;
     }
 
-    public void PostNewInductor(string uid, string room, string email)
+    public async Task PostNewInductor(string uid, string user, string email, string name)
     {
-        Inductor user = new Inductor(uid, room, email);
-        //string body = JsonUtility.ToJson(user);
-        DataBaseManager.instance.InsertUser("Inductors", uid, user.ConvertJson());
+        Inductor element = new Inductor(uid, user, email, name);
+        await DataBaseManager.instance.InsertWithoutId("Inductors", element.ConvertJson());
     }
 
-    public void PostNewStudent(string uid, string name, string document)
+    public async Task PostNewStudent(string uid, string name, string document, string idRoom)
     {
-        Student user = new Student(uid, name, document);
-        //string body = JsonUtility.ToJson(user);
-        DataBaseManager.instance.InsertUser("Students", uid, user.ConvertJson());
+        Student element = new Student(name, document, idRoom);
+        await DataBaseManager.instance.InsertWithId("Students", uid, element.ConvertJson());
     }
 
-    public async Task PutUserAsync(string db, string userId, string atribute, string value)
+    public async Task PutUserAsync(string db, string userId, Dictionary<string,object> data)
     {
-        await DataBaseManager.instance.UpdateUserAsync(db, userId, atribute, value);
+        await DataBaseManager.instance.UpdateAsync(db, userId, data);
     }
 
     public async Task<Dictionary<string, object>> GetUserAsync(string db, string userId)
     {
-        return await DataBaseManager.instance.SelectUserByIdAsync(db, userId);
+        return await DataBaseManager.instance.SearchById(db, userId);
     }
 
-    public async Task DeleteUserAsync(string db, string userId) 
+    public async Task<string> GetInductorIdByAuth(string idAuth)
     {
-        await DataBaseManager.instance.DeleteUserAsync(db, userId);
+        return await DataBaseManager.instance.SearchId("Inductors", "idAuth", idAuth);
+    }
 
-    }    
+    public async Task<bool> ExistUserByDocument(string db, string document)
+    {
+        List<Dictionary<string, object>> data = await DataBaseManager.instance.SearchByAttribute(db, "document", document);
+        if (data.Count != 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /*public async Task DeleteAsync(string db, string userId) 
+    {
+        await DataBaseManager.instance.DeleteAsync(db, userId);
+    }  */
+
+    public async Task DeleteSession(string idAuth) 
+    {
+        string idInductor = await GetInductorIdByAuth(idAuth);
+        await DataBaseManager.instance.DeleteSession(idInductor);
+    }
 }
 
 public class Inductor
 {
-    public string room;
+    public string idAuth;
+    public string user;
     public string email;
+    public string name;
 
     public Inductor() { }
 
-    public Inductor(string id, string room, string email)
+    public Inductor(string idAuth, string user, string email, string name)
     {
-        this.room = room;
+        this.idAuth = idAuth;
+        this.user = user;
         this.email = email;
+        this.name = name;
     }
     public Dictionary<string, object> ConvertJson()
     {
         return new Dictionary<string, object>() {
-            { "room", this.room },
-            { "email", this.email }
+            { "idAuth", this.idAuth },
+            { "user", this.user },
+            { "email", this.email },
+            { "name", this.name }
         };
     }
 }
@@ -70,19 +94,24 @@ public class Student
 {
     public string name;
     public string document;
+    public int score = 0;
+    public string idRoom;
 
     public Student() { }
 
-    public Student(string id, string name, string document)
+    public Student(string name, string document, string idRoom)
     {
         this.name = name;
         this.document = document;
+        this.idRoom = idRoom;
     }
 
     public Dictionary<string, object> ConvertJson(){
         return new Dictionary<string, object>() {
             { "name", this.name },
-            { "document", this.document }
+            { "document", this.document },
+            { "score", this.score},
+            { "idRoom", this.idRoom }
         };
     }
 }
