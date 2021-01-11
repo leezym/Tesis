@@ -41,8 +41,10 @@ public class MyProfile : MonoBehaviour
         object roomName = await DataBaseManager.instance.SearchAttribute("Rooms", idRoom.ToString(), "room");
         object inductorName = await DataBaseManager.instance.SearchAttribute("Inductors", idInductor.ToString(), "name");
 
-        textGroupName.text = roomName.ToString();
-        textInductorName.text = inductorName.ToString();    
+        if(roomName != null)
+            textGroupName.text = roomName.ToString();
+        if (inductorName != null)
+            textInductorName.text = inductorName.ToString();    
     }
 
     async void SearchStudents()

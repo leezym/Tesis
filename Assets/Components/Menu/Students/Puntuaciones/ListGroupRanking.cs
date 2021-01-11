@@ -63,7 +63,7 @@ public class ListGroupRanking : MonoBehaviour
                 {
                     groupElement.transform.Find("NameLabel").GetComponent<Text>().text = pair.Value.ToString();
                     
-                    if (pair.Value.ToString() == nameRoom.ToString())
+                    if (pair.Value.ToString() == nameRoom.ToString() && nameRoom != null)
                     {
                         textMyGroupRanking.text = count.ToString();
                     }
