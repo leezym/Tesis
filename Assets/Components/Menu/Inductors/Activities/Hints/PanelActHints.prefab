@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4787007483205309814}
   - component: {fileID: 1714070818615820719}
   - component: {fileID: 1451524312119564670}
+  - component: {fileID: 260502425}
   m_Layer: 5
   m_Name: Pista_Text_Title
   m_TagString: Untagged
@@ -34,7 +35,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -6, y: 502}
+  m_AnchoredPosition: {x: -6, y: 417}
   m_SizeDelta: {x: 175.09515, y: 75.40341}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1714070818615820719
@@ -67,7 +68,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 12800000, guid: 5c215703d70555c42b6709672a7355ea, type: 3}
     m_FontSize: 60
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 3
     m_MaxSize: 60
@@ -78,6 +79,21 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Pistas
+--- !u!114 &260502425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641406764302270001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 5, y: -5}
+  m_UseGraphicAlpha: 1
 --- !u!1 &915351688990722584
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,8 +311,8 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
-  m_Spacing: 0
+  m_ChildAlignment: 3
+  m_Spacing: -30
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -366,7 +382,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1910144339565932395}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
@@ -833,8 +849,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000071526, y: -97.598}
-  m_SizeDelta: {x: 719.99994, y: 1009.62695}
+  m_AnchoredPosition: {x: 0.0000071526, y: -139.9}
+  m_SizeDelta: {x: 719.99994, y: 925.03796}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7733755040289883029
 CanvasRenderer:

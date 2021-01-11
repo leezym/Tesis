@@ -228,6 +228,7 @@ GameObject:
   - component: {fileID: 6930098809472659577}
   - component: {fileID: 3858440859982423200}
   - component: {fileID: 3920010177601191025}
+  - component: {fileID: 2077366114}
   m_Layer: 5
   m_Name: Trivias_Text_Title
   m_TagString: Untagged
@@ -251,7 +252,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2, y: 502}
+  m_AnchoredPosition: {x: -2, y: 417}
   m_SizeDelta: {x: 175.09515, y: 75.40341}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3858440859982423200
@@ -284,7 +285,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 12800000, guid: 54be6424194298846951cb3cce99b261, type: 3}
     m_FontSize: 70
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 3
     m_MaxSize: 70
@@ -295,6 +296,21 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Trivias
+--- !u!114 &2077366114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3072802787666139966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 0.5}
+  m_EffectDistance: {x: 3, y: -3}
+  m_UseGraphicAlpha: 0
 --- !u!1 &3382641294944235287
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,7 +508,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2585.6863, y: 0}
+  m_AnchoredPosition: {x: -0.000009536743, y: 0}
   m_SizeDelta: {x: 0, y: 1012.62695}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &4739766941611635494
@@ -648,6 +664,7 @@ GameObject:
   - component: {fileID: 1948885135522406458}
   - component: {fileID: 8499540987032267598}
   - component: {fileID: 1593414941250297}
+  - component: {fileID: 498533033}
   m_Layer: 5
   m_Name: Building_Text_Title
   m_TagString: Untagged
@@ -671,7 +688,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -220, y: 398}
+  m_AnchoredPosition: {x: -220, y: 324}
   m_SizeDelta: {x: 175.09515, y: 75.40341}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8499540987032267598
@@ -714,7 +731,22 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Edificios:'
+  m_Text: Edificios
+--- !u!114 &498533033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4119049942288285886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 0.5}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &4882866354999061987
 GameObject:
   m_ObjectHideFlags: 0
@@ -912,7 +944,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 5458061073676320145}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.5
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -990,8 +1022,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000071526, y: -31.2}
-  m_SizeDelta: {x: 719.99994, y: 818.1196}
+  m_AnchoredPosition: {x: 0.0000071526, y: -111.48}
+  m_SizeDelta: {x: 719.99994, y: 981.56213}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5265170777140029082
 CanvasRenderer:

@@ -445,6 +445,7 @@ GameObject:
   - component: {fileID: 7262284016093680885}
   - component: {fileID: 3562232369100455980}
   - component: {fileID: 3639705161635387645}
+  - component: {fileID: 33736528}
   m_Layer: 5
   m_Name: ActTitle
   m_TagString: Untagged
@@ -468,7 +469,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 4, y: 408}
+  m_AnchoredPosition: {x: 4, y: 417}
   m_SizeDelta: {x: 463.38852, y: 100.15695}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3562232369100455980
@@ -500,18 +501,33 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 54be6424194298846951cb3cce99b261, type: 3}
-    m_FontSize: 70
-    m_FontStyle: 0
+    m_FontSize: 65
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 3
     m_MaxSize: 70
-    m_Alignment: 1
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Actividades
+--- !u!114 &33736528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3332858515618332594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 0.5}
+  m_EffectDistance: {x: 3, y: -3}
+  m_UseGraphicAlpha: 1
 --- !u!1 &4333658065117703912
 GameObject:
   m_ObjectHideFlags: 0
@@ -848,6 +864,7 @@ GameObject:
   - component: {fileID: 7382676445880962469}
   - component: {fileID: 5610548957792144209}
   - component: {fileID: 6795056496924407252}
+  - component: {fileID: 839646780}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -904,7 +921,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 12800000, guid: 54be6424194298846951cb3cce99b261, type: 3}
     m_FontSize: 60
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 5
     m_MaxSize: 60
@@ -915,6 +932,21 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Pistas
+--- !u!114 &839646780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7294866089724543569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 3, y: -3}
+  m_UseGraphicAlpha: 1
 --- !u!1 &8560797084257040483
 GameObject:
   m_ObjectHideFlags: 0
@@ -926,6 +958,7 @@ GameObject:
   - component: {fileID: 9198762102812087963}
   - component: {fileID: 3843166509614873793}
   - component: {fileID: 2687553403614601300}
+  - component: {fileID: 1505180765}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -982,7 +1015,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 12800000, guid: 54be6424194298846951cb3cce99b261, type: 3}
     m_FontSize: 60
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 6
     m_MaxSize: 60
@@ -993,3 +1026,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Trivias
+--- !u!114 &1505180765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8560797084257040483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 3, y: -3}
+  m_UseGraphicAlpha: 1
