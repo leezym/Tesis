@@ -115,10 +115,10 @@ public class DataBaseManager : MonoBehaviour
         return null;
     }
 
-    public async Task<List<Dictionary<string, object>>> SearchByOrder(string db, string attribute)
+    public async Task<List<Dictionary<string, object>>> SearchByOrderDescending(string db, string attribute)
     {
         CollectionReference colRef = reference.Collection(db);
-        Query queryAttribute = colRef.OrderBy(attribute);
+        Query queryAttribute = colRef.OrderByDescending(attribute);
         QuerySnapshot querySnapshot = await queryAttribute.GetSnapshotAsync();
         List<Dictionary<string,object>> data = new List<Dictionary<string, object>>();
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)

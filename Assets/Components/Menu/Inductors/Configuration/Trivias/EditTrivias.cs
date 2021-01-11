@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class EditTrivias : MonoBehaviour
 {
+    public Canvas canvasConfigTrivias, canvasTriviaDetail;
     public InputField inputTriviaQuestionDetail, inputTriviaAnswerOneDetail, inputTriviaAnswerTwoDetail, inputTriviaAnswerThreeDetail; 
     public Text textTriviaAnswerOneDetail, textTriviaAnswerTwoDetail, textTriviaAnswerThreeDetail;
     public Text placeholderTriviaAnswerOneDetail, placeholderTriviaAnswerTwoDetail, placeholderTriviaAnswerThreeDetail;
@@ -16,6 +17,7 @@ public class EditTrivias : MonoBehaviour
     
     string idTrivia = "";
     string triviaQuestion = "";
+    
 
     void Start() 
     {
@@ -32,6 +34,9 @@ public class EditTrivias : MonoBehaviour
         imageCancelQuestion.enabled = false;
         imageSaveAnswer.enabled = false;
         imageSaveQuestion.enabled = false;
+        toggleTriviaAnswerOneDetail.interactable = false;
+        toggleTriviaAnswerTwoDetail.interactable = false;
+        toggleTriviaAnswerThreeDetail.interactable = false;
         GameObject.FindObjectOfType<ListTrivias>().buildingsDropdown.value = 0;
 
     }
@@ -148,6 +153,9 @@ public class EditTrivias : MonoBehaviour
             inputTriviaAnswerOneDetail.interactable = true;
             inputTriviaAnswerTwoDetail.interactable = true;
             inputTriviaAnswerThreeDetail.interactable = true;
+            toggleTriviaAnswerOneDetail.interactable = true;
+            toggleTriviaAnswerTwoDetail.interactable = true;
+            toggleTriviaAnswerThreeDetail.interactable = true;
         }
     }
 
@@ -168,6 +176,9 @@ public class EditTrivias : MonoBehaviour
             inputTriviaAnswerOneDetail.interactable = false;
             inputTriviaAnswerTwoDetail.interactable = false;
             inputTriviaAnswerThreeDetail.interactable = false;
+            toggleTriviaAnswerOneDetail.interactable = false;
+            toggleTriviaAnswerTwoDetail.interactable = false;
+            toggleTriviaAnswerThreeDetail.interactable = false;
         }
     }
 
@@ -221,5 +232,18 @@ public class EditTrivias : MonoBehaviour
         }
         else
             NotificationsManager.instance.SetFailureNotificationMessage("Ya existe esa pregunta. Por favor intenta con otra.");
+    }
+
+    public void DeleteTrivia()
+    {
+        NotificationsManager.instance.SetQuestionNotificationMessage("¿Está seguro que desea eliminar esta pregunta?");
+        NotificationsManager.instance.acceptQuestionButton.onClick.AddListener(Delete);
+    }
+
+    async void Delete()
+    {
+        await TriviasManager.instance.DeleteTrivia(idTrivia);
+        ScenesManager.instance.LoadNewCanvas(canvasConfigTrivias);
+        ScenesManager.instance.DeleteCurrentCanvas(canvasTriviaDetail);
     }
 }

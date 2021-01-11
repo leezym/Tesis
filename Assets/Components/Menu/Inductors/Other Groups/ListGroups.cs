@@ -25,7 +25,7 @@ public class ListGroups : MonoBehaviour
 
     void ClearCurrentGroups()
     {
-        // Vaciar lista y borrar pistas actuales
+        // Vaciar lista y borrar grupos actuales
         foreach(GameObject group in currentGroups)
         {
             Destroy(group);

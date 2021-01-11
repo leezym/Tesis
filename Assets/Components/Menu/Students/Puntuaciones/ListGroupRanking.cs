@@ -6,23 +6,48 @@ using UnityEngine.UI;
 
 public class ListGroupRanking : MonoBehaviour
 {
-    public GameObject canvasGroupRanking;
+    public Canvas canvasPuntuaciones, canvasGroupRanking;
     public GameObject groupRankingPrefab;
     public Transform content;
+    public Text textMyGroupRanking, textMyGroupScore;
+    List<GameObject> currentGroups = new List<GameObject>();
+    List<Dictionary<string, object>> groupsList = new List<Dictionary<string, object>>();
     int count = 1;
 
     // Update is called once per frame
     void Update()
     {
-        if (canvasGroupRanking.activeSelf)
+        if (canvasPuntuaciones.enabled && canvasGroupRanking.enabled && groupsList.Count == 0)
             SearchPosition();
         else
+        {
             count = 1;
+            groupsList = new List<Dictionary<string, object>>();
+        }
     }
 
-    async void SearchPosition()
+    void ClearCurrentGroups()
     {
-        List<Dictionary<string, object>> groupsList = await RoomsManager.instance.GetRoomsByOrderOfScore();
+        // Vaciar lista y borrar grupos actuales
+        foreach(GameObject group in currentGroups)
+        {
+            Destroy(group);
+        }
+        currentGroups.Clear();
+    }
+
+    public async void SearchPosition()
+    {
+        groupsList = await RoomsManager.instance.GetRoomsByOrderOfScore();
+        object idRoom = await DataBaseManager.instance.SearchAttribute("Students", AuthManager.instance.GetUserId(), "idRoom");
+        object myGroupScore = await DataBaseManager.instance.SearchAttribute("Rooms", idRoom.ToString(), "score");
+        object nameRoom = await DataBaseManager.instance.SearchAttribute("Rooms", idRoom.ToString(),"name");
+
+        textMyGroupScore.text = myGroupScore.ToString();
+
+        ClearCurrentGroups();
+        count = 1;
+
         foreach(Dictionary<string, object> group in groupsList)
         {
             // Instanciar prefab
@@ -30,16 +55,25 @@ public class ListGroupRanking : MonoBehaviour
             groupElement.transform.parent = content.transform;
 
             // Asignar puesto
-            groupElement.transform.Find("").GetComponent<Text>().text = count.ToString();
-            count ++;
+            groupElement.transform.Find("PositionLabel").GetComponent<Text>().text = count.ToString();
             
             foreach(KeyValuePair<string, object> pair in group)
             {
-                if(pair.Key == "name")
-                    groupElement.transform.Find("").GetComponent<Text>().text = pair.Value.ToString();
+                if(pair.Key == "room")
+                {
+                    groupElement.transform.Find("NameLabel").GetComponent<Text>().text = pair.Value.ToString();
+                    
+                    if (pair.Value.ToString() == nameRoom.ToString())
+                    {
+                        textMyGroupRanking.text = count.ToString();
+                    }
+                }
                 if(pair.Key == "score")
-                    groupElement.transform.Find("").GetComponent<Text>().text = pair.Value.ToString();
+                    groupElement.transform.Find("ScoreLabel").GetComponent<Text>().text = pair.Value.ToString();
             }
+            // Añadir a Lista
+            currentGroups.Add(groupElement);
+            count ++;
         }
     }
 }

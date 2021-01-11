@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 public class EditHints : MonoBehaviour
 {
+    public Canvas canvasConfigHints, canvasHintDetail;
     public InputField inputHintNameDetail, inputHintDescriptionDetail, inputHintAnswerDetail;
     public Image imageSaveName, imageSaveDescription, imageSaveAnswer;
     public Image imageCancelName, imageCancelDescription, imageCancelAnswer;
@@ -133,5 +134,18 @@ public class EditHints : MonoBehaviour
         }
         else 
             NotificationsManager.instance.SetFailureNotificationMessage("Ya existe una pista con ese nombre. Por favor intenta con otro.");
+    }
+
+    public void DeleteHint()
+    {
+        NotificationsManager.instance.SetQuestionNotificationMessage("¿Está seguro que desea eliminar esta pista?");
+        NotificationsManager.instance.acceptQuestionButton.onClick.AddListener(Delete);
+    }
+
+    async void Delete()
+    {
+        await TriviasManager.instance.DeleteTrivia(idHint);
+        ScenesManager.instance.LoadNewCanvas(canvasConfigHints);
+        ScenesManager.instance.DeleteCurrentCanvas(canvasHintDetail);
     }
 }

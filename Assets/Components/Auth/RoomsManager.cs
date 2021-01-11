@@ -43,7 +43,7 @@ public class RoomsManager : MonoBehaviour
 
     public async Task<List<Dictionary<string, object>>> GetRoomsByOrderOfScore()
     {
-        return await DataBaseManager.instance.SearchByOrder("Rooms", "score");
+        return await DataBaseManager.instance.SearchByOrderDescending("Rooms", "score");
     }
 
     public async Task DeleteStudentInRoom(string idStudent)

@@ -306,7 +306,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1508909097384435484}
   m_HandleRect: {fileID: 8267644053055525891}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -743,7 +743,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 11, y: -91.5}
+  m_AnchoredPosition: {x: 0, y: -91.5}
   m_SizeDelta: {x: 552.7042, y: 896.7092}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8002905924967428185
@@ -849,7 +849,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0000100089865}
+  m_AnchoredPosition: {x: 0, y: -0.00024414062}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &5990059871802124732
@@ -943,6 +943,7 @@ GameObject:
   - component: {fileID: 5340394380301710680}
   - component: {fileID: 7863487157097627872}
   - component: {fileID: 3217315793959140875}
+  - component: {fileID: 3009511236687142020}
   m_Layer: 5
   m_Name: IntegrantesTitle
   m_TagString: Untagged
@@ -999,7 +1000,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 12800000, guid: 54be6424194298846951cb3cce99b261, type: 3}
     m_FontSize: 65
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 65
@@ -1010,6 +1011,21 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Otros grupos
+--- !u!114 &3009511236687142020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7555234667670111536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 0.5}
+  m_EffectDistance: {x: 3, y: -3}
+  m_UseGraphicAlpha: 1
 --- !u!1 &8801086955975664065
 GameObject:
   m_ObjectHideFlags: 0

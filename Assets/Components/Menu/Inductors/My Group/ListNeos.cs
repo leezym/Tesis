@@ -12,7 +12,7 @@ public class ListNeos : MonoBehaviour
     public Text content;
     private string idInductor;
     public Canvas canvasMyGroup;
-    public List<string> NeoJaverianos = new List<string>();
+    List<string> NeoJaverianos = new List<string>();
     int currentSizeStudents = 0, newSizeStudents = 0;
 
     async void Update()

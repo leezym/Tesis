@@ -151,8 +151,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -75.4}
-  m_SizeDelta: {x: 657.2865, y: 731.1665}
+  m_AnchoredPosition: {x: 0, y: -119.3}
+  m_SizeDelta: {x: 657.2865, y: 701.90063}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3674139191965344910
 CanvasRenderer:
@@ -382,7 +382,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 441.2}
+  m_AnchoredPosition: {x: 0, y: 321}
   m_SizeDelta: {x: 364.54688, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4721621431124187529
@@ -1238,7 +1238,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0000009802694}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2377383659793310984
@@ -1332,6 +1332,7 @@ GameObject:
   - component: {fileID: 1999641022789071469}
   - component: {fileID: 5649591223238223540}
   - component: {fileID: 5587316430414036581}
+  - component: {fileID: 1621447832960805271}
   m_Layer: 5
   m_Name: Trivia_Text_Title
   m_TagString: Untagged
@@ -1355,7 +1356,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 531}
+  m_AnchoredPosition: {x: 0, y: 417}
   m_SizeDelta: {x: 175.09515, y: 75.40341}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5649591223238223540
@@ -1387,11 +1388,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 5c215703d70555c42b6709672a7355ea, type: 3}
-    m_FontSize: 60
-    m_FontStyle: 0
+    m_FontSize: 65
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 3
-    m_MaxSize: 60
+    m_MaxSize: 65
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -1399,6 +1400,21 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Trivias
+--- !u!114 &1621447832960805271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5857009478749526314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 5, y: -5}
+  m_UseGraphicAlpha: 1
 --- !u!1 &6117906325422110096
 GameObject:
   m_ObjectHideFlags: 0
@@ -1746,7 +1762,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -285.5, y: -537}
+  m_AnchoredPosition: {x: -285.5, y: -551}
   m_SizeDelta: {x: 65.72476, y: 65.72476}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7544653423461835932

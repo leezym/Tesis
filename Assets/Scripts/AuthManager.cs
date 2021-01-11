@@ -71,7 +71,7 @@ public class AuthManager : MonoBehaviour
             SetSnapshot(await UsersManager.instance.GetUserAsync("Students", GetUserId()));
             if (GetSnapshot() == null)
             {
-                SignOut();
+                Exit();
                 GameObject.Find("PanelGeneralSessions").GetComponent<Canvas>().enabled = true;
             }
         }
@@ -157,8 +157,8 @@ public class AuthManager : MonoBehaviour
 
     public async void SignInStudent()
     {
-        string name = "inputFieldName.text";
-        string document = "inputFieldDocument.text";
+        string name = inputFieldName.text;
+        string document = inputFieldDocument.text;
         string idRoom = null;
 
         if (!await UsersManager.instance.ExistUserByDocument("Students", document))
@@ -197,7 +197,7 @@ public class AuthManager : MonoBehaviour
         }
     }
 
-    public void SignOut() 
+    public void LogOut() 
     {
         NotificationsManager.instance.SetQuestionNotificationMessage("¿Está seguro que desea cerrar sesión?");
         NotificationsManager.instance.acceptQuestionButton.onClick.AddListener(Exit);
