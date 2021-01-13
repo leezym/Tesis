@@ -38,6 +38,11 @@ public class TriviasManager : MonoBehaviour
         return await DataBaseManager.instance.SearchByAttribute("Trivias", "idBuilding", idBuilding);
     }
 
+    public async Task<List<Dictionary<string, object>>> GetTriviaByIdBuilding(string idBuilding)
+    {
+        return await DataBaseManager.instance.SearchByAttribute("Trivias", "idBuilding", idBuilding);
+    }
+
     public async Task<List<Dictionary<string, object>>> GetTriviaByQuestion(string question)
     {
         return await DataBaseManager.instance.SearchByAttribute("Trivias", "question", question);

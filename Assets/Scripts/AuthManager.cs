@@ -5,6 +5,7 @@ using Firebase.Firestore;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
+using System.Collections;
 
 public class AuthManager : MonoBehaviour
 {
@@ -18,16 +19,21 @@ public class AuthManager : MonoBehaviour
     // DataBase
     private Dictionary<string, object> snapshot;
 
-    // Canvas
+    // Canvas Iniciar Sesion
     public Canvas canvasGeneralSessions;
     public Canvas canvasLoginInductor, canvasNombreInductor, canvasMenuInductor;
     public Canvas canvasLoginStudent, canvasMenuStudent;
     public InputField inputFieldUser, inputFieldPassword, inputRoomName, inputInductorRoomSize;
     public InputField inputFieldDocument, inputFieldName;
 
+    // Canvas Loading Trivias
+    public Canvas canvasTimerTrivia;
+
     // UserData
     [HideInInspector]
     public string userType;
+    [HideInInspector]
+    string idInductor;
 
     public Dictionary<string, object> GetSnapshot() { return snapshot; }
     public void SetSnapshot(Dictionary<string, object> snapshot) { this.snapshot = snapshot; }
@@ -47,6 +53,8 @@ public class AuthManager : MonoBehaviour
     public void InitializeAtributes() 
     {
         userType = "";
+        idInductor = "";
+
         inputFieldUser.text = "";
         inputFieldPassword.text = "";
         inputFieldDocument.text = "";
@@ -68,13 +76,41 @@ public class AuthManager : MonoBehaviour
 
         if (signedIn && GetUserType() == "student")
         {
+            // Cerrar la sesión si al inductor elimina la sala
             SetSnapshot(await UsersManager.instance.GetUserAsync("Students", GetUserId()));
             if (GetSnapshot() == null)
             {
                 Exit();
                 GameObject.Find("PanelGeneralSessions").GetComponent<Canvas>().enabled = true;
             }
+
+            // Mostrar las trivias
+            if(idInductor == "")
+                idInductor = await UsersManager.instance.GetInductorByStudent(GetUserId());
+
+            List<Dictionary<string, object>> listAvailableTrivias = await DataBaseManager.instance.SearchByAttribute("InductorTriviasChallenges", "idInductor", idInductor, "available", true);
+            List<Dictionary<string, object>> listTrivias = new List<Dictionary<string, object>>();
+            foreach(Dictionary<string, object> availableTrivia in listAvailableTrivias)
+            {
+                foreach(KeyValuePair<string, object> pair in availableTrivia)
+                {
+                    if(pair.Key == "idBuilding")
+                    {
+                        listTrivias = await TriviasManager.instance.GetTriviaByIdBuilding(pair.Value.ToString());
+                    }
+                }
+            }
+
+            ScenesManager.instance.LoadNewCanvas(canvasTimerTrivia);
+            StartCoroutine(StartTrivia());
         }
+    }
+
+    IEnumerator StartTrivia(){
+        //coroutineFinishedTrivia = false;
+        yield return new WaitForSeconds(3f);
+        Debug.Log("Aqui comienza la trivia");
+        //coroutineFinishedTrivia = true;
     }
 
     public string GetUserId()

@@ -46,6 +46,13 @@ public class UsersManager : MonoBehaviour
         return await DataBaseManager.instance.SearchByOrderDescending("Students", "score");
     }
 
+    public async Task<string> GetInductorByStudent(string idStudent)
+    {
+        object idRoom = await DataBaseManager.instance.SearchAttribute("Students", idStudent, "idRoom");
+        object idInductor = await DataBaseManager.instance.SearchAttribute("Rooms", idRoom.ToString(), "idInductor");
+        return idInductor.ToString();
+    }
+
     public async Task<bool> ExistUserByDocument(string db, string document)
     {
         List<Dictionary<string, object>> data = await DataBaseManager.instance.SearchByAttribute(db, "document", document);

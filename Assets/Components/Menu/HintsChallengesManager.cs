@@ -19,7 +19,7 @@ public class HintsChallengesManager : MonoBehaviour
 
     /*public async Task PutHintChallengeAsync(string idRoom, string idHint, Dictionary<string,object> data)
     {
-        await DataBaseManager.instance.UpdateByTwoAttributesAsync("HintsChallenges", "idRoom", idRoom, "idHint", idHint, data);
+        await DataBaseManager.instance.UpdateAsync("HintsChallenges", "idRoom", idRoom, "idHint", idHint, data);
     }*/
 
     public async Task<Dictionary<string, object>> GetHintChallengeAsync(string idHintChallenge)

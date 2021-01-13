@@ -79,7 +79,6 @@ public class CardsTrivias : MonoBehaviour
                     }
                     if(pair.Key == "available")
                     {
-                        Debug.Log("uenas "+Convert.ToBoolean(pair.Value));
                         if (Convert.ToBoolean(pair.Value))
                             triviaElement.transform.Find("InitializeTriviaButton").GetComponent<Button>().interactable = true;
                         else
@@ -132,10 +131,5 @@ public class CardsTrivias : MonoBehaviour
                 }
             }
         }
-    }
-
-    void StartTrivia()
-    {
-        
     }
 }

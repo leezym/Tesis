@@ -11,7 +11,10 @@ public class TriviaElement : MonoBehaviour
     int question = 30;
     int answer = 10;
 
-    public async void SelectTrivia()
+    string idBuilding = "";
+    bool coroutineFinishedTrivia = false;
+
+    public void SelectTrivia()
     {
         Text hintText = this.gameObject.GetComponentInChildren<Text>();
         ScenesManager.instance.LoadNewCanvas(GameObject.Find("PanelTriviasDetails").GetComponent<Canvas>());
@@ -48,10 +51,31 @@ public class TriviaElement : MonoBehaviour
         
         // Datos edificio
         string buildingName = this.transform.Find("BuildingNameLabel").GetComponent<Text>().text;
-        string idBuilding = await DataBaseManager.instance.SearchId("Buildings", "name", buildingName);
+        idBuilding = await DataBaseManager.instance.SearchId("Buildings", "name", buildingName);
         
 
-        await TriviasChallengesManager.instance.PostNewInductorTriviaChallenge(await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()), idBuilding, false);
+        await TriviasChallengesManager.instance.PostNewInductorTriviaChallenge(await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()), idBuilding, true);
         ScenesManager.instance.LoadNewCanvas(canvasLoading.GetComponent<Canvas>());
+
+        StartCoroutine(FinishedTrivia(timeQuestions));
+
+        if(coroutineFinishedTrivia)
+        {
+            await TriviasChallengesManager.instance.PutInductorTriviaChallengeAsync
+            (
+                await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()), 
+                idBuilding, 
+                new Dictionary<string, object> () {
+                    {"available", false}
+                }
+            );
+            coroutineFinishedTrivia = false;
+        }
+    }
+
+    IEnumerator FinishedTrivia(float seconds){
+        coroutineFinishedTrivia = false;
+        yield return new WaitForSeconds(seconds);
+        coroutineFinishedTrivia = true;
     }
 }

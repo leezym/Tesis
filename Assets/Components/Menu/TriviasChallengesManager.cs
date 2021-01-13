@@ -23,6 +23,12 @@ public class TriviasChallengesManager : MonoBehaviour
         await DataBaseManager.instance.InsertWithoutId("StudentTriviasChallenges", element.ConvertJson());
     }
 
+    public async Task PutInductorTriviaChallengeAsync(string idInductor, string idBuilding, Dictionary<string,object> data)
+    {
+        string idTriviaChallenge = await DataBaseManager.instance.SearchId("InductorTriviasChallenges", "idInductor", idInductor, "idBuilding", idBuilding);
+        await DataBaseManager.instance.UpdateAsync("InductorTriviasChallenges", idTriviaChallenge, data);
+    }
+
     public async Task<Dictionary<string, object>> GetTriviaChallengeAsync(string db, string idHintChallenge)
     {
         return await DataBaseManager.instance.SearchById(db, idHintChallenge);

@@ -61,7 +61,7 @@ public class DataBaseManager : MonoBehaviour
         return null;
     }
 
-    public async Task<List<Dictionary<string, object>>> SearchByAttribute(string db, string attribute, string value)
+    public async Task<List<Dictionary<string, object>>> SearchByAttribute(string db, string attribute, object value)
     {
         CollectionReference colRef = reference.Collection(db);
         Query queryAttribute = colRef.WhereEqualTo(attribute, value);
@@ -74,7 +74,7 @@ public class DataBaseManager : MonoBehaviour
         return data;
     }
 
-    public async Task<List<Dictionary<string, object>>> SearchByTwoAttributes(string db, string attributeOne, string valueOne, string attributeTwo, string valueTwo)
+    public async Task<List<Dictionary<string, object>>> SearchByAttribute(string db, string attributeOne, object valueOne, string attributeTwo, object valueTwo)
     {
         CollectionReference colRef = reference.Collection(db);
         Query queryAttributes = colRef.WhereEqualTo(attributeOne, valueOne).WhereEqualTo(attributeTwo, valueTwo);
@@ -87,10 +87,22 @@ public class DataBaseManager : MonoBehaviour
         return data;
     }
 
-    public async Task<string> SearchId(string db, string attribute, string value)
+    public async Task<string> SearchId(string db, string attribute, object value)
     {
         CollectionReference colRef = reference.Collection(db);
         Query queryDocument = colRef.WhereEqualTo(attribute, value);
+        QuerySnapshot querySnapshot = await queryDocument.GetSnapshotAsync();
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            return documentSnapshot.Id;
+        }
+        return null;
+    }
+
+    public async Task<string> SearchId(string db, string attribute, object value, string attribute2, object value2)
+    {
+        CollectionReference colRef = reference.Collection(db);
+        Query queryDocument = colRef.WhereEqualTo(attribute, value).WhereEqualTo(attribute2, value2);
         QuerySnapshot querySnapshot = await queryDocument.GetSnapshotAsync();
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
         {
@@ -146,7 +158,7 @@ public class DataBaseManager : MonoBehaviour
         await docRef.UpdateAsync(data);
     }
 
-    public async Task UpdateByTwoAttributesAsync(string db, string attributeOne, string valueOne, string attributeTwo, string valueTwo, Dictionary<string,object> data)
+    public async Task UpdateAsync(string db, string attributeOne, object valueOne, string attributeTwo, object valueTwo, Dictionary<string,object> data)
     {
         CollectionReference colRef = reference.Collection(db);
         Query queryDocument = colRef.WhereEqualTo(attributeOne, valueOne).WhereEqualTo(attributeTwo, valueTwo);
@@ -222,7 +234,7 @@ public class DataBaseManager : MonoBehaviour
             return documentSnapshotRooms.Id;
         }
         return null;
-    }
+    }  
 
     public async Task<Dictionary<string, object>> ListStudentsByGroup(string db, string idInductor)
     {  
@@ -249,7 +261,7 @@ public class DataBaseManager : MonoBehaviour
             string idHint = documentSnapshot.Id;
             Dictionary<string, object> hint = documentSnapshot.ToDictionary();
             
-            List<Dictionary<string, object>> hintsChallengesList = await SearchByTwoAttributes("HintsChallenges", "idRoom", idRoom, "idHint", idHint) ;
+            List<Dictionary<string, object>> hintsChallengesList = await SearchByAttribute("HintsChallenges", "idRoom", idRoom, "idHint", idHint) ;
             foreach(Dictionary<string, object> hintChallenge in hintsChallengesList)
             {
                 foreach(KeyValuePair<string, object> pair in hintChallenge)
@@ -273,7 +285,7 @@ public class DataBaseManager : MonoBehaviour
             string idBuilding = documentSnapshot.Id;
             Dictionary<string, object> building = documentSnapshot.ToDictionary();
             
-            List<Dictionary<string, object>> inductorTriviasChallengesList = await SearchByTwoAttributes("InductorTriviasChallenges", "idInductor", idInductor, "idBuilding", idBuilding) ;
+            List<Dictionary<string, object>> inductorTriviasChallengesList = await SearchByAttribute("InductorTriviasChallenges", "idInductor", idInductor, "idBuilding", idBuilding) ;
             foreach(Dictionary<string, object> triviaChallenge in inductorTriviasChallengesList)
             {
                 foreach(KeyValuePair<string, object> pair in triviaChallenge)
