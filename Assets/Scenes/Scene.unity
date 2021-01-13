@@ -333,6 +333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasinductorLoading: {fileID: 1275548930}
+  canvasTimerTrivia: {fileID: 4090579396574020732}
 --- !u!114 &152516434 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3402145020089350439, guid: a0b62736eb8e02942ba97c9c91af9dd1,
@@ -12719,6 +12720,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ee37c99e5dbf8f9498de372a26e00215, type: 3}
+--- !u!223 &4090579396574020732 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 1854047189110537838, guid: ee37c99e5dbf8f9498de372a26e00215,
+    type: 3}
+  m_PrefabInstance: {fileID: 4090579396574020731}
+  m_PrefabAsset: {fileID: 0}
 --- !u!223 &4180849036615227123 stripped
 Canvas:
   m_CorrespondingSourceObject: {fileID: 8561682796864738248, guid: ba7756928fe81e54d868af01e5bf1988,
@@ -13043,6 +13050,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5350000588644541941, guid: e3315bee1a8901f459b48cb344af4d20,
+        type: 3}
+      propertyPath: canvasTimerTrivia
+      value: 
+      objectReference: {fileID: 4090579396574020732}
     - target: {fileID: 5350000588644541946, guid: e3315bee1a8901f459b48cb344af4d20,
         type: 3}
       propertyPath: m_Name
