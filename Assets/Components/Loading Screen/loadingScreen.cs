@@ -14,9 +14,8 @@ public class loadingScreen : MonoBehaviour
         // canvasinductorLoading
         if (canvasinductorLoading.enabled)
         {
+            Debug.Log("inductorloading");
             InductorLoading();
-            if (time <= 0)
-                canvasinductorLoading.enabled = false;  
         }
         else
         {
@@ -27,9 +26,8 @@ public class loadingScreen : MonoBehaviour
         // canvasTimerTrivia
         if (canvasTimerTrivia.enabled)
         {
-            TimerTriviaLoading();
-            if (time <= 0)
-                canvasTimerTrivia.enabled = false;  
+            Debug.Log("timer");
+            TimerTriviaLoading();             
         }
         else
         {
@@ -52,6 +50,8 @@ public class loadingScreen : MonoBehaviour
             time -= Time.deltaTime;
             canvasinductorLoading.transform.Find("TimeLabel").GetComponent<Text>().text = time.ToString("f0");
         }
+        else
+            canvasinductorLoading.enabled = false;
     }
 
     void TimerTriviaLoading()
@@ -65,7 +65,9 @@ public class loadingScreen : MonoBehaviour
         if (time > 0)
         {
             time -= Time.deltaTime;
-            canvasTimerTrivia.transform.Find("TimeLabel").GetComponent<Text>().text = time.ToString("f0"); //PENDIENTE
+            //canvasTimerTrivia.transform.Find("TimeLabel").GetComponent<Text>().text = time.ToString("f0"); //PENDIENTE
         }
+        else
+            canvasTimerTrivia.enabled = false;
     }
 }

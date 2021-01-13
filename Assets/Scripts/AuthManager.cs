@@ -32,8 +32,8 @@ public class AuthManager : MonoBehaviour
     // UserData
     [HideInInspector]
     public string userType;
-    [HideInInspector]
     string idInductor;
+    bool triviaInProgress;
 
     public Dictionary<string, object> GetSnapshot() { return snapshot; }
     public void SetSnapshot(Dictionary<string, object> snapshot) { this.snapshot = snapshot; }
@@ -54,13 +54,14 @@ public class AuthManager : MonoBehaviour
     {
         userType = "";
         idInductor = "";
+        triviaInProgress = false;
 
         inputFieldUser.text = "";
         inputFieldPassword.text = "";
         inputFieldDocument.text = "";
         inputFieldName.text = "";
         inputRoomName.text = "";
-        inputInductorRoomSize.text = "0";
+        inputInductorRoomSize.text = "";
     }
 
     private void InitializeFirebase()
@@ -88,25 +89,29 @@ public class AuthManager : MonoBehaviour
             if(idInductor == "")
                 idInductor = await UsersManager.instance.GetInductorByStudent(GetUserId());
 
-            List<Dictionary<string, object>> listAvailableTrivias = await DataBaseManager.instance.SearchByAttribute("InductorTriviasChallenges", "idInductor", idInductor, "available", true);
-            List<Dictionary<string, object>> listTrivias = new List<Dictionary<string, object>>();
-            foreach(Dictionary<string, object> availableTrivia in listAvailableTrivias)
+            if (!triviaInProgress)
             {
-                foreach(KeyValuePair<string, object> pair in availableTrivia)
+                List<Dictionary<string, object>> listAvailableTrivias = await DataBaseManager.instance.SearchByAttribute("InductorTriviasChallenges", "idInductor", idInductor, "available", true);
+                List<Dictionary<string, object>> listTrivias = new List<Dictionary<string, object>>();
+                foreach(Dictionary<string, object> availableTrivia in listAvailableTrivias)
                 {
-                    if(pair.Key == "idBuilding")
+                    foreach(KeyValuePair<string, object> pair in availableTrivia)
                     {
-                        listTrivias = await TriviasManager.instance.GetTriviaByIdBuilding(pair.Value.ToString());
+                        if(pair.Key == "idBuilding")
+                        {
+                            listTrivias = await TriviasManager.instance.GetTriviaByIdBuilding(pair.Value.ToString());
+                        }
                     }
                 }
+                ScenesManager.instance.LoadNewCanvas(canvasTimerTrivia);
+                StartCoroutine(StartTrivia());
+                triviaInProgress = true;
             }
-
-            ScenesManager.instance.LoadNewCanvas(canvasTimerTrivia);
-            StartCoroutine(StartTrivia());
         }
     }
 
     IEnumerator StartTrivia(){
+        Debug.Log("entro a la corrutina");
         //coroutineFinishedTrivia = false;
         yield return new WaitForSeconds(3f);
         Debug.Log("Aqui comienza la trivia");
