@@ -12,7 +12,7 @@ public class LoadingScreenManager : MonoBehaviour
     [HideInInspector]
     public int timer = 3, question = 30, waiting = 10;
 
-    public Canvas canvasInductorLoading, canvasTimerTriviaLoading, canvasQuestionLoading, canvasWaitingTriviaLoading;
+    public Canvas canvasInductorLoading, canvasTimerTriviaLoading, canvasQuestionLoading, canvasWaitingTriviaLoading, canvasPodiumStudent;
     float timeInductorLoading = 0, timeTimerTrivia = 0, timeTriviaLoading = 0, timeWaitingTrivia = 0;
     string idBuilding = "";
     int index = 0;
@@ -151,7 +151,6 @@ public class LoadingScreenManager : MonoBehaviour
             canvasQuestionLoading.enabled = true;
         }
         else
-            ScenesManager.instance.LoadNewCanvas(AuthManager.instance.canvasMenuStudent);
-
+            ScenesManager.instance.LoadNewCanvas(canvasPodiumStudent);
     }
 }
