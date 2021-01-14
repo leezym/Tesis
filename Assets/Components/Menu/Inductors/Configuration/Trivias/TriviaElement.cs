@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 using System;
 
 public class TriviaElement : MonoBehaviour
@@ -12,7 +13,6 @@ public class TriviaElement : MonoBehaviour
     int answer = 10;
 
     string idBuilding = "";
-    bool coroutineFinishedTrivia = false;
 
     public void SelectTrivia()
     {
@@ -40,14 +40,11 @@ public class TriviaElement : MonoBehaviour
 
     async void ExecuteTrivia()
     {
-        GameObject canvasLoading = GameObject.Find("InductorLoadingTrivias");
         this.transform.Find("InitializeTriviaButton").GetComponent<Button>().interactable = false;
 
         // Datos cantidad de preguntas
         int amoungQuestions = Convert.ToInt32(this.transform.Find("AmountQuestionsLabel").GetComponent<Text>().text);
         float timeQuestions = amoungQuestions * (timer + question + answer);
-        Text timeLabel = canvasLoading.transform.Find("TimeLabel").GetComponent<Text>();
-        timeLabel.text = timeQuestions.ToString();
         
         // Datos edificio
         string buildingName = this.transform.Find("BuildingNameLabel").GetComponent<Text>().text;
@@ -55,27 +52,9 @@ public class TriviaElement : MonoBehaviour
         
 
         await TriviasChallengesManager.instance.PostNewInductorTriviaChallenge(await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()), idBuilding, true);
-        ScenesManager.instance.LoadNewCanvas(canvasLoading.GetComponent<Canvas>());
-
-        StartCoroutine(FinishedTrivia(timeQuestions));
-
-        if(coroutineFinishedTrivia)
-        {
-            await TriviasChallengesManager.instance.PutInductorTriviaChallengeAsync
-            (
-                await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()), 
-                idBuilding, 
-                new Dictionary<string, object> () {
-                    {"available", false}
-                }
-            );
-            coroutineFinishedTrivia = false;
-        }
-    }
-
-    IEnumerator FinishedTrivia(float seconds){
-        coroutineFinishedTrivia = false;
-        yield return new WaitForSeconds(seconds);
-        coroutineFinishedTrivia = true;
+        ScenesManager.instance.LoadNewCanvas(LoadingScreenManager.instance.canvasInductorLoading);
+        
+        LoadingScreenManager.instance.SetTimeInductorLoading(timeQuestions);
+        LoadingScreenManager.instance.SetIdTriviaBuilding(idBuilding);
     }
 }

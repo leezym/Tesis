@@ -103,19 +103,14 @@ public class AuthManager : MonoBehaviour
                         }
                     }
                 }
-                ScenesManager.instance.LoadNewCanvas(canvasTimerTrivia);
-                StartCoroutine(StartTrivia());
-                triviaInProgress = true;
+                if(listTrivias.Count != 0)
+                {
+                    ScenesManager.instance.LoadNewCanvas(canvasTimerTrivia);
+                    LoadingScreenManager.instance.SetTimeTimerTrivia(3);
+                    triviaInProgress = true;
+                }
             }
         }
-    }
-
-    IEnumerator StartTrivia(){
-        Debug.Log("entro a la corrutina");
-        //coroutineFinishedTrivia = false;
-        yield return new WaitForSeconds(3f);
-        Debug.Log("Aqui comienza la trivia");
-        //coroutineFinishedTrivia = true;
     }
 
     public string GetUserId()

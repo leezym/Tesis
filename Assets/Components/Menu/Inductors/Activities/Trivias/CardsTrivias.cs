@@ -22,10 +22,12 @@ public class CardsTrivias : MonoBehaviour
 
     async void Update()
     {
-        CardAnimation();
 
         if (canvasActTrivia.enabled)
+        {
             await SearchTrivia();
+            CardAnimation();
+        }
         else
             currentSizeTrivias = 0;
     }

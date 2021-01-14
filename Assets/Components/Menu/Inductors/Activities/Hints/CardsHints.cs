@@ -22,10 +22,11 @@ public class CardsHints : MonoBehaviour
 
     async void Update()
     {
-        CardAnimation();
-
         if (canvasActHint.enabled)
+        {
             await SearchHint();
+            CardAnimation();
+        }
         else
             currentSizeHints = 0;
     }
