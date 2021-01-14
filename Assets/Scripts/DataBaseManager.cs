@@ -55,8 +55,22 @@ public class DataBaseManager : MonoBehaviour
         DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
         if (snapshot.Exists)
         {
-            Dictionary<string, object> data = snapshot.ToDictionary();
-            return data;
+            return snapshot.ToDictionary();
+        }
+        return null;
+    }
+
+    public async Task<object> SearchById(string db, string id, string attribute)
+    {
+        DocumentReference docRef = reference.Collection(db).Document(id);
+        DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+        if (snapshot.Exists)
+        {
+            foreach (KeyValuePair<string, object> pair in snapshot.ToDictionary())
+            {
+                if(pair.Key == attribute)
+                    return pair.Value;
+            }
         }
         return null;
     }

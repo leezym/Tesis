@@ -7,11 +7,6 @@ using System;
 
 public class TriviaElement : MonoBehaviour
 {
-    // 3seg Contador, 30seg Pregunta, 10seg 
-    int timer = 3;
-    int question = 30;
-    int answer = 10;
-
     string idBuilding = "";
 
     public void SelectTrivia()
@@ -44,7 +39,9 @@ public class TriviaElement : MonoBehaviour
 
         // Datos cantidad de preguntas
         int amoungQuestions = Convert.ToInt32(this.transform.Find("AmountQuestionsLabel").GetComponent<Text>().text);
-        float timeQuestions = amoungQuestions * (timer + question + answer);
+        float timeQuestions = amoungQuestions * (LoadingScreenManager.instance.timer + 
+                                                LoadingScreenManager.instance.question + 
+                                                LoadingScreenManager.instance.waiting);
         
         // Datos edificio
         string buildingName = this.transform.Find("BuildingNameLabel").GetComponent<Text>().text;

@@ -22,12 +22,9 @@ public class AuthManager : MonoBehaviour
     // Canvas Iniciar Sesion
     public Canvas canvasGeneralSessions;
     public Canvas canvasLoginInductor, canvasNombreInductor, canvasMenuInductor;
-    public Canvas canvasLoginStudent, canvasMenuStudent;
+    public Canvas canvasLoginStudent, canvasMenuStudent, canvasPuntuacionesStudent;
     public InputField inputFieldUser, inputFieldPassword, inputRoomName, inputInductorRoomSize;
     public InputField inputFieldDocument, inputFieldName;
-
-    // Canvas Loading Trivias
-    public Canvas canvasTimerTrivia;
 
     // UserData
     [HideInInspector]
@@ -92,22 +89,23 @@ public class AuthManager : MonoBehaviour
             if (!triviaInProgress)
             {
                 List<Dictionary<string, object>> listAvailableTrivias = await DataBaseManager.instance.SearchByAttribute("InductorTriviasChallenges", "idInductor", idInductor, "available", true);
-                List<Dictionary<string, object>> listTrivias = new List<Dictionary<string, object>>();
                 foreach(Dictionary<string, object> availableTrivia in listAvailableTrivias)
                 {
                     foreach(KeyValuePair<string, object> pair in availableTrivia)
                     {
                         if(pair.Key == "idBuilding")
                         {
-                            listTrivias = await TriviasManager.instance.GetTriviaByIdBuilding(pair.Value.ToString());
+                            triviaInProgress = true;
+
+                            ScenesManager.instance.LoadNewCanvas(LoadingScreenManager.instance.canvasTimerTriviaLoading);
+                            ScenesManager.instance.DeleteCurrentCanvas(canvasMenuStudent);
+                            ScenesManager.instance.DeleteCurrentCanvas(canvasPuntuacionesStudent);
+
+                            LoadingScreenManager.instance.SetTimeTimerTrivia(LoadingScreenManager.instance.timer);
+                            LoadingScreenManager.instance.SetIdTriviaBuilding(pair.Value.ToString());
+                            LoadingScreenManager.instance.SetListTrivias(await TriviasManager.instance.GetTriviaByIdBuilding(pair.Value.ToString()));
                         }
                     }
-                }
-                if(listTrivias.Count != 0)
-                {
-                    ScenesManager.instance.LoadNewCanvas(canvasTimerTrivia);
-                    LoadingScreenManager.instance.SetTimeTimerTrivia(3);
-                    triviaInProgress = true;
                 }
             }
         }
