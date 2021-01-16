@@ -41,7 +41,8 @@ public class TriviaElement : MonoBehaviour
         int amoungQuestions = Convert.ToInt32(this.transform.Find("AmountQuestionsLabel").GetComponent<Text>().text);
         float timeQuestions = amoungQuestions * (LoadingScreenManager.instance.timer + 
                                                 LoadingScreenManager.instance.question + 
-                                                LoadingScreenManager.instance.waiting);
+                                                LoadingScreenManager.instance.waiting +
+                                                LoadingScreenManager.instance.isOver);
         
         // Datos edificio
         string buildingName = this.transform.Find("BuildingNameLabel").GetComponent<Text>().text;

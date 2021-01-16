@@ -10,24 +10,21 @@ public class LoadingScreenManager : MonoBehaviour
 
     // 3seg Contador, 30seg Pregunta, 10seg 
     [HideInInspector]
-    public int timer = 3, question = 30, waiting = 5;
+    public int timer = 3, question = 30, waiting = 3;
+    public float isOver = 1.5f;
 
-    public Canvas canvasInductorLoading, canvasTimerTriviaLoading, canvasQuestionLoading, canvasWaitingTriviaLoading, canvasPodiumStudent;
+    public Canvas canvasInductorLoading, canvasTimerTriviaLoading, canvasQuestionLoading, canvasWaitingTriviaLoading, canvasPodiumStudent, canvasTimeOver;
     public Sprite normalAnswer;
 
-    float timeInductorLoading = 0, timeTimerTrivia = 0, timeTriviaLoading = 0, timeWaitingTrivia = 0;
+    float timeInductorLoading = 0, timeTimerTrivia = 0, timeTriviaLoading = 0, timeWaitingTrivia = 0, timeIsOver = 0;
     string idBuilding = "";
     int index = 0;
     Dictionary<string,object>[] listTrivias;
 
-    //public float GetTimeInductorLoading() { return timeInductorLoading; }
     public void SetTimeInductorLoading(float timeInductorLoading) { this.timeInductorLoading = timeInductorLoading; }
-
-    //public float GetTimeTimerTrivia() { return timeTimerTrivia; }
     public void SetTimeTimerTrivia(float timeTimerTrivia) { this.timeTimerTrivia = timeTimerTrivia; }
-
-    //public float GetTimeTriviaLoading() { return timeTriviaLoading; }
     public void SetTimeTriviaLoading(float timeTriviaLoading) { this.timeTriviaLoading = timeTriviaLoading; }
+    public void SetTimeOverLoading(float timeIsOver) { this.timeIsOver = timeIsOver; }
 
     public void SetIdTriviaBuilding(string idBuilding){ this.idBuilding = idBuilding; }
     public void SetListTrivias(List<Dictionary<string,object>> listTrivias){ this.listTrivias = listTrivias.ToArray(); }
@@ -62,6 +59,10 @@ public class LoadingScreenManager : MonoBehaviour
         if (canvasWaitingTriviaLoading.enabled)
             WaitingTriviaLoading();
 
+        // canvasWaitingTriviaLoading
+        if (canvasTimeOver.enabled)
+            TimeOverLoading();
+
     }
 
     async void InductorLoading()
@@ -85,6 +86,7 @@ public class LoadingScreenManager : MonoBehaviour
         }
     }
 
+    // Carga del inicio
     void TimerTriviaLoading()
     {
         index = 0;
@@ -103,6 +105,7 @@ public class LoadingScreenManager : MonoBehaviour
         }
     }
 
+    // Pregunta
     void TriviaLoading()
     {
         if (timeTriviaLoading > 0)
@@ -113,12 +116,29 @@ public class LoadingScreenManager : MonoBehaviour
         else if (timeTriviaLoading < 0)
         {
             timeTriviaLoading = 0;
+            //canvasQuestionLoading.enabled = false;
+            timeIsOver = 0;
+            canvasTimeOver.enabled = true;
+        }
+    }
+
+    void TimeOverLoading()
+    {
+        if (timeIsOver > 0)
+        {
+            timeIsOver -= Time.deltaTime;
+        }
+        else if (timeTriviaLoading < 0)
+        {
+            timeIsOver = 0;
+            canvasTimeOver.enabled = false;
             canvasQuestionLoading.enabled = false;
             timeWaitingTrivia = 0;
             canvasWaitingTriviaLoading.enabled = true;
         }
     }
 
+    // Carga entre preguntas
     void WaitingTriviaLoading()
     {
         if (timeWaitingTrivia < waiting)
@@ -145,6 +165,7 @@ public class LoadingScreenManager : MonoBehaviour
         }
     }
 
+    // Informacion de la pregunta
     async void ShowTrivia()
     {
         object buildingName = await DataBaseManager.instance.SearchById("Buildings", idBuilding,"name");
