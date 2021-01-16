@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class PlayATrivia : MonoBehaviour
 {
+    public Canvas canvasPodiumStudent;
     public Button[] answerButtons;
     public Text question, finalScore;
     public Sprite wrongAnswer, rightAnswer;
+    public GameObject[] placeLabels;
 
     public async void DetectAnswer(Button button)
     {
@@ -64,5 +67,20 @@ public class PlayATrivia : MonoBehaviour
         else if (score >= 1000 && score <= 9999)
             finalScore.text = score.ToString();
             
+    }
+
+    public async void ShowFinalRanking()
+    {
+        List<Dictionary<string, object>> rankingList = await UsersManager.instance.GetFinalTriviasRanking();
+        foreach(Dictionary<string, object> ranking in rankingList)
+        {
+            foreach(KeyValuePair<string, object> pair in ranking)
+            {
+                if(pair.Key == "name")
+                    placeLabels[rankingList.IndexOf(ranking)].transform.Find("NameLabel").GetComponent<Text>().text = pair.Value.ToString();
+                if(pair.Key == "score")
+                    placeLabels[rankingList.IndexOf(ranking)].transform.Find("ScoreLabel").GetComponent<Text>().text = pair.Value.ToString();
+            }
+        }
     }
 }

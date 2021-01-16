@@ -167,7 +167,9 @@ public class LoadingScreenManager : MonoBehaviour
             index++;
             canvasQuestionLoading.enabled = true;
         }
-        else
+        else{
+            GameObject.FindObjectOfType<PlayATrivia>().ShowFinalRanking();
             ScenesManager.instance.LoadNewCanvas(canvasPodiumStudent);
+        }
     }
 }
