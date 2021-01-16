@@ -184,8 +184,7 @@ public class AuthManager : MonoBehaviour
                 }
                 return;
             }
-            await UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, inputRoomName.text);       
-            await RoomsManager.instance.PostNewRoom("Grupo de " + user, Convert.ToInt32(inputInductorRoomSize.text), userFirebase.UserId);            
+            await UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, "");
         });
     }
 
@@ -195,39 +194,44 @@ public class AuthManager : MonoBehaviour
         string document = inputFieldDocument.text;
         string idRoom = null;
 
-        if (!await UsersManager.instance.ExistUserByDocument("Students", document))
+        if(name != "" && document != "")
         {
-            if (!await DataBaseManager.instance.IsEmptyTable("Rooms"))
+            if (!await UsersManager.instance.ExistUserByDocument("Students", document))
             {
-                idRoom = await RoomsManager.instance.GetAvailableRoom();
-                if(idRoom != null)
+                if (!await DataBaseManager.instance.IsEmptyTable("Rooms"))
                 {
-                    await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task =>
+                    idRoom = await RoomsManager.instance.GetAvailableRoom();
+                    if(idRoom != null)
                     {
-                        if (task.IsFaulted)
+                        await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task =>
                         {
-                            foreach (System.Exception exception in task.Exception.InnerExceptions)
+                            if (task.IsFaulted)
                             {
-                                Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
-                                string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
-                                NotificationsManager.instance.SetFailureNotificationMessage(message);
+                                foreach (System.Exception exception in task.Exception.InnerExceptions)
+                                {
+                                    Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
+                                    string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
+                                    NotificationsManager.instance.SetFailureNotificationMessage(message);
+                                }
+                                return;
                             }
-                            return;
-                        }
 
-                        await UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
+                            await UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
 
-                        //SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
+                            //SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
 
-                    });
+                        });
+                    }else{
+                        NotificationsManager.instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");
+                    }
                 }else{
                     NotificationsManager.instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");
                 }
             }else{
-                NotificationsManager.instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");
+                NotificationsManager.instance.SetFailureNotificationMessage("Ya existe un usuario con ese documento.");
             }
         }else{
-            NotificationsManager.instance.SetFailureNotificationMessage("Ya existe un usuario con ese documento.");
+            NotificationsManager.instance.SetFailureNotificationMessage("Por favor llena los campos.");
         }
     }
 

@@ -10,9 +10,11 @@ public class LoadingScreenManager : MonoBehaviour
 
     // 3seg Contador, 30seg Pregunta, 10seg 
     [HideInInspector]
-    public int timer = 3, question = 30, waiting = 10;
+    public int timer = 3, question = 30, waiting = 5;
 
     public Canvas canvasInductorLoading, canvasTimerTriviaLoading, canvasQuestionLoading, canvasWaitingTriviaLoading, canvasPodiumStudent;
+    public Sprite normalAnswer;
+
     float timeInductorLoading = 0, timeTimerTrivia = 0, timeTriviaLoading = 0, timeWaitingTrivia = 0;
     string idBuilding = "";
     int index = 0;
@@ -33,6 +35,11 @@ public class LoadingScreenManager : MonoBehaviour
     void Awake()
     {
         instance = this;
+    }
+
+    void Start()
+    {
+        canvasWaitingTriviaLoading.transform.Find("TimeSlider").GetComponent<Slider>().maxValue = waiting;
     }
     
     void Update()
@@ -85,7 +92,7 @@ public class LoadingScreenManager : MonoBehaviour
         if (timeTimerTrivia > 0)
         {
             timeTimerTrivia -= Time.deltaTime;
-            Debug.Log("timeTimerTrivia " + timeTimerTrivia);
+            canvasTimerTriviaLoading.transform.Find("LoadCircle").GetComponentInChildren<Text>().text = timeTimerTrivia.ToString("f0");
         }
         else if (timeTimerTrivia < 0)
         {
@@ -101,29 +108,39 @@ public class LoadingScreenManager : MonoBehaviour
         if (timeTriviaLoading > 0)
         {
             timeTriviaLoading -= Time.deltaTime;
-            Debug.Log("timeTriviaLoading "+timeTriviaLoading);
+            canvasQuestionLoading.transform.Find("Timer").GetComponentInChildren<Text>().text = timeTriviaLoading.ToString("f0");
         }
         else if (timeTriviaLoading < 0)
         {
             timeTriviaLoading = 0;
             canvasQuestionLoading.enabled = false;
-            timeWaitingTrivia = waiting;
+            timeWaitingTrivia = 0;
             canvasWaitingTriviaLoading.enabled = true;
         }
     }
 
     void WaitingTriviaLoading()
     {
-        if (timeWaitingTrivia > 0)
+        if (timeWaitingTrivia < waiting)
         {
-            timeWaitingTrivia -= Time.deltaTime;
-            Debug.Log("timeWaitingTrivia "+timeWaitingTrivia);
+            timeWaitingTrivia += Time.deltaTime;
+            canvasWaitingTriviaLoading.transform.Find("TimeSlider").GetComponent<Slider>().value = timeWaitingTrivia;
+
         }
-        else if (timeWaitingTrivia < 0)
+        else if (timeWaitingTrivia > waiting)
         {
             timeWaitingTrivia = 0;
+            canvasWaitingTriviaLoading.transform.Find("TimeSlider").GetComponent<Slider>().maxValue = waiting;
             canvasWaitingTriviaLoading.enabled = false;
             timeTriviaLoading = question;
+
+            canvasQuestionLoading.transform.Find("AnswerOne").GetComponent<Button>().interactable = true;
+            canvasQuestionLoading.transform.Find("AnswerTwo").GetComponent<Button>().interactable = true;
+            canvasQuestionLoading.transform.Find("AnswerThree").GetComponent<Button>().interactable = true;
+
+            canvasQuestionLoading.transform.Find("AnswerOne").GetComponent<Button>().image.sprite = normalAnswer;
+            canvasQuestionLoading.transform.Find("AnswerTwo").GetComponent<Button>().image.sprite = normalAnswer;
+            canvasQuestionLoading.transform.Find("AnswerThree").GetComponent<Button>().image.sprite = normalAnswer;
             ShowTrivia();
         }
     }
