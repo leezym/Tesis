@@ -37,7 +37,7 @@ public class TriviasChallengesManager : MonoBehaviour
     public async Task<List<Dictionary<string, object>>> GetTriviaChallengeByBuilding(string idInductor)
     {
         return await DataBaseManager.instance.SearchTriviaDataByBuilding(idInductor);
-    }
+    }    
 
     public async Task DeleteTriviaChallenge(string db, string idHintChallenge)
     {

@@ -46,6 +46,11 @@ public class UsersManager : MonoBehaviour
         return await DataBaseManager.instance.SearchByOrderDescending("Students", "score");
     }
 
+    public async Task<List<Dictionary<string, object>>> GetFinalTriviasRanking()
+    {
+        return await DataBaseManager.instance.SearchByOrderDescendingAndLimit("Students", "score", 3);
+    }
+
     public async Task<string> GetInductorByStudent(string idStudent)
     {
         object idRoom = await DataBaseManager.instance.SearchAttribute("Students", idStudent, "idRoom");

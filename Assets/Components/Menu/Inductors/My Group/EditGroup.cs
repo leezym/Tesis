@@ -96,9 +96,13 @@ public class EditGroup : MonoBehaviour
                 { "name" , inputInductorName.text}
             };
             await UsersManager.instance.PutUserAsync("Inductors", await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()), data);
-            await RoomsManager.instance.PostNewRoom("Sala de " + inputInductorName.text, Convert.ToInt32(inputRoomSize.text), await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()));
+            await RoomsManager.instance.PostNewRoom("Grupo de " + inputInductorName.text, Convert.ToInt32(inputRoomSize.text), await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()));
             ScenesManager.instance.DeleteCurrentCanvas(canvasNombreInductor);
             ScenesManager.instance.LoadNewCanvas(canvasMenuInductor);
+        }
+        else
+        {
+            NotificationsManager.instance.SetFailureNotificationMessage("Por favor llene los campos.");
         }
     }
 
@@ -114,16 +118,13 @@ public class EditGroup : MonoBehaviour
                 { "size" , Convert.ToInt32(newInputRoomSize.text)},
                 { "room" , newInputRoomName.text}
             };
-            Debug.Log("New room name: " + newInputRoomName.text);
 
             await RoomsManager.instance.PutRoomAsync(roomId, newRoomData);
+            NotificationsManager.instance.SetSuccessNotificationMessage("El grupo "+newInputRoomName.text+" fue editado.");
         }
-        /*else
+        else
         {
-            advertencia = cosas de advertencia;
-            WarningGenerator(advertencia);
-            ScenesManager.instance.DeleteCurrentCanvas(canvasNombreInductor);
-            ScenesManager.instance.LoadNewCanvas(canvasMenuInductor);
-        }*/
+            NotificationsManager.instance.SetFailureNotificationMessage("El tamaño del grupo no puede ser menor que el tamaño actual.");
+        }
     }
 }
