@@ -18,4 +18,14 @@ public class ScenesManager : MonoBehaviour
     {
         canvas.enabled = true;
     }
+
+    public void DeleteCurrentCanvas(CanvasGroup canvas)
+    {
+        canvas.alpha = 0;
+    }
+
+    public void LoadNewCanvas(CanvasGroup canvas)
+    {
+        canvas.alpha = 1;
+    }
 }

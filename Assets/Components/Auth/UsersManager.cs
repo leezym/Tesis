@@ -14,9 +14,10 @@ public class UsersManager : MonoBehaviour
         instance = this;
     }
 
-    public async Task PostNewInductor(string uid, string user, string email, string name)
+    public async Task PostNewInductor(string uid, string user, string name)
     {
-        Inductor element = new Inductor(uid, user, email, name);
+        Debug.Log("yes");
+        Inductor element = new Inductor(uid, user, name);
         await DataBaseManager.instance.InsertWithoutId("Inductors", element.ConvertJson());
     }
 
@@ -84,16 +85,14 @@ public class Inductor
 {
     public string idAuth;
     public string user;
-    public string email;
     public string name;
 
     public Inductor() { }
 
-    public Inductor(string idAuth, string user, string email, string name)
+    public Inductor(string idAuth, string user, string name)
     {
         this.idAuth = idAuth;
         this.user = user;
-        this.email = email;
         this.name = name;
     }
     public Dictionary<string, object> ConvertJson()
@@ -101,7 +100,6 @@ public class Inductor
         return new Dictionary<string, object>() {
             { "idAuth", this.idAuth },
             { "user", this.user },
-            { "email", this.email },
             { "name", this.name }
         };
     }

@@ -168,12 +168,12 @@ public class AuthManager : MonoBehaviour
         Exit();
     }
 
-    public void SignInInductor() {
+    public async void SignInInductor() {
         string user = inputFieldUser.text;
         string password = inputFieldPassword.text;
         string email = user + "@javerianacali.edu.co";
 
-        authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async taskSignIn => {                
+        await authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async taskSignIn => {                
             if (taskSignIn.IsFaulted)
             {
                 foreach (System.Exception exception in taskSignIn.Exception.InnerExceptions)
@@ -184,7 +184,8 @@ public class AuthManager : MonoBehaviour
                 }
                 return;
             }
-            await UsersManager.instance.PostNewInductor(userFirebase.UserId, user, userFirebase.Email, "");
+            await UsersManager.instance.PostNewInductor(userFirebase.UserId, "", "");
+
         });
     }
 
