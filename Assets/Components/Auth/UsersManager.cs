@@ -16,7 +16,6 @@ public class UsersManager : MonoBehaviour
 
     public async Task PostNewInductor(string uid, string user, string name)
     {
-        Debug.Log("yes");
         Inductor element = new Inductor(uid, user, name);
         await DataBaseManager.instance.InsertWithoutId("Inductors", element.ConvertJson());
     }
