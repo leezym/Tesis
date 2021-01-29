@@ -91,14 +91,16 @@ public class EditGroup : MonoBehaviour
     {
         if (CheckNewData())
         {
-            Dictionary<string, object> data = new Dictionary<string, object>
-            {
-                { "name" , inputInductorName.text}
-            };
-            await UsersManager.instance.PutUserAsync("Inductors", await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()), data);
-            await RoomsManager.instance.PostNewRoom("Grupo de " + inputInductorName.text, Convert.ToInt32(inputRoomSize.text), await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()));
+            string idInductor = await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId());
+
+            await UsersManager.instance.PutUserAsync("Inductors", idInductor, new Dictionary<string, object>{
+                {"name", inputInductorName.text}
+            });
+            await RoomsManager.instance.PostNewRoom("Grupo de " + inputInductorName.text, Convert.ToInt32(inputRoomSize.text), idInductor);
+            
             ScenesManager.instance.DeleteCurrentCanvas(canvasNombreInductor);
             ScenesManager.instance.LoadNewCanvas(canvasMenuInductor);
+
         }
         else
         {

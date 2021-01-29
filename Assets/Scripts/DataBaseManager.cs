@@ -23,28 +23,15 @@ public class DataBaseManager : MonoBehaviour
         reference = FirebaseFirestore.DefaultInstance;
     }
 
-    public async Task<List<Dictionary<string, object>>> SearchByCollection(string db)
+    public async Task<List<DocumentSnapshot>> SearchByCollection(string db)
     {
         CollectionReference colRef = reference.Collection(db);
         QuerySnapshot querySnapshot = await colRef.GetSnapshotAsync();
-        List<Dictionary<string, object>> data = new List<Dictionary<string, object>>();
+        List<DocumentSnapshot> data = new List<DocumentSnapshot>();
 
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
         {
-            data.Add(documentSnapshot.ToDictionary());
-        }
-        return data;
-    }
-
-    public async Task<List<string>> SearchIdsByCollection(string db)
-    {
-        CollectionReference colRef = reference.Collection(db);
-        QuerySnapshot querySnapshot = await colRef.GetSnapshotAsync();
-        List<string> data = new List<string>();
-
-        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
-        {
-            data.Add(documentSnapshot.Id);
+            data.Add(documentSnapshot);
         }
         return data;
     }
@@ -185,6 +172,21 @@ public class DataBaseManager : MonoBehaviour
         await docRef.UpdateAsync(data);
     }
 
+    public async Task UpdateAsync(string db, string attributeOne, object valueOne, Dictionary<string,object> data)
+    {
+        CollectionReference colRef = reference.Collection(db);
+        Query queryDocument = colRef.WhereEqualTo(attributeOne, valueOne);
+        QuerySnapshot querySnapshot = await queryDocument.GetSnapshotAsync();
+        string id = "";
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            id = documentSnapshot.Id;
+        }
+
+        DocumentReference docRef = reference.Collection(db).Document(id);        
+        await docRef.UpdateAsync(data);
+    }
+
     public async Task UpdateAsync(string db, string attributeOne, object valueOne, string attributeTwo, object valueTwo, Dictionary<string,object> data)
     {
         CollectionReference colRef = reference.Collection(db);
@@ -217,6 +219,45 @@ public class DataBaseManager : MonoBehaviour
     {
         if (await SizeTable(db) == 0) return true;
         else return false;
+    }
+
+    public async Task<List<Coords>> GetMyInductorLocation(string idStudent)
+    {
+        float latitude = 0, longitude = 0;
+        List<Coords> coordsList = new List<Coords>();
+        string idInductor = await UsersManager.instance.GetInductorByStudent(idStudent);        
+        Dictionary<string, object> location = await SearchById("Inductors", idInductor);
+        foreach (KeyValuePair<string, object> pair in location)
+        {
+            if(pair.Key == "latitude")
+                latitude = (float)pair.Value;
+            if(pair.Key == "longitude")
+                longitude = (float)pair.Value;
+        }
+        coordsList.Add(new Coords(latitude, longitude));
+        return coordsList;
+    }
+
+    public async Task<List<Coords>> GetOthersInductorsLocation(string idInductor)
+    {
+        float latitude = 0, longitude = 0;  
+        List<Coords> coordsList = new List<Coords>();    
+        List<DocumentSnapshot> locationList = await SearchByCollection("Inductors");
+        foreach(DocumentSnapshot location in locationList)
+        {
+            if (location.Id != idInductor)
+            {
+                foreach (KeyValuePair<string, object> pair in location.ToDictionary())
+                {
+                    if(pair.Key == "latitude")
+                        latitude = (float)Convert.ToDecimal(pair.Value);
+                    if(pair.Key == "longitude")
+                        longitude = (float)Convert.ToDecimal(pair.Value);                
+                }
+                coordsList.Add(new Coords(latitude, longitude));
+            }
+        }
+        return coordsList;
     }
 
     public async Task<string> GetAvailableRoom(string dbRoom) 

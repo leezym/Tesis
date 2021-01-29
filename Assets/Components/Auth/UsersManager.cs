@@ -14,9 +14,9 @@ public class UsersManager : MonoBehaviour
         instance = this;
     }
 
-    public async Task PostNewInductor(string uid, string user, string name)
+    public async Task PostNewInductor(string uid, string name)
     {
-        Inductor element = new Inductor(uid, user, name);
+        Inductor element = new Inductor(uid, name);
         await DataBaseManager.instance.InsertWithoutId("Inductors", element.ConvertJson());
     }
 
@@ -83,23 +83,24 @@ public class UsersManager : MonoBehaviour
 public class Inductor
 {
     public string idAuth;
-    public string user;
     public string name;
+    public float latitude = 0;
+    public float longitude = 0;
 
     public Inductor() { }
 
-    public Inductor(string idAuth, string user, string name)
+    public Inductor(string idAuth, string name)
     {
         this.idAuth = idAuth;
-        this.user = user;
         this.name = name;
     }
     public Dictionary<string, object> ConvertJson()
     {
         return new Dictionary<string, object>() {
             { "idAuth", this.idAuth },
-            { "user", this.user },
-            { "name", this.name }
+            { "name", this.name },
+            { "latitude", this.latitude },
+            { "longitude", this.longitude }
         };
     }
 }
@@ -110,6 +111,8 @@ public class Student
     public string document;
     public int score = 0;
     public string idRoom;
+    public float latitude = 0;
+    public float longitude = 0;
 
     public Student() { }
 
@@ -125,7 +128,9 @@ public class Student
             { "name", this.name },
             { "document", this.document },
             { "score", this.score},
-            { "idRoom", this.idRoom }
+            { "idRoom", this.idRoom },
+            { "latitude", this.latitude },
+            { "longitude", this.longitude }
         };
     }
 }

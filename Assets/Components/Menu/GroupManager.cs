@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Threading.Tasks;
+using Firebase.Firestore;
 using UnityEngine.UIElements;
 
 public class GroupManager : MonoBehaviour
@@ -59,10 +60,10 @@ public class GroupManager : MonoBehaviour
     {
         string nameInductor = "", nameRoom  = "", idInductor = "";
         List<Dictionary<string, string>> Salas = new List<Dictionary<string, string>>();
-        List<Dictionary<string, object>> rooms = await DataBaseManager.instance.SearchByCollection("Rooms");
-        foreach (Dictionary<string, object> room in rooms)
+        List<DocumentSnapshot> rooms = await DataBaseManager.instance.SearchByCollection("Rooms");
+        foreach (DocumentSnapshot room in rooms)
         {
-            foreach (KeyValuePair<string, object> pairRoom in room)
+            foreach (KeyValuePair<string, object> pairRoom in room.ToDictionary())
             {  
                 if (pairRoom.Key == "room")
                 {

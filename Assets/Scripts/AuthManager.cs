@@ -31,6 +31,7 @@ public class AuthManager : MonoBehaviour
     public string userType;
     string idInductor;
     bool triviaInProgress;
+    float currentLatitude = 0, currentLongitude = 0, newLatitude = -1, newLongitude = -1;
 
     public Dictionary<string, object> GetSnapshot() { return snapshot; }
     public void SetSnapshot(Dictionary<string, object> snapshot) { this.snapshot = snapshot; }
@@ -71,40 +72,92 @@ public class AuthManager : MonoBehaviour
 
     public async void Update()
     {
-
-        if (signedIn && GetUserType() == "student")
-        {
-            // Cerrar la sesión si al inductor elimina la sala
-            SetSnapshot(await UsersManager.instance.GetUserAsync("Students", GetUserId()));
-            if (GetSnapshot() == null)
+        if (signedIn)
+        {   
+            if (currentLatitude != newLatitude || currentLongitude != newLongitude)
             {
-                Exit();
-                GameObject.Find("PanelGeneralSessions").GetComponent<Canvas>().enabled = true;
+                /*Input.location.Start();
+                newLatitude = Input.location.lastData.latitude;
+                newLongitude = Input.location.lastData.longitude;
+                Input.location.Stop();*/
+                //punto A
+                Input.location.Start();
+                newLatitude = 3.3478998f;
+                newLongitude = -76.5324315f;
+                Input.location.Stop();
+
+                if (GetUserType() == "student")
+                {
+                    // Mapa
+                    string idStudent = GetUserId();
+                    await UsersManager.instance.PutUserAsync("Students", idStudent, new Dictionary<string, object>{
+                        {"latitude", currentLatitude},
+                        {"longitude", currentLongitude}
+                    });
+                }
+                else if(GetUserType() == "inductor")
+                { 
+                    // Mapa
+                    if(idInductor == "")
+                        idInductor = await UsersManager.instance.GetInductorIdByAuth(GetUserId());
+                    else
+                    {
+                        await UsersManager.instance.PutUserAsync("Inductors", idInductor, new Dictionary<string, object>{
+                            {"latitude", currentLatitude},
+                            {"longitude", currentLongitude}
+                        });
+                        Debug.Log("actualiza locacion en la DB");
+                    }
+                }  
+
+                currentLatitude = newLatitude;
+                currentLongitude = newLongitude;
             }
 
-            // Mostrar las trivias
-            if(idInductor == "")
-                idInductor = await UsersManager.instance.GetInductorByStudent(GetUserId());
+            if (GetUserType() == "student")
+            {                
+                // Cerrar la sesión si al inductor elimina la sala
+                LogOutStudent();
 
-            if (!triviaInProgress)
+                // Mostrar las trivias
+                ShowTriviasStudent();
+            }            
+        }
+    }
+
+    async void LogOutStudent()
+    {
+        SetSnapshot(await UsersManager.instance.GetUserAsync("Students", GetUserId()));
+        if (GetSnapshot() == null)
+        {
+            Exit();
+            GameObject.Find("PanelGeneralSessions").GetComponent<Canvas>().enabled = true;
+        }
+    }
+
+    async void ShowTriviasStudent()
+    {
+        if(idInductor == "")
+            idInductor = await UsersManager.instance.GetInductorByStudent(GetUserId());
+
+        if (!triviaInProgress)
+        {
+            List<Dictionary<string, object>> listAvailableTrivias = await DataBaseManager.instance.SearchByAttribute("InductorTriviasChallenges", "idInductor", idInductor, "available", true);
+            foreach(Dictionary<string, object> availableTrivia in listAvailableTrivias)
             {
-                List<Dictionary<string, object>> listAvailableTrivias = await DataBaseManager.instance.SearchByAttribute("InductorTriviasChallenges", "idInductor", idInductor, "available", true);
-                foreach(Dictionary<string, object> availableTrivia in listAvailableTrivias)
+                foreach(KeyValuePair<string, object> pair in availableTrivia)
                 {
-                    foreach(KeyValuePair<string, object> pair in availableTrivia)
+                    if(pair.Key == "idBuilding")
                     {
-                        if(pair.Key == "idBuilding")
-                        {
-                            triviaInProgress = true;
+                        triviaInProgress = true;
 
-                            ScenesManager.instance.LoadNewCanvas(LoadingScreenManager.instance.canvasTimerTriviaLoading);
-                            ScenesManager.instance.DeleteCurrentCanvas(canvasMenuStudent);
-                            ScenesManager.instance.DeleteCurrentCanvas(canvasPuntuacionesStudent);
+                        ScenesManager.instance.LoadNewCanvas(LoadingScreenManager.instance.canvasTimerTriviaLoading);
+                        ScenesManager.instance.DeleteCurrentCanvas(canvasMenuStudent);
+                        ScenesManager.instance.DeleteCurrentCanvas(canvasPuntuacionesStudent);
 
-                            LoadingScreenManager.instance.SetTimeTimerTrivia(LoadingScreenManager.instance.timer);
-                            LoadingScreenManager.instance.SetIdTriviaBuilding(pair.Value.ToString());
-                            LoadingScreenManager.instance.SetListTrivias(await TriviasManager.instance.GetTriviaByIdBuilding(pair.Value.ToString()));
-                        }
+                        LoadingScreenManager.instance.SetTimeTimerTrivia(LoadingScreenManager.instance.timer);
+                        LoadingScreenManager.instance.SetIdTriviaBuilding(pair.Value.ToString());
+                        LoadingScreenManager.instance.SetListTrivias(await TriviasManager.instance.GetTriviaByIdBuilding(pair.Value.ToString()));
                     }
                 }
             }
@@ -184,8 +237,7 @@ public class AuthManager : MonoBehaviour
                 }
                 return;
             }
-            await UsersManager.instance.PostNewInductor(userFirebase.UserId, "", "");
-
+            await UsersManager.instance.PostNewInductor(AuthManager.instance.GetUserId(), user);
         });
     }
 
@@ -217,8 +269,7 @@ public class AuthManager : MonoBehaviour
                                 return;
                             }
 
-                            await UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);
-
+                            await UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);                            
                             //SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
 
                         });

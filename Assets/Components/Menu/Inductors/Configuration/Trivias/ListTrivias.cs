@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using Firebase.Firestore;
 
 public class ListTrivias : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class ListTrivias : MonoBehaviour
     public Canvas canvasConfigTrivias, canvasAddTrivias;
     public Dropdown buildingsDropdown;
     public Button addTrivia;
-    List<Dictionary<string,object>> buildingsList = new List<Dictionary<string,object>>();
+    List<DocumentSnapshot> buildingsList = new List<DocumentSnapshot>();
 
     List<Dictionary<string,object>> triviasList = new List<Dictionary<string,object>>();
     public List<GameObject> currentTrivias = new List<GameObject>();
@@ -61,8 +62,8 @@ public class ListTrivias : MonoBehaviour
 
     async Task SearchBuilding(){
         buildingsList = await DataBaseManager.instance.SearchByCollection("Buildings");
-        foreach(Dictionary<string,object> buildings in buildingsList){
-            foreach(KeyValuePair<string,object> pair in buildings){
+        foreach(DocumentSnapshot buildings in buildingsList){
+            foreach(KeyValuePair<string,object> pair in buildings.ToDictionary()){
                 if(pair.Key == "name"){
                     Dropdown.OptionData option = new Dropdown.OptionData();
                     option.text = pair.Value.ToString();
