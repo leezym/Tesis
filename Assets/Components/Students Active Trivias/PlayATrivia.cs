@@ -23,23 +23,20 @@ public class PlayATrivia : MonoBehaviour
         if(answer == correctAnswer.ToString())
         {
             button.image.sprite = rightAnswer;
+            LoadingScreenManager.instance.SetKevinQuote(true);
             RegisterPoints(idTrivia);
         }
         else
         {
             button.image.sprite = wrongAnswer;
+            LoadingScreenManager.instance.SetKevinQuote(false);
             foreach(Button answerButton in answerButtons)
             {
                 if(answerButton.GetComponentInChildren<Text>().text == correctAnswer.ToString())
                     answerButton.image.sprite = rightAnswer;
             }
         }
-
-        // Inhabilitar botones
-        foreach(Button answerButton in answerButtons)
-        {
-            answerButton.interactable = false;
-        }
+        LoadingScreenManager.instance.canvasKevinNotification.enabled = true;
     }
 
     async void RegisterPoints(string idTrivia)
