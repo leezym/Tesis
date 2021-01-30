@@ -3,18 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using Random=System.Random;
 
 public class LoadingScreenManager : MonoBehaviour
 {
     public static LoadingScreenManager instance;
 
-    // 3seg Contador, 30seg Pregunta, 10seg 
+    // Contadores
     [HideInInspector]
-    public int timer = 3, question = 30, waiting = 3;
-    public float isOver = 1.5f;
+    public int timer = 3, question = 20;
+    [HideInInspector]
+    public float isOver = 1.5f, waiting = 1.5f;
 
-    public Canvas canvasInductorLoading, canvasTimerTriviaLoading, canvasQuestionLoading, canvasWaitingTriviaLoading, canvasPodiumStudent, canvasTimeOver;
+    public Canvas canvasInductorLoading, canvasTimerTriviaLoading, canvasQuestionLoading, canvasWaitingTriviaLoading, canvasPodiumStudent, canvasTimeOver, canvasKevinNotification;
     public Sprite normalAnswer;
+    public Text kevinQuote;
+    
+    private List<string> SuccessQuotesList = new List<string>{"Buena esa, crack.", "Eres un Máquina", "Eres un Fiera", "Un Titán", "Caballo"};
+    private List<string> FailQuotesList = new List<string>{"Mejor suerte para la próxima, crack.", "Lamenteibol.", "Llórelo papá."};
 
     float timeInductorLoading = 0, timeTimerTrivia = 0, timeTriviaLoading = 0, timeWaitingTrivia = 0, timeIsOver = 0;
     string idBuilding = "";
@@ -41,28 +47,27 @@ public class LoadingScreenManager : MonoBehaviour
     
     void Update()
     {   
-        // canvasinductorLoading
+        // Carga del inductor
         if (canvasInductorLoading.enabled)
             InductorLoading();
         else
             timeInductorLoading = 0;
 
-        // canvasTimerTriviaLoadingLoading
+        // Carga del inicio
         if (canvasTimerTriviaLoading.enabled)
             TimerTriviaLoading();
 
-        // canvasQuestionLoasing
+        // Pregunta
         if (canvasQuestionLoading.enabled)
             TriviaLoading();
 
-        // canvasWaitingTriviaLoading
-        if (canvasWaitingTriviaLoading.enabled)
-            WaitingTriviaLoading();
-
-        // canvasWaitingTriviaLoading
+        // El tiempo se acabó
         if (canvasTimeOver.enabled)
             TimeOverLoading();
 
+        // Puntaje de la pregunta
+        if (canvasWaitingTriviaLoading.enabled)
+            WaitingTriviaLoading();
     }
 
     async void InductorLoading()
@@ -116,24 +121,26 @@ public class LoadingScreenManager : MonoBehaviour
         else if (timeTriviaLoading < 0)
         {
             timeTriviaLoading = 0;
-            //canvasQuestionLoading.enabled = false;
-            timeIsOver = 0;
+            timeIsOver = isOver;
+            kevinQuote.text = "";
             canvasTimeOver.enabled = true;
+            canvasKevinNotification.enabled = false;
         }
     }
 
+    // Se acabó el tiempo para responder
     void TimeOverLoading()
     {
         if (timeIsOver > 0)
         {
             timeIsOver -= Time.deltaTime;
         }
-        else if (timeTriviaLoading < 0)
+        else if (timeIsOver < 0)
         {
             timeIsOver = 0;
+            timeWaitingTrivia = 0;
             canvasTimeOver.enabled = false;
             canvasQuestionLoading.enabled = false;
-            timeWaitingTrivia = 0;
             canvasWaitingTriviaLoading.enabled = true;
         }
     }
@@ -191,6 +198,18 @@ public class LoadingScreenManager : MonoBehaviour
         else{
             GameObject.FindObjectOfType<PlayATrivia>().ShowFinalRanking();
             ScenesManager.instance.LoadNewCanvas(canvasPodiumStudent);
+        }
+    }
+
+    // Kevin Alerta
+    public void SetKevinQuote(bool correctAnswer){
+        var random = new Random();
+        if(correctAnswer){
+            int randomQuote = random.Next(SuccessQuotesList.Count);
+            kevinQuote.text = SuccessQuotesList[randomQuote];
+        }else{
+            int randomQuote = random.Next(FailQuotesList.Count);
+            kevinQuote.text = FailQuotesList[randomQuote];
         }
     }
 }

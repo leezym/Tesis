@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Firebase.Firestore;
 using System.Threading.Tasks;
 
 public class ListHints : MonoBehaviour
@@ -9,7 +10,7 @@ public class ListHints : MonoBehaviour
     public GameObject hintPrefab;
     public Transform hintContent;
     public Canvas canvasConfigHints, canvasAddHints;
-    List<Dictionary<string,object>> hintsList = new List<Dictionary<string,object>>();
+    List<DocumentSnapshot> hintsList = new List<DocumentSnapshot>();
     List<GameObject> currentHints = new List<GameObject>();
     int currentSizeHints = 0, newSizeHints = 0;
 
@@ -55,9 +56,9 @@ public class ListHints : MonoBehaviour
         if (currentSizeHints != newSizeHints)
         {
             ClearCurrentHints();
-            foreach(Dictionary<string,object> hint in hintsList)
+            foreach(DocumentSnapshot hint in hintsList)
             {
-                foreach(KeyValuePair<string,object> pair in hint)
+                foreach(KeyValuePair<string,object> pair in hint.ToDictionary())
                 {
                     if(pair.Key == "name"){
 

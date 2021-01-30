@@ -17,11 +17,6 @@ public class HintsChallengesManager : MonoBehaviour
         await DataBaseManager.instance.InsertWithoutId("HintsChallenges", element.ConvertJson());
     }
 
-    /*public async Task PutHintChallengeAsync(string idRoom, string idHint, Dictionary<string,object> data)
-    {
-        await DataBaseManager.instance.UpdateAsync("HintsChallenges", "idRoom", idRoom, "idHint", idHint, data);
-    }*/
-
     public async Task<Dictionary<string, object>> GetHintChallengeAsync(string idHintChallenge)
     {
         return await DataBaseManager.instance.SearchById("HintsChallenges", idHintChallenge);
