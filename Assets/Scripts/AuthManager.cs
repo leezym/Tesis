@@ -25,6 +25,7 @@ public class AuthManager : MonoBehaviour
     public Canvas canvasLoginStudent, canvasMenuStudent, canvasPuntuacionesStudent;
     public InputField inputFieldUser, inputFieldPassword, inputRoomName, inputInductorRoomSize;
     public InputField inputFieldDocument, inputFieldName;
+    public Button buttonChangeMapNeos;
 
     // UserData
     [HideInInspector]
@@ -60,6 +61,7 @@ public class AuthManager : MonoBehaviour
         inputFieldName.text = "";
         inputRoomName.text = "";
         inputInductorRoomSize.text = "";
+
     }
 
     private void InitializeFirebase()
@@ -94,6 +96,8 @@ public class AuthManager : MonoBehaviour
                         {"latitude", currentLatitude},
                         {"longitude", currentLongitude}
                     });
+                    //Aquí activo el botón de cambio de mapa para los neos//
+                    buttonChangeMapNeos.enabled = true;
                 }
                 else if(GetUserType() == "inductor")
                 { 
@@ -106,6 +110,8 @@ public class AuthManager : MonoBehaviour
                             {"latitude", currentLatitude},
                             {"longitude", currentLongitude}
                         });
+                        //Aquí desactivo el botón de cambio de mapa para los neos//
+                        buttonChangeMapNeos.enabled = false;
                         Debug.Log("actualiza locacion en la DB");
                     }
                 }  
@@ -132,6 +138,7 @@ public class AuthManager : MonoBehaviour
         {
             Exit();
             GameObject.Find("PanelGeneralSessions").GetComponent<Canvas>().enabled = true;
+            buttonChangeMapNeos.enabled = false;
         }
     }
 

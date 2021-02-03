@@ -43,16 +43,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59fd198cefbe94040961306460da7891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasGeneralSessions: {fileID: 0}
   canvasLoginInductor: {fileID: 0}
   canvasNombreInductor: {fileID: 0}
   canvasMenuInductor: {fileID: 0}
   canvasLoginStudent: {fileID: 0}
   canvasMenuStudent: {fileID: 0}
+  canvasPuntuacionesStudent: {fileID: 0}
   inputFieldUser: {fileID: 0}
   inputFieldPassword: {fileID: 0}
   inputRoomName: {fileID: 0}
+  inputInductorRoomSize: {fileID: 0}
   inputFieldDocument: {fileID: 0}
   inputFieldName: {fileID: 0}
-  inputInductorRoomSize: {fileID: 0}
-  textUserName: {fileID: 0}
-  userType: 0
+  buttonChangeMapNeos: {fileID: 0}
+  userType: 
