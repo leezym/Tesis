@@ -25,7 +25,8 @@ public class AuthManager : MonoBehaviour
     public Canvas canvasLoginStudent, canvasMenuStudent, canvasPuntuacionesStudent;
     public InputField inputFieldUser, inputFieldPassword, inputRoomName, inputInductorRoomSize;
     public InputField inputFieldDocument, inputFieldName;
-    public Button buttonChangeMapNeos;
+    //public GameObject buttonChangeMapNeos;
+
 
     // UserData
     [HideInInspector]
@@ -97,7 +98,7 @@ public class AuthManager : MonoBehaviour
                         {"longitude", currentLongitude}
                     });
                     //Aquí activo el botón de cambio de mapa para los neos//
-                    buttonChangeMapNeos.enabled = true;
+                    //buttonChangeMapNeos.SetActive(true);
                 }
                 else if(GetUserType() == "inductor")
                 { 
@@ -111,7 +112,7 @@ public class AuthManager : MonoBehaviour
                             {"longitude", currentLongitude}
                         });
                         //Aquí desactivo el botón de cambio de mapa para los neos//
-                        buttonChangeMapNeos.enabled = false;
+                        //buttonChangeMapNeos.SetActive(false);
                         Debug.Log("actualiza locacion en la DB");
                     }
                 }  
@@ -138,7 +139,6 @@ public class AuthManager : MonoBehaviour
         {
             Exit();
             GameObject.Find("PanelGeneralSessions").GetComponent<Canvas>().enabled = true;
-            buttonChangeMapNeos.enabled = false;
         }
     }
 
