@@ -18,6 +18,7 @@ public class MapManager : MonoBehaviour
     public CanvasGroup canvasARMap;
     public Canvas canvasGeoMap;
     public GameObject mainCamera, mapCamera, scriptStreet, scriptBuilding;
+    public GameObject buttonChangeMapNeos;
     float latitude = 0, longitude = 0;
 
     void Awake()
@@ -45,7 +46,13 @@ public class MapManager : MonoBehaviour
             mapCamera.SetActive(false);
             scriptStreet.SetActive(false);
             scriptBuilding.SetActive(false);
-        }               
+        }
+
+        if(AuthManager.instance.GetUserType()=="student"){
+            SetChangeMapButtonActive();
+        }else{
+            SetChangeMapButtonNotActive();
+        }
     }
 
     public void Refresh()
@@ -98,6 +105,18 @@ public class MapManager : MonoBehaviour
 
         googleMap.markers[1].locations = locationsList.ToArray();
         StartCoroutine(googleMap._Refresh());
+    }
+
+    void SetChangeMapButtonActive(){
+        buttonChangeMapNeos.SetActive(true);
+    }
+
+    void SetChangeMapButtonNotActive(){
+        buttonChangeMapNeos.SetActive(false);
+    }
+
+    public void ChangeMapFromAR(){
+        canvasARMap.alpha = 0;
     }
 
     /*private IEnumerator CurrentLocation()
