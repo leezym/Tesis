@@ -15,7 +15,7 @@ public class LoadingScreenManager : MonoBehaviour
     [HideInInspector]
     public float isOver = 1.5f, waiting = 1.5f;
 
-    public Canvas canvasInductorLoading, canvasTimerTriviaLoading, canvasQuestionLoading, canvasWaitingTriviaLoading, canvasPodiumStudent, canvasTimeOver, canvasKevinNotification;
+    public Canvas canvasInductorLoading, canvasTimerTriviaLoading, canvasQuestionLoading, canvasWaitingTriviaLoading, canvasPodiumStudent, canvasTimeOver, canvasKevinNotification, canvasRankingFinal;
     public Sprite normalAnswer;
     public Text kevinQuote;
     
@@ -211,5 +211,10 @@ public class LoadingScreenManager : MonoBehaviour
             int randomQuote = random.Next(FailQuotesList.Count);
             kevinQuote.text = FailQuotesList[randomQuote];
         }
+    }
+
+    public void ShowFinalRankingYincana() //pendiente
+    {
+        
     }
 }

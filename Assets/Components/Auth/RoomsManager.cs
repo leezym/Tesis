@@ -37,7 +37,7 @@ public class RoomsManager : MonoBehaviour
 
     public async Task<string> GetRoomByInductor(string idInductor)
     {
-        return await DataBaseManager.instance.GetRoomByInductor("Rooms", idInductor);
+        return await DataBaseManager.instance.GetRoomByInductor(idInductor);
 
     }
 
@@ -58,6 +58,7 @@ public class Room
     public int size;
     public int currentSize;
     public int score = 0;
+    public bool finished = false;
     public string idInductor;
 
     public Room() { }
@@ -79,6 +80,7 @@ public class Room
             { "size", this.size },
             { "currentSize", this.currentSize },
             { "score", this.score},
+            { "finished", this.finished},
             { "idInductor", this.idInductor }
         };
     }

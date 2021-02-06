@@ -1,16 +1,16 @@
 {
-    "scopedRegistries": [
-        {
-            "name": "Game Package Registry by Google",
-            "url": "https://unityregistry-pa.googleapis.com",
-            "scopes": [
-                "com.google"
-            ]
-        }
-    ],
-    "dependencies": {
-    "com.ptc.vuforia.engine": "git+https://git-packages.developer.vuforia.com#9.6.4",
+  "scopedRegistries": [
+    {
+      "name": "Game Package Registry by Google",
+      "url": "https://unityregistry-pa.googleapis.com",
+      "scopes": [
+        "com.google"
+      ]
+    }
+  ],
+  "dependencies": {
     "com.google.firebase.analytics": "6.16.0",
+    "com.ptc.vuforia.engine": "file:C:/Users/Elyz/Downloads/com.ptc.vuforia.engine",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.ads": "3.4.9",

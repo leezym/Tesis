@@ -215,6 +215,13 @@ public class DataBaseManager : MonoBehaviour
         return querySnapshot.Count;
     }
 
+    public async Task<int> SizeTable(string db, string attribute, object value)
+    {
+        Query queryCol = reference.Collection(db).WhereEqualTo(attribute, value);
+        QuerySnapshot querySnapshot = await queryCol.GetSnapshotAsync();
+        return querySnapshot.Count;
+    }
+
     public async Task<bool> IsEmptyTable(string db)
     {
         if (await SizeTable(db) == 0) return true;
@@ -293,9 +300,9 @@ public class DataBaseManager : MonoBehaviour
         return null;
     }
     
-    public async Task<string> GetRoomByInductor(string db, string idInductor)
+    public async Task<string> GetRoomByInductor(string idInductor)
     {
-        Query RoomMembersQuery = reference.Collection(db).WhereEqualTo("idInductor", idInductor);
+        Query RoomMembersQuery = reference.Collection("Rooms").WhereEqualTo("idInductor", idInductor);
         QuerySnapshot RoomMembersQuerySnapshot = await RoomMembersQuery.GetSnapshotAsync();
         foreach (DocumentSnapshot documentSnapshotRooms in RoomMembersQuerySnapshot.Documents)
         {
@@ -306,7 +313,7 @@ public class DataBaseManager : MonoBehaviour
 
     public async Task<Dictionary<string, object>> ListStudentsByGroup(string db, string idInductor)
     {  
-        string RoomId = await GetRoomByInductor("Rooms", idInductor);        
+        string RoomId = await GetRoomByInductor(idInductor);        
 
         Query MembersQuery = reference.Collection(db).WhereEqualTo("idRoom", RoomId);
         QuerySnapshot MembersQuerySnapshot = await MembersQuery.GetSnapshotAsync();

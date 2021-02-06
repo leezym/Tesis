@@ -35,6 +35,8 @@ public class TriviaElement : MonoBehaviour
 
     async void ExecuteTrivia()
     {
+        GameObject.FindObjectOfType<EditGroup>().countTrivias ++;
+        
         this.transform.Find("InitializeTriviaButton").GetComponent<Button>().interactable = false;
 
         // Datos cantidad de preguntas

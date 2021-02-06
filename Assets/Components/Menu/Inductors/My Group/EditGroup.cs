@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Threading.Tasks;
-using UnityEngine.UIElements;
 using UnityEngine.UI;
 
 public class EditGroup : MonoBehaviour
@@ -13,6 +12,9 @@ public class EditGroup : MonoBehaviour
     public Canvas canvasMyGroup, canvasEditGroup, canvasNombreInductor, canvasMenuInductor;
     public InputField inputRoomSize, inputInductorName;
     public InputField newInputRoomSize, newInputRoomName;
+    public Button finishButton;
+    [HideInInspector]
+    public int countTrivias = 0, countHints = 0;
     
     void Start()
     {
@@ -29,12 +31,30 @@ public class EditGroup : MonoBehaviour
         newInputRoomName.text = "";
     }
 
-    void Update()
+    async void Update()
     {
         if(canvasMyGroup.enabled && !canvasEditGroup.enabled)
         {
             ShowRoomData();
             ShowInductorData();           
+        }
+
+        if(countTrivias == await DataBaseManager.instance.SizeTable("Buildings") && countHints == await DataBaseManager.instance.SizeTable("Hints"))
+        {
+            finishButton.interactable = true;
+            string idInductor = await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId());
+            string idRoom = await DataBaseManager.instance.GetRoomByInductor(idInductor);
+            await RoomsManager.instance.PutRoomAsync(idRoom, new Dictionary<string, object>{
+                {"finished", true}
+            });
+
+            int sizeRoomsTable = await DataBaseManager.instance.SizeTable("Rooms");
+            int sizeFinishedRoomsTable = await DataBaseManager.instance.SizeTable("Rooms", "finished", true);
+            if (sizeFinishedRoomsTable == sizeRoomsTable)
+            {
+                LoadingScreenManager.instance.ShowFinalRankingYincana();
+                ScenesManager.instance.LoadNewCanvas(LoadingScreenManager.instance.canvasRankingFinal);
+            }
         }
     }   
 

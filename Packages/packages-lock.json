@@ -26,13 +26,12 @@
       "url": "https://unityregistry-pa.googleapis.com"
     },
     "com.ptc.vuforia.engine": {
-      "version": "git+https://git-packages.developer.vuforia.com#9.6.4",
+      "version": "file:C:/Users/Elyz/Downloads/com.ptc.vuforia.engine",
       "depth": 0,
-      "source": "git",
+      "source": "local",
       "dependencies": {
         "com.unity.ugui": "1.0.0"
-      },
-      "hash": "716a8216fe89b655589017441aa8e6ea2431485c"
+      }
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",

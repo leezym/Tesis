@@ -36,7 +36,7 @@ public class PlayATrivia : MonoBehaviour
                     answerButton.image.sprite = rightAnswer;
             }
         }
-        LoadingScreenManager.instance.canvasKevinNotification.enabled = true;
+        ScenesManager.instance.LoadNewCanvas(LoadingScreenManager.instance.canvasKevinNotification);
     }
 
     async void RegisterPoints(string idTrivia)

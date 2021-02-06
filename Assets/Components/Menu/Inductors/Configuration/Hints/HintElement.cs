@@ -23,6 +23,8 @@ public class HintElement : MonoBehaviour
 
     async void SaveHint()
     {
+        GameObject.FindObjectOfType<EditGroup>().countHints ++;
+        
         Text hourText = this.transform.Find("HintTimeLabel").GetComponent<Text>();
         //string dateAndTimeVar = System.DateTime.Now.ToString(("yyyy/mm/dd HH:mm:ss"));
         string currentTime = System.DateTime.Now.ToString(("HH:mm"));
