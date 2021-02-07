@@ -51,5 +51,4 @@ public class TabGroup : MonoBehaviour
             button.background.sprite = tabIdle;
         }
     }
-
 }

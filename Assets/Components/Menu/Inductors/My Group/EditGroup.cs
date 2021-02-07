@@ -39,23 +39,8 @@ public class EditGroup : MonoBehaviour
             ShowInductorData();           
         }
 
-        if(countTrivias == await DataBaseManager.instance.SizeTable("Buildings") && countHints == await DataBaseManager.instance.SizeTable("Hints"))
-        {
-            finishButton.interactable = true;
-            string idInductor = await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId());
-            string idRoom = await DataBaseManager.instance.GetRoomByInductor(idInductor);
-            await RoomsManager.instance.PutRoomAsync(idRoom, new Dictionary<string, object>{
-                {"finished", true}
-            });
-
-            int sizeRoomsTable = await DataBaseManager.instance.SizeTable("Rooms");
-            int sizeFinishedRoomsTable = await DataBaseManager.instance.SizeTable("Rooms", "finished", true);
-            if (sizeFinishedRoomsTable == sizeRoomsTable)
-            {
-                LoadingScreenManager.instance.ShowFinalRankingYincana();
-                ScenesManager.instance.LoadNewCanvas(LoadingScreenManager.instance.canvasRankingFinal);
-            }
-        }
+        if(countTrivias == 1 && countHints == await DataBaseManager.instance.SizeTable("Hints"))
+            finishButton.interactable = true;     
     }   
 
     async void ShowRoomData ()
@@ -148,5 +133,14 @@ public class EditGroup : MonoBehaviour
         {
             NotificationsManager.instance.SetFailureNotificationMessage("El tamaño del grupo no puede ser menor que el tamaño actual.");
         }
+    }
+
+    public async void FinishedGroup()
+    {
+        string idInductor = await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId());
+        string idRoom = await DataBaseManager.instance.GetRoomByInductor(idInductor);
+        await RoomsManager.instance.PutRoomAsync(idRoom, new Dictionary<string, object>{
+            {"finished", true}
+        });  
     }
 }

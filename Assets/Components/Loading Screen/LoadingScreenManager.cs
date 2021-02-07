@@ -47,6 +47,8 @@ public class LoadingScreenManager : MonoBehaviour
     
     void Update()
     {   
+        ShowFinalRankingYincana();
+
         // Carga del inductor
         if (canvasInductorLoading.enabled)
             InductorLoading();
@@ -213,8 +215,14 @@ public class LoadingScreenManager : MonoBehaviour
         }
     }
 
-    public void ShowFinalRankingYincana() //pendiente
+    async void ShowFinalRankingYincana() //pendiente
     {
-        
+        int sizeRoomsTable = await DataBaseManager.instance.SizeTable("Rooms");
+        int sizeFinishedRoomsTable = await DataBaseManager.instance.SizeTable("Rooms", "finished", true);
+        if (sizeFinishedRoomsTable == sizeRoomsTable)
+        {
+            // buscar las puntuaciones
+            ScenesManager.instance.LoadNewCanvas(LoadingScreenManager.instance.canvasRankingFinal);
+        }
     }
 }
