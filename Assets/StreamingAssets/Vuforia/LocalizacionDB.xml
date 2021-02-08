@@ -2,6 +2,5 @@
 <QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
   <Tracking>
     <ImageTarget name="logo_puj" size="50.000000 50.000000" />
-    <ImageTarget name="target" size="6.000000 4.592391" />
   </Tracking>
 </QCARConfig>

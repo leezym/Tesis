@@ -17,7 +17,7 @@ public class MapManager : MonoBehaviour
     public Image spriteMapRenderer;
     public CanvasGroup canvasARMap;
     public Canvas canvasGeoMap;
-    public GameObject mainCamera, mapCamera, arCamera, scriptStreet, scriptBuilding;
+    public GameObject mainCamera, mapCamera, arCamera, scriptStreet, scriptBuilding, plane;
     public GameObject buttonChangeMapNeos;
     float latitude = 0, longitude = 0;
 
