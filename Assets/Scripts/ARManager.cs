@@ -5,6 +5,7 @@ using UnityEngine;
 public class ARManager : MonoBehaviour
 {
     public GameObject[] markers;
+    public GameObject palmas, guayacanes, lago, raulPosada;
     void Update()
     {
         if(Input.GetMouseButtonDown(0)){}
@@ -27,6 +28,18 @@ public class ARManager : MonoBehaviour
                 foreach(GameObject marker in markers)
                     marker.SetActive(false);
             }
+
+            if(hit.transform.name == "PalmasMarker")
+                palmas.SetActive(true);
+
+            if(hit.transform.name == "GuayacanesMarker")
+                guayacanes.SetActive(true);
+            
+            if(hit.transform.name == "RaulPosadaMarker")
+                raulPosada.SetActive(true);
+            
+            if(hit.transform.name == "LagoMarker")
+                lago.SetActive(true);
         }
     }
 
@@ -38,5 +51,10 @@ public class ARManager : MonoBehaviour
         MapManager.instance.plane.SetActive(true);
         foreach(GameObject marker in markers)
             marker.SetActive(true);
+        
+        palmas.SetActive(false);
+        guayacanes.SetActive(false);    
+        raulPosada.SetActive(false);    
+        lago.SetActive(false);
     }
 }
