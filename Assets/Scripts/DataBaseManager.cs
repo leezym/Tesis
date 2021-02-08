@@ -153,6 +153,19 @@ public class DataBaseManager : MonoBehaviour
         }
         return data;
     }
+
+    public async Task<List<Dictionary<string, object>>> SearchByOrderDescendingAndLimit(string db, string attribute, int limit, string filterAttribute, object filterValue)
+    {
+        Query colRef = reference.Collection(db).WhereEqualTo(filterAttribute, filterValue);
+        Query queryAttribute = colRef.OrderByDescending(attribute).Limit(limit);
+        QuerySnapshot querySnapshot = await queryAttribute.GetSnapshotAsync();
+        List<Dictionary<string,object>> data = new List<Dictionary<string, object>>();
+        foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+        {
+            data.Add(documentSnapshot.ToDictionary());
+        }
+        return data;
+    }
     
     public async Task InsertWithId(string db, string id, Dictionary<string, object> json)
     {

@@ -18,6 +18,9 @@ public class LoadingScreenManager : MonoBehaviour
     public Canvas canvasInductorLoading, canvasTimerTriviaLoading, canvasQuestionLoading, canvasWaitingTriviaLoading, canvasPodiumStudent, canvasTimeOver, canvasKevinNotification, canvasRankingFinal;
     public Sprite normalAnswer;
     public Text kevinQuote;
+
+    public GameObject[] placeIndividualLabels;
+    public GameObject[] placeGrupalLabels;
     
     private List<string> SuccessQuotesList = new List<string>{"Buena esa, crack.", "Eres un Máquina", "Eres un Fiera", "Un Titán", "Caballo"};
     private List<string> FailQuotesList = new List<string>{"Mejor suerte para la próxima, crack.", "Lamenteibol.", "Llórelo papá."};
@@ -215,14 +218,45 @@ public class LoadingScreenManager : MonoBehaviour
         }
     }
 
-    async void ShowFinalRankingYincana() //pendiente
+    async void ShowFinalRankingYincana()
     {
         int sizeRoomsTable = await DataBaseManager.instance.SizeTable("Rooms");
         int sizeFinishedRoomsTable = await DataBaseManager.instance.SizeTable("Rooms", "finished", true);
         if (sizeFinishedRoomsTable == sizeRoomsTable && sizeRoomsTable != 0)
         {
-            // buscar las puntuaciones
+            IndividualRanking();
+            GroupRanking();
             ScenesManager.instance.LoadNewCanvas(LoadingScreenManager.instance.canvasRankingFinal);
+        }
+    }
+
+    public async void IndividualRanking()
+    {
+        List<Dictionary<string, object>> rankingList = await DataBaseManager.instance.SearchByOrderDescendingAndLimit("Students", "score", 3);
+        foreach(Dictionary<string, object> ranking in rankingList)
+        {
+            foreach(KeyValuePair<string, object> pair in ranking)
+            {
+                if(pair.Key == "name")
+                    placeIndividualLabels[rankingList.IndexOf(ranking)].transform.Find("NameLabel").GetComponent<Text>().text = pair.Value.ToString();
+                if(pair.Key == "score")
+                    placeIndividualLabels[rankingList.IndexOf(ranking)].transform.Find("PointsLabel").GetComponent<Text>().text = pair.Value.ToString();
+            }
+        }
+    }
+
+    public async void GroupRanking()
+    {
+        List<Dictionary<string, object>> rankingList = await DataBaseManager.instance.SearchByOrderDescendingAndLimit("Rooms", "score", 3);
+        foreach(Dictionary<string, object> ranking in rankingList)
+        {
+            foreach(KeyValuePair<string, object> pair in ranking)
+            {
+                if(pair.Key == "room")
+                    placeGrupalLabels[rankingList.IndexOf(ranking)].transform.Find("NameLabel").GetComponent<Text>().text = pair.Value.ToString();
+                if(pair.Key == "score")
+                    placeGrupalLabels[rankingList.IndexOf(ranking)].transform.Find("PointsLabel").GetComponent<Text>().text = pair.Value.ToString();
+            }
         }
     }
 }

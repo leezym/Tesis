@@ -12,6 +12,7 @@ public class PlayATrivia : MonoBehaviour
     public Text question, finalScore;
     public Sprite wrongAnswer, rightAnswer;
     public GameObject[] placeLabels;
+    string idStudent = "";
 
     public async void DetectAnswer(Button button)
     {
@@ -41,7 +42,7 @@ public class PlayATrivia : MonoBehaviour
 
     async void RegisterPoints(string idTrivia)
     {
-        string idStudent = AuthManager.instance.GetUserId();
+        idStudent = AuthManager.instance.GetUserId();
 
         // Crear trivia resuelta
         object points = await DataBaseManager.instance.SearchAttribute("Trivias", idTrivia, "points");
@@ -68,7 +69,8 @@ public class PlayATrivia : MonoBehaviour
 
     public async void ShowFinalRanking()
     {
-        List<Dictionary<string, object>> rankingList = await UsersManager.instance.GetFinalTriviasRanking();
+        object idRoom = await DataBaseManager.instance.SearchAttribute("Students", idStudent, "idRoom");
+        List<Dictionary<string, object>> rankingList = await UsersManager.instance.GetFinalTriviasRanking(idRoom.ToString());
         foreach(Dictionary<string, object> ranking in rankingList)
         {
             foreach(KeyValuePair<string, object> pair in ranking)
