@@ -44,8 +44,8 @@ public class CardsTrivias : MonoBehaviour
 
     async Task SearchTrivia()
     {
-        string idInductor = await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId());
-        triviasList = await TriviasChallengesManager.instance.GetTriviaChallengeByBuilding(idInductor);
+        string idInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
+        triviasList = await TriviasChallengesManager.Instance.GetTriviaChallengeByBuilding(idInductor);
         newSizeTrivias = triviasList.Count;
 
         if (currentSizeTrivias != newSizeTrivias)

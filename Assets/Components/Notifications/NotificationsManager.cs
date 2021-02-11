@@ -10,6 +10,8 @@ using Firebase.Auth;
 public class NotificationsManager : MonoBehaviour
 {
     public static NotificationsManager instance;
+    public static NotificationsManager Instance { get => instance; set => instance = value; }
+
     public Canvas canvasNotificationFailure, canvasNotificationSuccess, canvasNotificationQuestion;
     public Text NotificationFailureText, NotificationSuccessText, NotificationQuestionText;
     public Button acceptQuestionButton;
@@ -102,20 +104,20 @@ public class NotificationsManager : MonoBehaviour
         NotificationFailureText.enabled = false;
         NotificationFailureText.enabled = true;
         NotificationFailureText.text = message;
-        ScenesManager.instance.LoadNewCanvas(canvasNotificationFailure);
+        ScenesManager.Instance.LoadNewCanvas(canvasNotificationFailure);
     }
 
     public void LoadSuccessNotificationCanvas(string message){
         NotificationSuccessText.enabled = false;
         NotificationSuccessText.enabled = true;
         NotificationSuccessText.text = message;
-        ScenesManager.instance.LoadNewCanvas(canvasNotificationSuccess);
+        ScenesManager.Instance.LoadNewCanvas(canvasNotificationSuccess);
     }
 
     public void LoadQuestionNotificationCanvas(string message){
         NotificationQuestionText.enabled = false;
         NotificationQuestionText.enabled = true;
         NotificationQuestionText.text = message;
-        ScenesManager.instance.LoadNewCanvas(canvasNotificationQuestion);
+        ScenesManager.Instance.LoadNewCanvas(canvasNotificationQuestion);
     }
 }

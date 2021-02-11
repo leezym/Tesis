@@ -35,7 +35,7 @@ public class ListGroups : MonoBehaviour
 
     async void ShowGroupsData()
     {
-        groupsList = await GroupManager.instance.GetOtherGroupsDataAsync();
+        groupsList = await GroupManager.Instance.GetOtherGroupsDataAsync();
         newSizeGroups = groupsList.Count;
 
         if (currentSizeGroups != newSizeGroups)

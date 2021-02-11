@@ -8,6 +8,8 @@ using System;
 public class KevinNotification : MonoBehaviour
 {
     public static KevinNotification instance;
+    public static KevinNotification Instance { get => instance; set => instance = value; }
+
     public Canvas canvasKevinQuotes;
     public Text kevinQuote;
 
@@ -53,6 +55,6 @@ public class KevinNotification : MonoBehaviour
         canvasKevinQuotes.enabled = false;
         canvasKevinQuotes.enabled = true;
         //SetKevinQuote();
-        ScenesManager.instance.LoadNewCanvas(canvasKevinQuotes);
+        ScenesManager.Instance.LoadNewCanvas(canvasKevinQuotes);
     }
 }

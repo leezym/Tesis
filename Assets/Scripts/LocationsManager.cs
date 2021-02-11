@@ -7,6 +7,7 @@ using System;
 public class LocationsManager : MonoBehaviour
 {
     public static LocationsManager instance;
+    public static LocationsManager Instance { get => instance; set => instance = value; }
 
     public void Awake()
     {
@@ -16,16 +17,16 @@ public class LocationsManager : MonoBehaviour
     public async Task<List<Coords>> GetLocationAsync(string userType)
     {
         List<Coords> coordsList = new List<Coords>();
-        if(AuthManager.instance.GetUserType() == "inductor")
+        if(AuthManager.Instance.GetUserType() == "inductor")
         {
-            string idInductor = await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId());
-            coordsList = await DataBaseManager.instance.GetOthersInductorsLocation(idInductor);
+            string idInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
+            coordsList = await DataBaseManager.Instance.GetOthersInductorsLocation(idInductor);
             Debug.Log("coordenadas");
         }
-        else if (AuthManager.instance.GetUserType() == "student")
+        else if (AuthManager.Instance.GetUserType() == "student")
         {
-            string idStudent = AuthManager.instance.GetUserId();
-            coordsList = await DataBaseManager.instance.GetMyInductorLocation(idStudent);
+            string idStudent = AuthManager.Instance.GetUserId();
+            coordsList = await DataBaseManager.Instance.GetMyInductorLocation(idStudent);
         }
         
         return coordsList;

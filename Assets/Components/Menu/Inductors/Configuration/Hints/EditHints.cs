@@ -35,8 +35,8 @@ public class EditHints : MonoBehaviour
 
     public async void SearchHintDetails(string hintText)
     {        
-        idHint = await HintsManager.instance.GetIdHintByName(hintText);
-        Dictionary<string, object> hint = await HintsManager.instance.GetHintAsync(idHint);
+        idHint = await HintsManager.Instance.GetIdHintByName(hintText);
+        Dictionary<string, object> hint = await HintsManager.Instance.GetHintAsync(idHint);
         foreach(KeyValuePair<string, object> pair in hint)
         {
             if (pair.Key == "name")
@@ -112,7 +112,7 @@ public class EditHints : MonoBehaviour
     {
         List<Dictionary<string, object>> hint = new List<Dictionary<string, object>>();
         if (inputHintNameDetail.text != hintName)
-            hint = await HintsManager.instance.GetHintByName(inputHintNameDetail.text);
+            hint = await HintsManager.Instance.GetHintByName(inputHintNameDetail.text);
 
         if (hint.Count == 0)
         {
@@ -125,27 +125,27 @@ public class EditHints : MonoBehaviour
                     { "description" , inputHintDescriptionDetail.text},
                     { "answer" , inputHintAnswerDetail.text}
                 };
-                await HintsManager.instance.PutHintAsync(idHint, newHintData);
-                NotificationsManager.instance.SetSuccessNotificationMessage("Datos guardados.");
+                await HintsManager.Instance.PutHintAsync(idHint, newHintData);
+                NotificationsManager.Instance.SetSuccessNotificationMessage("Datos guardados.");
                 hintName = inputHintNameDetail.text;
             }
             else
-                NotificationsManager.instance.SetFailureNotificationMessage("Campos Incompletos. Por favor llene todos los campos.");
+                NotificationsManager.Instance.SetFailureNotificationMessage("Campos Incompletos. Por favor llene todos los campos.");
         }
         else 
-            NotificationsManager.instance.SetFailureNotificationMessage("Ya existe una pista con ese nombre. Por favor intenta con otro.");
+            NotificationsManager.Instance.SetFailureNotificationMessage("Ya existe una pista con ese nombre. Por favor intenta con otro.");
     }
 
     public void DeleteHint()
     {
-        NotificationsManager.instance.SetQuestionNotificationMessage("¿Está seguro que desea eliminar esta pista?");
-        NotificationsManager.instance.acceptQuestionButton.onClick.AddListener(Delete);
+        NotificationsManager.Instance.SetQuestionNotificationMessage("¿Está seguro que desea eliminar esta pista?");
+        NotificationsManager.Instance.acceptQuestionButton.onClick.AddListener(Delete);
     }
 
     async void Delete()
     {
-        await TriviasManager.instance.DeleteTrivia(idHint);
-        ScenesManager.instance.LoadNewCanvas(canvasConfigHints);
-        ScenesManager.instance.DeleteCurrentCanvas(canvasHintDetail);
+        await TriviasManager.Instance.DeleteTrivia(idHint);
+        ScenesManager.Instance.LoadNewCanvas(canvasConfigHints);
+        ScenesManager.Instance.DeleteCurrentCanvas(canvasHintDetail);
     }
 }

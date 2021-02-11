@@ -7,6 +7,7 @@ using Firebase.Database;
 public class RoomsManager : MonoBehaviour
 {
     public static RoomsManager instance;
+    public static RoomsManager Instance { get => instance; set => instance = value; }
 
     public void Awake()
     {
@@ -16,39 +17,39 @@ public class RoomsManager : MonoBehaviour
     public async Task PostNewRoom(string room, int size, string idInductor)
     {
         Room element = new Room(room, size, idInductor);
-        await DataBaseManager.instance.InsertWithoutId("Rooms", element.ConvertJson());
+        await DataBaseManager.Instance.InsertWithoutId("Rooms", element.ConvertJson());
     }
 
     public async Task PutRoomAsync(string idRoom, Dictionary<string,object> data)
     {
-        await DataBaseManager.instance.UpdateAsync("Rooms", idRoom, data);
+        await DataBaseManager.Instance.UpdateAsync("Rooms", idRoom, data);
     }
 
     public async Task<Dictionary<string, object>> GetRoomAsync(string idRoom)
     {
-        return await DataBaseManager.instance.SearchById("Rooms", idRoom);
+        return await DataBaseManager.Instance.SearchById("Rooms", idRoom);
     }
 
     public async Task<string> GetAvailableRoom() 
     {
 
-        return await DataBaseManager.instance.GetAvailableRoom("Rooms");
+        return await DataBaseManager.Instance.GetAvailableRoom("Rooms");
     }
 
     public async Task<string> GetRoomByInductor(string idInductor)
     {
-        return await DataBaseManager.instance.GetRoomByInductor(idInductor);
+        return await DataBaseManager.Instance.GetRoomByInductor(idInductor);
 
     }
 
     public async Task<List<Dictionary<string, object>>> GetRoomsByOrderOfScore()
     {
-        return await DataBaseManager.instance.SearchByOrderDescending("Rooms", "score");
+        return await DataBaseManager.Instance.SearchByOrderDescending("Rooms", "score");
     }
 
     public async Task DeleteStudentInRoom(string idStudent)
     {
-        await DataBaseManager.instance.DeleteStudentInRoom(idStudent);
+        await DataBaseManager.Instance.DeleteStudentInRoom(idStudent);
     }
 }
 

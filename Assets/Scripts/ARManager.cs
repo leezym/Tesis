@@ -14,17 +14,17 @@ public class ARManager : MonoBehaviour
 
     void DetectClick()
     {
-         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         
         if(Physics.Raycast (ray, out hit))
         {
             if(hit.transform.tag == "Marker")
             {
-                MapManager.instance.arCamera.SetActive(true);
-                MapManager.instance.mapCamera.SetActive(false);
-                MapManager.instance.canvasARMap.alpha = 0; 
-                MapManager.instance.plane.SetActive(false);
+                MapManager.Instance.arCamera.SetActive(true);
+                MapManager.Instance.mapCamera.SetActive(false);
+                MapManager.Instance.canvasARMap.alpha = 0; 
+                MapManager.Instance.plane.SetActive(false);
                 foreach(GameObject marker in markers)
                     marker.SetActive(false);
             }
@@ -45,10 +45,10 @@ public class ARManager : MonoBehaviour
 
     public void Exit()
     {
-        MapManager.instance.arCamera.SetActive(false);
-        MapManager.instance.mapCamera.SetActive(true);
-        MapManager.instance.canvasARMap.alpha = 1; 
-        MapManager.instance.plane.SetActive(true);
+        MapManager.Instance.arCamera.SetActive(false);
+        MapManager.Instance.mapCamera.SetActive(true);
+        MapManager.Instance.canvasARMap.alpha = 1; 
+        MapManager.Instance.plane.SetActive(true);
         foreach(GameObject marker in markers)
             marker.SetActive(true);
         

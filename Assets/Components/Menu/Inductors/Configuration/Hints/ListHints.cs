@@ -50,7 +50,7 @@ public class ListHints : MonoBehaviour
     async Task SearchHint()
     {
 
-        hintsList = await DataBaseManager.instance.SearchByCollection("Hints");
+        hintsList = await DataBaseManager.Instance.SearchByCollection("Hints");
         newSizeHints = hintsList.Count;
 
         if (currentSizeHints != newSizeHints)
@@ -92,19 +92,19 @@ public class ListHints : MonoBehaviour
     {    
         if (CheckNewData())
         {
-            List<Dictionary<string, object>> newHint = await HintsManager.instance.GetHintByName(inputHintName.text);
+            List<Dictionary<string, object>> newHint = await HintsManager.Instance.GetHintByName(inputHintName.text);
             if (newHint.Count == 0)
             {
-                await HintsManager.instance.PostNewHint(inputHintName.text, inputHintDescription.text, inputHintAnswer.text);
-                ScenesManager.instance.LoadNewCanvas(canvasConfigHints);
-                ScenesManager.instance.DeleteCurrentCanvas(canvasAddHints);
+                await HintsManager.Instance.PostNewHint(inputHintName.text, inputHintDescription.text, inputHintAnswer.text);
+                ScenesManager.Instance.LoadNewCanvas(canvasConfigHints);
+                ScenesManager.Instance.DeleteCurrentCanvas(canvasAddHints);
                 ClearCurrentHints();
-                NotificationsManager.instance.SetSuccessNotificationMessage("Pista creada.");
+                NotificationsManager.Instance.SetSuccessNotificationMessage("Pista creada.");
             }
             else
-                NotificationsManager.instance.SetFailureNotificationMessage("Ya existe una pista con ese nombre. Por favor intenta con otro.");
+                NotificationsManager.Instance.SetFailureNotificationMessage("Ya existe una pista con ese nombre. Por favor intenta con otro.");
         }else
-            NotificationsManager.instance.SetFailureNotificationMessage("Campos Incompletos. Por favor llene todos los campos.");
+            NotificationsManager.Instance.SetFailureNotificationMessage("Campos Incompletos. Por favor llene todos los campos.");
     }
 }
 

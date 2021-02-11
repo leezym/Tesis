@@ -39,13 +39,13 @@ public class EditGroup : MonoBehaviour
             ShowInductorData();           
         }
 
-        if(countTrivias == 1 && countHints == await DataBaseManager.instance.SizeTable("Hints"))
+        if(countTrivias == 1 && countHints == await DataBaseManager.Instance.SizeTable("Hints"))
             finishButton.interactable = true;     
     }   
 
     async void ShowRoomData ()
     {
-        Dictionary<string, object> datosRoom = await GroupManager.instance.GetRoomDataAsync();
+        Dictionary<string, object> datosRoom = await GroupManager.Instance.GetRoomDataAsync();
         if (datosRoom != null)
         {
             foreach (KeyValuePair<string, object> pair in datosRoom)
@@ -70,7 +70,7 @@ public class EditGroup : MonoBehaviour
 
     async void ShowInductorData()
     {
-        Dictionary<string,object> datosInductor = await GroupManager.instance.GetInductorDataAsync(inductorNameLabel);
+        Dictionary<string,object> datosInductor = await GroupManager.Instance.GetInductorDataAsync(inductorNameLabel);
         if (datosInductor != null){
             foreach(KeyValuePair<string, object> pair in datosInductor)
             {
@@ -96,20 +96,20 @@ public class EditGroup : MonoBehaviour
     {
         if (CheckNewData())
         {
-            string idInductor = await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId());
+            string idInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
 
-            await UsersManager.instance.PutUserAsync("Inductors", idInductor, new Dictionary<string, object>{
+            await UsersManager.Instance.PutUserAsync("Inductors", idInductor, new Dictionary<string, object>{
                 {"name", inputInductorName.text}
             });
-            await RoomsManager.instance.PostNewRoom("Grupo de " + inputInductorName.text, Convert.ToInt32(inputRoomSize.text), idInductor);
+            await RoomsManager.Instance.PostNewRoom("Grupo de " + inputInductorName.text, Convert.ToInt32(inputRoomSize.text), idInductor);
             
-            ScenesManager.instance.DeleteCurrentCanvas(canvasNombreInductor);
-            ScenesManager.instance.LoadNewCanvas(canvasMenuInductor);
+            ScenesManager.Instance.DeleteCurrentCanvas(canvasNombreInductor);
+            ScenesManager.Instance.LoadNewCanvas(canvasMenuInductor);
 
         }
         else
         {
-            NotificationsManager.instance.SetFailureNotificationMessage("Por favor llene los campos.");
+            NotificationsManager.Instance.SetFailureNotificationMessage("Por favor llene los campos.");
         }
     }
 
@@ -117,8 +117,8 @@ public class EditGroup : MonoBehaviour
     {
         if (Convert.ToInt32(newInputRoomSize.text) >= roomCurrentSize)
         {
-            string inductorId = await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId());
-            string roomId = await RoomsManager.instance.GetRoomByInductor(inductorId);
+            string inductorId = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
+            string roomId = await RoomsManager.Instance.GetRoomByInductor(inductorId);
 
             Dictionary<string, object> newRoomData = new Dictionary<string, object>
             {
@@ -126,20 +126,20 @@ public class EditGroup : MonoBehaviour
                 { "room" , newInputRoomName.text}
             };
 
-            await RoomsManager.instance.PutRoomAsync(roomId, newRoomData);
-            NotificationsManager.instance.SetSuccessNotificationMessage("El grupo "+newInputRoomName.text+" fue editado.");
+            await RoomsManager.Instance.PutRoomAsync(roomId, newRoomData);
+            NotificationsManager.Instance.SetSuccessNotificationMessage("El grupo "+newInputRoomName.text+" fue editado.");
         }
         else
         {
-            NotificationsManager.instance.SetFailureNotificationMessage("El tamaño del grupo no puede ser menor que el tamaño actual.");
+            NotificationsManager.Instance.SetFailureNotificationMessage("El tamaño del grupo no puede ser menor que el tamaño actual.");
         }
     }
 
     public async void FinishedGroup()
     {
-        string idInductor = await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId());
-        string idRoom = await DataBaseManager.instance.GetRoomByInductor(idInductor);
-        await RoomsManager.instance.PutRoomAsync(idRoom, new Dictionary<string, object>{
+        string idInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
+        string idRoom = await DataBaseManager.Instance.GetRoomByInductor(idInductor);
+        await RoomsManager.Instance.PutRoomAsync(idRoom, new Dictionary<string, object>{
             {"finished", true}
         });  
     }

@@ -61,7 +61,7 @@ public class ListTrivias : MonoBehaviour
     }
 
     async Task SearchBuilding(){
-        buildingsList = await DataBaseManager.instance.SearchByCollection("Buildings");
+        buildingsList = await DataBaseManager.Instance.SearchByCollection("Buildings");
         foreach(DocumentSnapshot buildings in buildingsList){
             foreach(KeyValuePair<string,object> pair in buildings.ToDictionary()){
                 if(pair.Key == "name"){
@@ -147,7 +147,7 @@ public class ListTrivias : MonoBehaviour
 
     public async void SearchTrivias()
     {
-        triviasList = await TriviasManager.instance.GetTriviaByBuilding(buildingName);
+        triviasList = await TriviasManager.Instance.GetTriviaByBuilding(buildingName);
         newSizeTrivias = triviasList.Count;
 
         if (currentSizeTrivias != newSizeTrivias)
@@ -202,28 +202,28 @@ public class ListTrivias : MonoBehaviour
     {    
         if (CheckNewData())
         {
-            List<Dictionary<string, object>> newTrivia = await TriviasManager.instance.GetTriviaByQuestion(inputTriviaQuestion.text);
+            List<Dictionary<string, object>> newTrivia = await TriviasManager.Instance.GetTriviaByQuestion(inputTriviaQuestion.text);
             if (newTrivia.Count == 0)
             {
-                string idBuilding = await DataBaseManager.instance.SearchId("Buildings", "name", buildingName);
+                string idBuilding = await DataBaseManager.Instance.SearchId("Buildings", "name", buildingName);
 
                 // Actualizar Edificios
                 Dictionary<string, object> newBuildingData = new Dictionary<string, object>
                 {
                     {"amongQuestions", currentSizeTrivias + 1 }
                 };
-                await DataBaseManager.instance.UpdateAsync("Buildings", idBuilding, newBuildingData);
+                await DataBaseManager.Instance.UpdateAsync("Buildings", idBuilding, newBuildingData);
 
                 // Actualizar Trivias
-                await TriviasManager.instance.PostNewTrivia(idBuilding, inputTriviaQuestion.text, inputTriviaAnswerOne.text, inputTriviaAnswerTwo.text, inputTriviaAnswerThree.text, DetectCorrectAnswer());
-                ScenesManager.instance.LoadNewCanvas(canvasConfigTrivias);
-                ScenesManager.instance.DeleteCurrentCanvas(canvasAddTrivias);
+                await TriviasManager.Instance.PostNewTrivia(idBuilding, inputTriviaQuestion.text, inputTriviaAnswerOne.text, inputTriviaAnswerTwo.text, inputTriviaAnswerThree.text, DetectCorrectAnswer());
+                ScenesManager.Instance.LoadNewCanvas(canvasConfigTrivias);
+                ScenesManager.Instance.DeleteCurrentCanvas(canvasAddTrivias);
                 ClearCurrentTrivias();
-                NotificationsManager.instance.SetSuccessNotificationMessage("Pregunta creada.");
+                NotificationsManager.Instance.SetSuccessNotificationMessage("Pregunta creada.");
             }
             else
-            NotificationsManager.instance.SetFailureNotificationMessage("Ya existe esa pregunta. Por favor intenta con otra.");
+            NotificationsManager.Instance.SetFailureNotificationMessage("Ya existe esa pregunta. Por favor intenta con otra.");
         }else
-            NotificationsManager.instance.SetFailureNotificationMessage("Campos Incompletos. Por favor llene todos los campos.");
+            NotificationsManager.Instance.SetFailureNotificationMessage("Campos Incompletos. Por favor llene todos los campos.");
     }   
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 public class HintsChallengesManager : MonoBehaviour
 {
     public static HintsChallengesManager instance;
+    public static HintsChallengesManager Instance { get => instance; set => instance = value; }
 
     void Awake() {
         instance = this;
@@ -14,22 +15,22 @@ public class HintsChallengesManager : MonoBehaviour
     public async Task PostNewHintChallenge(string idRoom, string idHint, int score, int position, string hour)
     {
         HintChallenge element = new HintChallenge(idRoom, idHint, score, position, hour);
-        await DataBaseManager.instance.InsertWithoutId("HintsChallenges", element.ConvertJson());
+        await DataBaseManager.Instance.InsertWithoutId("HintsChallenges", element.ConvertJson());
     }
 
     public async Task<Dictionary<string, object>> GetHintChallengeAsync(string idHintChallenge)
     {
-        return await DataBaseManager.instance.SearchById("HintsChallenges", idHintChallenge);
+        return await DataBaseManager.Instance.SearchById("HintsChallenges", idHintChallenge);
     }
 
     public async Task<List<Dictionary<string, object>>> GetHintChallengeByRoom(string idRoom)
     {
-        return await DataBaseManager.instance.SearchHintDataByRoom(idRoom);
+        return await DataBaseManager.Instance.SearchHintDataByRoom(idRoom);
     }
 
     public async Task DeleteHintChallenge(string idHintChallenge)
     {
-        await DataBaseManager.instance.DeleteAsync("HintsChallenges", idHintChallenge);
+        await DataBaseManager.Instance.DeleteAsync("HintsChallenges", idHintChallenge);
     }
 }
 

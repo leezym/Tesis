@@ -38,9 +38,9 @@ public class ListIndividualRanking : MonoBehaviour
 
     public async void SearchPosition()
     {
-        studentsList = await UsersManager.instance.GetStudentsByOrderOfScore();
-        object myScore = await DataBaseManager.instance.SearchAttribute("Students", AuthManager.instance.GetUserId(), "score");
-        object nameStudent = await DataBaseManager.instance.SearchAttribute("Students", AuthManager.instance.GetUserId(), "name");
+        studentsList = await UsersManager.Instance.GetStudentsByOrderOfScore();
+        object myScore = await DataBaseManager.Instance.SearchAttribute("Students", AuthManager.Instance.GetUserId(), "score");
+        object nameStudent = await DataBaseManager.Instance.SearchAttribute("Students", AuthManager.Instance.GetUserId(), "name");
 
         textMyScore.text = myScore.ToString();
 

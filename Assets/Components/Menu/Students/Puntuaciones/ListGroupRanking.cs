@@ -38,10 +38,10 @@ public class ListGroupRanking : MonoBehaviour
 
     public async void SearchPosition()
     {
-        groupsList = await RoomsManager.instance.GetRoomsByOrderOfScore();
-        object idRoom = await DataBaseManager.instance.SearchAttribute("Students", AuthManager.instance.GetUserId(), "idRoom");
-        object myGroupScore = await DataBaseManager.instance.SearchAttribute("Rooms", idRoom.ToString(), "score");
-        object nameRoom = await DataBaseManager.instance.SearchAttribute("Rooms", idRoom.ToString(),"name");
+        groupsList = await RoomsManager.Instance.GetRoomsByOrderOfScore();
+        object idRoom = await DataBaseManager.Instance.SearchAttribute("Students", AuthManager.Instance.GetUserId(), "idRoom");
+        object myGroupScore = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom.ToString(), "score");
+        object nameRoom = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom.ToString(),"name");
 
         textMyGroupScore.text = myGroupScore.ToString();
 

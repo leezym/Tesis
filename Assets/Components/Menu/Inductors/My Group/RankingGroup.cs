@@ -27,9 +27,9 @@ public class RankingGroup : MonoBehaviour
 
     async void SearchScore()
     {
-        string idInductor = await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId());
-        string idRoom = await RoomsManager.instance.GetRoomByInductor(idInductor);
-        List<Dictionary<string, object>> hintsChallengesList = await HintsChallengesManager.instance.GetHintChallengeByRoom(idRoom);
+        string idInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
+        string idRoom = await RoomsManager.Instance.GetRoomByInductor(idInductor);
+        List<Dictionary<string, object>> hintsChallengesList = await HintsChallengesManager.Instance.GetHintChallengeByRoom(idRoom);
         int score = 0;
         foreach(Dictionary<string, object> hintChallenge in hintsChallengesList)
         {

@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class UsersManager : MonoBehaviour
 {
     public static UsersManager instance;
+    public static UsersManager Instance { get => instance; set => instance = value; }
 
     public void Awake()
     {
@@ -17,50 +18,50 @@ public class UsersManager : MonoBehaviour
     public async Task PostNewInductor(string uid, string name)
     {
         Inductor element = new Inductor(uid, name);
-        await DataBaseManager.instance.InsertWithoutId("Inductors", element.ConvertJson());
+        await DataBaseManager.Instance.InsertWithoutId("Inductors", element.ConvertJson());
     }
 
     public async Task PostNewStudent(string uid, string name, string document, string idRoom)
     {
         Student element = new Student(name, document, idRoom);
-        await DataBaseManager.instance.InsertWithId("Students", uid, element.ConvertJson());
+        await DataBaseManager.Instance.InsertWithId("Students", uid, element.ConvertJson());
     }
 
     public async Task PutUserAsync(string db, string userId, Dictionary<string,object> data)
     {
-        await DataBaseManager.instance.UpdateAsync(db, userId, data);
+        await DataBaseManager.Instance.UpdateAsync(db, userId, data);
     }
 
     public async Task<Dictionary<string, object>> GetUserAsync(string db, string userId)
     {
-        return await DataBaseManager.instance.SearchById(db, userId);
+        return await DataBaseManager.Instance.SearchById(db, userId);
     }
 
     public async Task<string> GetInductorIdByAuth(string idAuth)
     {
-        return await DataBaseManager.instance.SearchId("Inductors", "idAuth", idAuth);
+        return await DataBaseManager.Instance.SearchId("Inductors", "idAuth", idAuth);
     }
 
     public async Task<List<Dictionary<string, object>>> GetStudentsByOrderOfScore()
     {
-        return await DataBaseManager.instance.SearchByOrderDescending("Students", "score");
+        return await DataBaseManager.Instance.SearchByOrderDescending("Students", "score");
     }
 
     public async Task<List<Dictionary<string, object>>> GetFinalTriviasRanking(string idRoom)
     {
-        return await DataBaseManager.instance.SearchByOrderDescendingAndLimit("Students", "score", 3, "idRoom", idRoom);
+        return await DataBaseManager.Instance.SearchByOrderDescendingAndLimit("Students", "score", 3, "idRoom", idRoom);
     }
 
     public async Task<string> GetInductorByStudent(string idStudent)
     {
-        object idRoom = await DataBaseManager.instance.SearchAttribute("Students", idStudent, "idRoom");
-        object idInductor = await DataBaseManager.instance.SearchAttribute("Rooms", idRoom.ToString(), "idInductor");
+        object idRoom = await DataBaseManager.Instance.SearchAttribute("Students", idStudent, "idRoom");
+        object idInductor = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom.ToString(), "idInductor");
         return idInductor.ToString();
     }
 
     public async Task<bool> ExistUserByDocument(string db, string document)
     {
-        List<Dictionary<string, object>> data = await DataBaseManager.instance.SearchByAttribute(db, "document", document);
+        List<Dictionary<string, object>> data = await DataBaseManager.Instance.SearchByAttribute(db, "document", document);
         if (data.Count != 0)
         {
             return true;
@@ -70,13 +71,13 @@ public class UsersManager : MonoBehaviour
 
     /*public async Task DeleteAsync(string db, string userId) 
     {
-        await DataBaseManager.instance.DeleteAsync(db, userId);
+        await DataBaseManager.Instance.DeleteAsync(db, userId);
     }  */
 
     public async Task DeleteSession(string idAuth) 
     {
         string idInductor = await GetInductorIdByAuth(idAuth);
-        await DataBaseManager.instance.DeleteSession(idInductor);
+        await DataBaseManager.Instance.DeleteSession(idInductor);
     }
 }
 

@@ -11,7 +11,7 @@ public class GooglePlayService : MonoBehaviour
             var dependencyStatus = task.Result;
             if (dependencyStatus == Firebase.DependencyStatus.Available)
             {
-                //AuthManager.instance.InitializeFirebase();
+                //AuthManager.Instance.InitializeFirebase();
                 // Create and hold a reference to your FirebaseApp,
                 // where app is a Firebase.FirebaseApp property of your application class.
                 //   app = Firebase.FirebaseApp.DefaultInstance;

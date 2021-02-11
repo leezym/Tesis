@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 public class HintsManager : MonoBehaviour
 {
     public static HintsManager instance;
+    public static HintsManager Instance { get => instance; set => instance = value; }
 
     void Awake() {
         instance = this;
@@ -14,32 +15,32 @@ public class HintsManager : MonoBehaviour
     public async Task PostNewHint(string name, string description, string answer)
     {
         Hint element = new Hint(name, description, answer);
-        await DataBaseManager.instance.InsertWithoutId("Hints", element.ConvertJson());
+        await DataBaseManager.Instance.InsertWithoutId("Hints", element.ConvertJson());
     }
 
     public async Task PutHintAsync(string idHint, Dictionary<string,object> data)
     {
-        await DataBaseManager.instance.UpdateAsync("Hints", idHint, data);
+        await DataBaseManager.Instance.UpdateAsync("Hints", idHint, data);
     }
 
     public async Task<Dictionary<string, object>> GetHintAsync(string idHint)
     {
-        return await DataBaseManager.instance.SearchById("Hints", idHint);
+        return await DataBaseManager.Instance.SearchById("Hints", idHint);
     }
 
     public async Task<List<Dictionary<string, object>>> GetHintByName(string name)
     {
-        return await DataBaseManager.instance.SearchByAttribute("Hints", "name", name);
+        return await DataBaseManager.Instance.SearchByAttribute("Hints", "name", name);
     }
 
     public async Task<string> GetIdHintByName(string name)
     {
-        return await DataBaseManager.instance.SearchId("Hints", "name", name);
+        return await DataBaseManager.Instance.SearchId("Hints", "name", name);
     }
 
     public async Task DeleteHint(string idHint)
     {
-        await DataBaseManager.instance.DeleteAsync("Hints", idHint);
+        await DataBaseManager.Instance.DeleteAsync("Hints", idHint);
     }
 }
 

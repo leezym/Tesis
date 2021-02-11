@@ -10,6 +10,7 @@ using System.Collections;
 public class AuthManager : MonoBehaviour
 {
     public static AuthManager instance;
+    public static AuthManager Instance { get => instance; set => instance = value; }
 
     // Firebase
     protected Firebase.Auth.FirebaseAuth authFirebase;
@@ -93,7 +94,7 @@ public class AuthManager : MonoBehaviour
                 {
                     // Mapa
                     string idStudent = GetUserId();
-                    await UsersManager.instance.PutUserAsync("Students", idStudent, new Dictionary<string, object>{
+                    await UsersManager.Instance.PutUserAsync("Students", idStudent, new Dictionary<string, object>{
                         {"latitude", currentLatitude},
                         {"longitude", currentLongitude}
                     });
@@ -104,10 +105,10 @@ public class AuthManager : MonoBehaviour
                 { 
                     // Mapa
                     if(idInductor == "")
-                        idInductor = await UsersManager.instance.GetInductorIdByAuth(GetUserId());
+                        idInductor = await UsersManager.Instance.GetInductorIdByAuth(GetUserId());
                     else
                     {
-                        await UsersManager.instance.PutUserAsync("Inductors", idInductor, new Dictionary<string, object>{
+                        await UsersManager.Instance.PutUserAsync("Inductors", idInductor, new Dictionary<string, object>{
                             {"latitude", currentLatitude},
                             {"longitude", currentLongitude}
                         });
@@ -134,7 +135,7 @@ public class AuthManager : MonoBehaviour
 
     async void LogOutStudent()
     {
-        SetSnapshot(await UsersManager.instance.GetUserAsync("Students", GetUserId()));
+        SetSnapshot(await UsersManager.Instance.GetUserAsync("Students", GetUserId()));
         if (GetSnapshot() == null)
         {
             Exit();
@@ -145,11 +146,11 @@ public class AuthManager : MonoBehaviour
     async void ShowTriviasStudent()
     {
         if(idInductor == "")
-            idInductor = await UsersManager.instance.GetInductorByStudent(GetUserId());
+            idInductor = await UsersManager.Instance.GetInductorByStudent(GetUserId());
 
         if (!triviaInProgress)
         {
-            List<Dictionary<string, object>> listAvailableTrivias = await DataBaseManager.instance.SearchByAttribute("InductorTriviasChallenges", "idInductor", idInductor, "available", true);
+            List<Dictionary<string, object>> listAvailableTrivias = await DataBaseManager.Instance.SearchByAttribute("InductorTriviasChallenges", "idInductor", idInductor, "available", true);
             foreach(Dictionary<string, object> availableTrivia in listAvailableTrivias)
             {
                 foreach(KeyValuePair<string, object> pair in availableTrivia)
@@ -158,13 +159,13 @@ public class AuthManager : MonoBehaviour
                     {
                         triviaInProgress = true;
 
-                        ScenesManager.instance.LoadNewCanvas(LoadingScreenManager.instance.canvasTimerTriviaLoading);
-                        ScenesManager.instance.DeleteCurrentCanvas(canvasMenuStudent);
-                        ScenesManager.instance.DeleteCurrentCanvas(canvasPuntuacionesStudent);
+                        ScenesManager.Instance.LoadNewCanvas(LoadingScreenManager.Instance.canvasTimerTriviaLoading);
+                        ScenesManager.Instance.DeleteCurrentCanvas(canvasMenuStudent);
+                        ScenesManager.Instance.DeleteCurrentCanvas(canvasPuntuacionesStudent);
 
-                        LoadingScreenManager.instance.SetTimeTimerTrivia(LoadingScreenManager.instance.timer);
-                        LoadingScreenManager.instance.SetIdTriviaBuilding(pair.Value.ToString());
-                        LoadingScreenManager.instance.SetListTrivias(await TriviasManager.instance.GetTriviaByIdBuilding(pair.Value.ToString()));
+                        LoadingScreenManager.Instance.SetTimeTimerTrivia(LoadingScreenManager.Instance.timer);
+                        LoadingScreenManager.Instance.SetIdTriviaBuilding(pair.Value.ToString());
+                        LoadingScreenManager.Instance.SetListTrivias(await TriviasManager.Instance.GetTriviaByIdBuilding(pair.Value.ToString()));
                     }
                 }
             }
@@ -206,15 +207,15 @@ public class AuthManager : MonoBehaviour
                 if (GetUserType() == "inductor")
                 {
                     Debug.Log("spy un inductor");
-                    ScenesManager.instance.DeleteCurrentCanvas(canvasLoginInductor);
-                    ScenesManager.instance.LoadNewCanvas(canvasNombreInductor);
+                    ScenesManager.Instance.DeleteCurrentCanvas(canvasLoginInductor);
+                    ScenesManager.Instance.LoadNewCanvas(canvasNombreInductor);
                     
                 }
                 else if (GetUserType() == "student")
                 {
                     Debug.Log("spy un estu");
-                    ScenesManager.instance.DeleteCurrentCanvas(canvasLoginStudent);
-                    ScenesManager.instance.LoadNewCanvas(canvasMenuStudent);
+                    ScenesManager.Instance.DeleteCurrentCanvas(canvasLoginStudent);
+                    ScenesManager.Instance.LoadNewCanvas(canvasMenuStudent);
                 }     
                 
             }
@@ -239,12 +240,12 @@ public class AuthManager : MonoBehaviour
                 foreach (System.Exception exception in taskSignIn.Exception.InnerExceptions)
                 {
                     Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
-                    string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
-                    NotificationsManager.instance.SetFailureNotificationMessage(message);
+                    string message = NotificationsManager.Instance.GetErrorMessage(firebaseEx);
+                    NotificationsManager.Instance.SetFailureNotificationMessage(message);
                 }
                 return;
             }
-            await UsersManager.instance.PostNewInductor(AuthManager.instance.GetUserId(), user);
+            await UsersManager.Instance.PostNewInductor(AuthManager.Instance.GetUserId(), user);
         });
     }
 
@@ -256,11 +257,11 @@ public class AuthManager : MonoBehaviour
 
         if(name != "" && document != "")
         {
-            if (!await UsersManager.instance.ExistUserByDocument("Students", document))
+            if (!await UsersManager.Instance.ExistUserByDocument("Students", document))
             {
-                if (!await DataBaseManager.instance.IsEmptyTable("Rooms"))
+                if (!await DataBaseManager.Instance.IsEmptyTable("Rooms"))
                 {
-                    idRoom = await RoomsManager.instance.GetAvailableRoom();
+                    idRoom = await RoomsManager.Instance.GetAvailableRoom();
                     if(idRoom != null)
                     {
                         await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task =>
@@ -270,34 +271,34 @@ public class AuthManager : MonoBehaviour
                                 foreach (System.Exception exception in task.Exception.InnerExceptions)
                                 {
                                     Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
-                                    string message = NotificationsManager.instance.GetErrorMessage(firebaseEx);
-                                    NotificationsManager.instance.SetFailureNotificationMessage(message);
+                                    string message = NotificationsManager.Instance.GetErrorMessage(firebaseEx);
+                                    NotificationsManager.Instance.SetFailureNotificationMessage(message);
                                 }
                                 return;
                             }
 
-                            await UsersManager.instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);                            
-                            //SetSnapshot(await UsersManager.instance.GetUserAsync("Students", userFirebase.UserId));
+                            await UsersManager.Instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);                            
+                            //SetSnapshot(await UsersManager.Instance.GetUserAsync("Students", userFirebase.UserId));
 
                         });
                     }else{
-                        NotificationsManager.instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");
+                        NotificationsManager.Instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");
                     }
                 }else{
-                    NotificationsManager.instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");
+                    NotificationsManager.Instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");
                 }
             }else{
-                NotificationsManager.instance.SetFailureNotificationMessage("Ya existe un usuario con ese documento.");
+                NotificationsManager.Instance.SetFailureNotificationMessage("Ya existe un usuario con ese documento.");
             }
         }else{
-            NotificationsManager.instance.SetFailureNotificationMessage("Por favor llena los campos.");
+            NotificationsManager.Instance.SetFailureNotificationMessage("Por favor llena los campos.");
         }
     }
 
     public void LogOut() 
     {
-        NotificationsManager.instance.SetQuestionNotificationMessage("¿Está seguro que desea cerrar sesión?");
-        NotificationsManager.instance.acceptQuestionButton.onClick.AddListener(Exit);
+        NotificationsManager.Instance.SetQuestionNotificationMessage("¿Está seguro que desea cerrar sesión?");
+        NotificationsManager.Instance.acceptQuestionButton.onClick.AddListener(Exit);
     }
 
     public async void Exit()
@@ -307,16 +308,16 @@ public class AuthManager : MonoBehaviour
         {
             if (GetUserType() == "inductor")
             {
-                await UsersManager.instance.DeleteSession(userFirebase.UserId);
-                ScenesManager.instance.DeleteCurrentCanvas(canvasMenuInductor);
+                await UsersManager.Instance.DeleteSession(userFirebase.UserId);
+                ScenesManager.Instance.DeleteCurrentCanvas(canvasMenuInductor);
             }
             else if (GetSnapshot() != null || GetUserType() == "student")
             {
-                await RoomsManager.instance.DeleteStudentInRoom(userFirebase.UserId);
-                ScenesManager.instance.DeleteCurrentCanvas(canvasMenuStudent);
+                await RoomsManager.Instance.DeleteStudentInRoom(userFirebase.UserId);
+                ScenesManager.Instance.DeleteCurrentCanvas(canvasMenuStudent);
             }
             
-            ScenesManager.instance.LoadNewCanvas(canvasGeneralSessions);
+            ScenesManager.Instance.LoadNewCanvas(canvasGeneralSessions);
             InitializeAtributes();
             authFirebase.SignOut();            
            
@@ -332,11 +333,11 @@ public class AuthManager : MonoBehaviour
 
                 if (GetIsInductor())
                 {
-                    await UsersManager.instance.DeleteSession(idUser);
+                    await UsersManager.Instance.DeleteSession(idUser);
                 }
                 else if (GetSnapshot() != null)
                 {
-                    await RoomsManager.instance.DeleteStudentInRoom(idUser);
+                    await RoomsManager.Instance.DeleteStudentInRoom(idUser);
                 }
                 
                 //authFirebase = null;

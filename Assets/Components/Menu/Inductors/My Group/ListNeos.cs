@@ -26,11 +26,11 @@ public class ListNeos : MonoBehaviour
     async Task DetectStudent()
     {
         if (idInductor == null){
-            idInductor = await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId());
-            currentSizeStudents = await GroupManager.instance.SearchCurrentSizeRoom(idInductor);
+            idInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
+            currentSizeStudents = await GroupManager.Instance.SearchCurrentSizeRoom(idInductor);
         }
 
-        NeoJaverianos = await GroupManager.instance.ListNameStudents(idInductor);
+        NeoJaverianos = await GroupManager.Instance.ListNameStudents(idInductor);
         newSizeStudents = NeoJaverianos.Count;
 
         if (currentSizeStudents != newSizeStudents)

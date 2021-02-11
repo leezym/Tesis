@@ -18,10 +18,10 @@ public class MyProfile : MonoBehaviour
         {
             if (idRoom == null)
             {
-                idRoom = await DataBaseManager.instance.SearchAttribute("Students", AuthManager.instance.GetUserId(), "idRoom");
+                idRoom = await DataBaseManager.Instance.SearchAttribute("Students", AuthManager.Instance.GetUserId(), "idRoom");
                 if (idInductor == null)
                 {
-                    idInductor = await DataBaseManager.instance.SearchAttribute("Rooms", idRoom.ToString(), "idInductor");
+                    idInductor = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom.ToString(), "idInductor");
                 }
             }
             if (idRoom != null && idInductor != null)
@@ -38,8 +38,8 @@ public class MyProfile : MonoBehaviour
 
     async void SearchGroupData()
     {
-        object roomName = await DataBaseManager.instance.SearchAttribute("Rooms", idRoom.ToString(), "room");
-        object inductorName = await DataBaseManager.instance.SearchAttribute("Inductors", idInductor.ToString(), "name");
+        object roomName = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom.ToString(), "room");
+        object inductorName = await DataBaseManager.Instance.SearchAttribute("Inductors", idInductor.ToString(), "name");
 
         if(roomName != null)
             textGroupName.text = roomName.ToString();
@@ -49,7 +49,7 @@ public class MyProfile : MonoBehaviour
 
     async void SearchStudents()
     {
-        NeoJaverianos = await GroupManager.instance.ListNameStudents(idInductor.ToString());
+        NeoJaverianos = await GroupManager.Instance.ListNameStudents(idInductor.ToString());
         newSizeStudents = NeoJaverianos.Count;
 
         if (currentSizeStudents != newSizeStudents)

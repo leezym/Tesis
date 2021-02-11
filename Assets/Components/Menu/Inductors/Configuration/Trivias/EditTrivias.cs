@@ -99,8 +99,8 @@ public class EditTrivias : MonoBehaviour
 
     public async void SearchTriviaDetails(string triviaText)
     {        
-        idTrivia = await TriviasManager.instance.GetIdTriviaByQuestion(triviaText);
-        Dictionary<string, object> trivia = await TriviasManager.instance.GetTriviaAsync(idTrivia);
+        idTrivia = await TriviasManager.Instance.GetIdTriviaByQuestion(triviaText);
+        Dictionary<string, object> trivia = await TriviasManager.Instance.GetTriviaAsync(idTrivia);
         foreach(KeyValuePair<string, object> pair in trivia)
         {
             if (pair.Key == "question")
@@ -208,7 +208,7 @@ public class EditTrivias : MonoBehaviour
     {
         List<Dictionary<string, object>> trivia = new List<Dictionary<string, object>>();
         if (inputTriviaQuestionDetail.text != triviaQuestion)
-            trivia = await TriviasManager.instance.GetTriviaByQuestion(inputTriviaQuestionDetail.text);
+            trivia = await TriviasManager.Instance.GetTriviaByQuestion(inputTriviaQuestionDetail.text);
         
         if (trivia.Count == 0)
         {
@@ -223,27 +223,27 @@ public class EditTrivias : MonoBehaviour
                     { "answerThree" , inputTriviaAnswerThreeDetail.text},
                     { "correctAnswer", DetectCorrectAnswer()}
                 };
-                await TriviasManager.instance.PutTriviaAsync(idTrivia, newTriviaData);
-                NotificationsManager.instance.SetSuccessNotificationMessage("Datos guardados.");
+                await TriviasManager.Instance.PutTriviaAsync(idTrivia, newTriviaData);
+                NotificationsManager.Instance.SetSuccessNotificationMessage("Datos guardados.");
                 triviaQuestion = inputTriviaQuestionDetail.text;
             }
             else
-                NotificationsManager.instance.SetFailureNotificationMessage("Campos Incompletos. Por favor llene todos los campos.");
+                NotificationsManager.Instance.SetFailureNotificationMessage("Campos Incompletos. Por favor llene todos los campos.");
         }
         else
-            NotificationsManager.instance.SetFailureNotificationMessage("Ya existe esa pregunta. Por favor intenta con otra.");
+            NotificationsManager.Instance.SetFailureNotificationMessage("Ya existe esa pregunta. Por favor intenta con otra.");
     }
 
     public void DeleteTrivia()
     {
-        NotificationsManager.instance.SetQuestionNotificationMessage("¿Está seguro que desea eliminar esta pregunta?");
-        NotificationsManager.instance.acceptQuestionButton.onClick.AddListener(Delete);
+        NotificationsManager.Instance.SetQuestionNotificationMessage("¿Está seguro que desea eliminar esta pregunta?");
+        NotificationsManager.Instance.acceptQuestionButton.onClick.AddListener(Delete);
     }
 
     async void Delete()
     {
-        await TriviasManager.instance.DeleteTrivia(idTrivia);
-        ScenesManager.instance.LoadNewCanvas(canvasConfigTrivias);
-        ScenesManager.instance.DeleteCurrentCanvas(canvasTriviaDetail);
+        await TriviasManager.Instance.DeleteTrivia(idTrivia);
+        ScenesManager.Instance.LoadNewCanvas(canvasConfigTrivias);
+        ScenesManager.Instance.DeleteCurrentCanvas(canvasTriviaDetail);
     }
 }

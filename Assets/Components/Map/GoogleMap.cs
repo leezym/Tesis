@@ -117,7 +117,7 @@ public class GoogleMap : MonoBehaviour {
         } else {
             Texture2D texture = DownloadHandlerTexture.GetContent(request);
             //Set the renderer to display newly downloaded texture
-            Image spriteRenderer = MapManager.instance.spriteMapRenderer;
+            Image spriteRenderer = MapManager.Instance.spriteMapRenderer;
             spriteRenderer.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.width), new Vector2(0.5f, 0.5f));
             spriteRenderer.material.mainTexture = texture;
             spriteRenderer.material.shader = Shader.Find("Sprites/Default");

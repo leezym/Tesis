@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 public class TriviasManager : MonoBehaviour
 {
     public static TriviasManager instance;
+    public static TriviasManager Instance { get => instance; set => instance = value; }
 
     void Awake() {
         instance = this;
@@ -14,43 +15,43 @@ public class TriviasManager : MonoBehaviour
     public async Task PostNewTrivia(string idBuilding, string question, string answerOne, string answerTwo, string answerThree, string correctAnswer)
     {
         Trivia element = new Trivia(idBuilding, question, answerOne, answerTwo, answerThree, correctAnswer);
-        await DataBaseManager.instance.InsertWithoutId("Trivias", element.ConvertJson());
+        await DataBaseManager.Instance.InsertWithoutId("Trivias", element.ConvertJson());
     }
 
     public async Task PutTriviaAsync(string idTrivia, Dictionary<string,object> data)
     {
-        await DataBaseManager.instance.UpdateAsync("Trivias", idTrivia, data);
+        await DataBaseManager.Instance.UpdateAsync("Trivias", idTrivia, data);
     }
 
     public async Task<Dictionary<string, object>> GetTriviaAsync(string idTrivia)
     {
-        return await DataBaseManager.instance.SearchById("Trivias", idTrivia);
+        return await DataBaseManager.Instance.SearchById("Trivias", idTrivia);
     }
 
     public async Task<string> GetIdTriviaByQuestion(string question)
     {
-        return await DataBaseManager.instance.SearchId("Trivias", "question", question);
+        return await DataBaseManager.Instance.SearchId("Trivias", "question", question);
     }
 
     public async Task<List<Dictionary<string, object>>> GetTriviaByBuilding(string name)
     {
-        string idBuilding = await DataBaseManager.instance.SearchId("Buildings", "name", name);
-        return await DataBaseManager.instance.SearchByAttribute("Trivias", "idBuilding", idBuilding);
+        string idBuilding = await DataBaseManager.Instance.SearchId("Buildings", "name", name);
+        return await DataBaseManager.Instance.SearchByAttribute("Trivias", "idBuilding", idBuilding);
     }
 
     public async Task<List<Dictionary<string, object>>> GetTriviaByIdBuilding(string idBuilding)
     {
-        return await DataBaseManager.instance.SearchByAttribute("Trivias", "idBuilding", idBuilding);
+        return await DataBaseManager.Instance.SearchByAttribute("Trivias", "idBuilding", idBuilding);
     }
 
     public async Task<List<Dictionary<string, object>>> GetTriviaByQuestion(string question)
     {
-        return await DataBaseManager.instance.SearchByAttribute("Trivias", "question", question);
+        return await DataBaseManager.Instance.SearchByAttribute("Trivias", "question", question);
     }
 
     public async Task DeleteTrivia(string idTrivia)
     {
-        await DataBaseManager.instance.DeleteAsync("Trivias", idTrivia);
+        await DataBaseManager.Instance.DeleteAsync("Trivias", idTrivia);
     }
 }
 

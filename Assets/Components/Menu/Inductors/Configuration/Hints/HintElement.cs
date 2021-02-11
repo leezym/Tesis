@@ -11,8 +11,8 @@ public class HintElement : MonoBehaviour
     public void SelectHint()
     {
         Text hintText = this.gameObject.GetComponentInChildren<Text>();
-        ScenesManager.instance.LoadNewCanvas(GameObject.Find("PanelHintsDetails").GetComponent<Canvas>());
-        ScenesManager.instance.DeleteCurrentCanvas(GameObject.Find("PanelConfigHints").GetComponent<Canvas>());
+        ScenesManager.Instance.LoadNewCanvas(GameObject.Find("PanelHintsDetails").GetComponent<Canvas>());
+        ScenesManager.Instance.DeleteCurrentCanvas(GameObject.Find("PanelConfigHints").GetComponent<Canvas>());
         GameObject.FindObjectOfType<EditHints>().InitializeAtributes();
         GameObject.FindObjectOfType<EditHints>().SearchHintDetails(hintText.text);
     }
@@ -24,12 +24,12 @@ public class HintElement : MonoBehaviour
 
         if (score == "" || position == "")
         {
-            NotificationsManager.instance.SetFailureNotificationMessage("Por favor, llena los campos posición y puntuación.");
+            NotificationsManager.Instance.SetFailureNotificationMessage("Por favor, llena los campos posición y puntuación.");
         }
         else
         {
-            NotificationsManager.instance.SetQuestionNotificationMessage("¿Está seguro que desea finalizar la pista? Una vez finalizada, no se pueden restaurar los cambios.");
-            NotificationsManager.instance.acceptQuestionButton.onClick.AddListener(SaveHint);
+            NotificationsManager.Instance.SetQuestionNotificationMessage("¿Está seguro que desea finalizar la pista? Una vez finalizada, no se pueden restaurar los cambios.");
+            NotificationsManager.Instance.acceptQuestionButton.onClick.AddListener(SaveHint);
         }
     }
 
@@ -50,13 +50,13 @@ public class HintElement : MonoBehaviour
         
 
         // Crear la pista con puntuaciones
-        string idRoom = await RoomsManager.instance.GetRoomByInductor(await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()));
-        string idHint = await HintsManager.instance.GetIdHintByName(hintName);
-        await HintsChallengesManager.instance.PostNewHintChallenge(idRoom, idHint, Convert.ToInt32(score), Convert.ToInt32(position), hour);
+        string idRoom = await RoomsManager.Instance.GetRoomByInductor(await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId()));
+        string idHint = await HintsManager.Instance.GetIdHintByName(hintName);
+        await HintsChallengesManager.Instance.PostNewHintChallenge(idRoom, idHint, Convert.ToInt32(score), Convert.ToInt32(position), hour);
 
         // Asignar puntuaciones totales a la sala
-        object currentRoomScore = await DataBaseManager.instance.SearchAttribute("Rooms", idRoom, "score");
-        await RoomsManager.instance.PutRoomAsync(idRoom, new Dictionary<string, object> {
+        object currentRoomScore = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom, "score");
+        await RoomsManager.Instance.PutRoomAsync(idRoom, new Dictionary<string, object> {
             {"score", Convert.ToInt32(currentRoomScore) + score}
         });
         

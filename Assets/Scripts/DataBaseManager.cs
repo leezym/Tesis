@@ -11,6 +11,7 @@ using System.Linq;
 public class DataBaseManager : MonoBehaviour
 {
     public static DataBaseManager instance;
+    public static DataBaseManager Instance { get => instance; set => instance = value; }
 
     FirebaseFirestore reference;
 
@@ -245,7 +246,7 @@ public class DataBaseManager : MonoBehaviour
     {
         float latitude = 0, longitude = 0;
         List<Coords> coordsList = new List<Coords>();
-        string idInductor = await UsersManager.instance.GetInductorByStudent(idStudent);        
+        string idInductor = await UsersManager.Instance.GetInductorByStudent(idStudent);        
         Dictionary<string, object> location = await SearchById("Inductors", idInductor);
         foreach (KeyValuePair<string, object> pair in location)
         {

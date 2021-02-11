@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 public class TriviasChallengesManager : MonoBehaviour
 {
     public static TriviasChallengesManager instance;
+    public static TriviasChallengesManager Instance { get => instance; set => instance = value; }
+
     void Awake() 
     {
         instance = this;
@@ -14,34 +16,34 @@ public class TriviasChallengesManager : MonoBehaviour
     public async Task PostNewInductorTriviaChallenge(string idInductor, string idBuilding, bool available)
     {
         InductorTriviaChallenge element = new InductorTriviaChallenge(idInductor, idBuilding, available);
-        await DataBaseManager.instance.InsertWithoutId("InductorTriviasChallenges", element.ConvertJson());
+        await DataBaseManager.Instance.InsertWithoutId("InductorTriviasChallenges", element.ConvertJson());
     }
 
     public async Task PostNewStudentTriviaChallenge(string idStudent, string idTrivia, int score)
     {
         StudentTriviaChallenge element = new StudentTriviaChallenge(idStudent, idTrivia, score);
-        await DataBaseManager.instance.InsertWithoutId("StudentTriviasChallenges", element.ConvertJson());
+        await DataBaseManager.Instance.InsertWithoutId("StudentTriviasChallenges", element.ConvertJson());
     }
 
     public async Task PutInductorTriviaChallengeAsync(string idInductor, string idBuilding, Dictionary<string,object> data)
     {
-        string idTriviaChallenge = await DataBaseManager.instance.SearchId("InductorTriviasChallenges", "idInductor", idInductor, "idBuilding", idBuilding);
-        await DataBaseManager.instance.UpdateAsync("InductorTriviasChallenges", idTriviaChallenge, data);
+        string idTriviaChallenge = await DataBaseManager.Instance.SearchId("InductorTriviasChallenges", "idInductor", idInductor, "idBuilding", idBuilding);
+        await DataBaseManager.Instance.UpdateAsync("InductorTriviasChallenges", idTriviaChallenge, data);
     }
 
     public async Task<Dictionary<string, object>> GetTriviaChallengeAsync(string db, string idHintChallenge)
     {
-        return await DataBaseManager.instance.SearchById(db, idHintChallenge);
+        return await DataBaseManager.Instance.SearchById(db, idHintChallenge);
     }
 
     public async Task<List<Dictionary<string, object>>> GetTriviaChallengeByBuilding(string idInductor)
     {
-        return await DataBaseManager.instance.SearchTriviaDataByBuilding(idInductor);
+        return await DataBaseManager.Instance.SearchTriviaDataByBuilding(idInductor);
     }    
 
     public async Task DeleteTriviaChallenge(string db, string idHintChallenge)
     {
-        await DataBaseManager.instance.DeleteAsync(db, idHintChallenge);
+        await DataBaseManager.Instance.DeleteAsync(db, idHintChallenge);
     }
 }
 

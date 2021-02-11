@@ -11,7 +11,8 @@ public class MapManager : MonoBehaviour
     // punto A 3.3478998,-76.5324315
     // punto B 3.3481168,-76.5311696
     // punto C 3.3483012,-76.5316218
-    public static MapManager instance;
+    private static MapManager instance;
+    public static MapManager Instance { get => instance; set => instance = value; }
 
     GoogleMap googleMap;
     public Image spriteMapRenderer;
@@ -48,7 +49,7 @@ public class MapManager : MonoBehaviour
             scriptBuilding.SetActive(false);
         }
 
-        if(AuthManager.instance.GetUserType()=="student"){
+        if(AuthManager.Instance.GetUserType()=="student"){
             SetChangeMapButtonActive();
         }else{
             SetChangeMapButtonNotActive();
@@ -92,7 +93,7 @@ public class MapManager : MonoBehaviour
 
     async void OthersCurrentLocation()
     {
-        List<Coords> coordsList = await LocationsManager.instance.GetLocationAsync(AuthManager.instance.GetUserType());
+        List<Coords> coordsList = await LocationsManager.Instance.GetLocationAsync(AuthManager.Instance.GetUserType());
         List<GoogleMapLocation> locationsList = new List<GoogleMapLocation>();
         foreach(Coords coords in coordsList)
         {

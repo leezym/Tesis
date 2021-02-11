@@ -8,6 +8,7 @@ using Random=System.Random;
 public class LoadingScreenManager : MonoBehaviour
 {
     public static LoadingScreenManager instance;
+    public static LoadingScreenManager Instance { get => instance; set => instance = value; }
 
     // Contadores
     [HideInInspector]
@@ -85,9 +86,9 @@ public class LoadingScreenManager : MonoBehaviour
         else if (timeInductorLoading < 0)
         {
             canvasInductorLoading.enabled = false;
-            await TriviasChallengesManager.instance.PutInductorTriviaChallengeAsync
+            await TriviasChallengesManager.Instance.PutInductorTriviaChallengeAsync
             (
-                await UsersManager.instance.GetInductorIdByAuth(AuthManager.instance.GetUserId()), 
+                await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId()), 
                 idBuilding,
                 new Dictionary<string, object> () {
                     { "available", false }
@@ -180,7 +181,7 @@ public class LoadingScreenManager : MonoBehaviour
     // Informacion de la pregunta
     async void ShowTrivia()
     {
-        object buildingName = await DataBaseManager.instance.SearchById("Buildings", idBuilding,"name");
+        object buildingName = await DataBaseManager.Instance.SearchById("Buildings", idBuilding,"name");
         canvasQuestionLoading.transform.Find("BuildingNameLabel").GetComponent<Text>().text = buildingName.ToString();            
 
         if(index < listTrivias.Length)
@@ -202,7 +203,7 @@ public class LoadingScreenManager : MonoBehaviour
         }
         else{
             GameObject.FindObjectOfType<PlayATrivia>().ShowFinalRanking();
-            ScenesManager.instance.LoadNewCanvas(canvasPodiumStudent);
+            ScenesManager.Instance.LoadNewCanvas(canvasPodiumStudent);
         }
     }
 
@@ -220,19 +221,19 @@ public class LoadingScreenManager : MonoBehaviour
 
     async void ShowFinalRankingYincana()
     {
-        int sizeRoomsTable = await DataBaseManager.instance.SizeTable("Rooms");
-        int sizeFinishedRoomsTable = await DataBaseManager.instance.SizeTable("Rooms", "finished", true);
+        int sizeRoomsTable = await DataBaseManager.Instance.SizeTable("Rooms");
+        int sizeFinishedRoomsTable = await DataBaseManager.Instance.SizeTable("Rooms", "finished", true);
         if (sizeFinishedRoomsTable == sizeRoomsTable && sizeRoomsTable != 0)
         {
             IndividualRanking();
             GroupRanking();
-            ScenesManager.instance.LoadNewCanvas(LoadingScreenManager.instance.canvasRankingFinal);
+            ScenesManager.Instance.LoadNewCanvas(LoadingScreenManager.Instance.canvasRankingFinal);
         }
     }
 
     public async void IndividualRanking()
     {
-        List<Dictionary<string, object>> rankingList = await DataBaseManager.instance.SearchByOrderDescendingAndLimit("Students", "score", 3);
+        List<Dictionary<string, object>> rankingList = await DataBaseManager.Instance.SearchByOrderDescendingAndLimit("Students", "score", 3);
         foreach(Dictionary<string, object> ranking in rankingList)
         {
             foreach(KeyValuePair<string, object> pair in ranking)
@@ -247,7 +248,7 @@ public class LoadingScreenManager : MonoBehaviour
 
     public async void GroupRanking()
     {
-        List<Dictionary<string, object>> rankingList = await DataBaseManager.instance.SearchByOrderDescendingAndLimit("Rooms", "score", 3);
+        List<Dictionary<string, object>> rankingList = await DataBaseManager.Instance.SearchByOrderDescendingAndLimit("Rooms", "score", 3);
         foreach(Dictionary<string, object> ranking in rankingList)
         {
             foreach(KeyValuePair<string, object> pair in ranking)

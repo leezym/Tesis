@@ -2,8 +2,9 @@
 
 public class ScenesManager : MonoBehaviour
 {
-    public static ScenesManager instance;
-    
+    private static ScenesManager instance;
+    public static ScenesManager Instance { get => instance; set => instance = value; }
+
     private void Awake ()
     {
         instance = this;        
