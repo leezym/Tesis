@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
   <Tracking>
+    <ImageTarget name="QR_El_Lago" size="500.000000 500.000000" />
+    <ImageTarget name="QR_Las_Palmas" size="500.000000 500.000000" />
+    <ImageTarget name="QR_Los_Guayacanes" size="500.000000 500.000000" />
+    <ImageTarget name="QR_Raul_Posada" size="500.000000 500.000000" />
     <ImageTarget name="logo_puj" size="50.000000 50.000000" />
   </Tracking>
 </QCARConfig>

@@ -80,15 +80,15 @@ public class AuthManager : MonoBehaviour
         {   
             if (currentLatitude != newLatitude || currentLongitude != newLongitude)
             {
-                /*Input.location.Start();
+                Input.location.Start();
                 newLatitude = Input.location.lastData.latitude;
                 newLongitude = Input.location.lastData.longitude;
-                Input.location.Stop();*/
-                //punto A
-                Input.location.Start();
+                Input.location.Stop();
+                //Punto A
+                /*Input.location.Start();
                 newLatitude = 3.3478998f;
                 newLongitude = -76.5324315f;
-                Input.location.Stop();
+                Input.location.Stop();*/
 
                 if (GetUserType() == "student")
                 {
@@ -98,8 +98,6 @@ public class AuthManager : MonoBehaviour
                         {"latitude", currentLatitude},
                         {"longitude", currentLongitude}
                     });
-                    //Aquí activo el botón de cambio de mapa para los neos//
-                    //buttonChangeMapNeos.SetActive(true);
                 }
                 else if(GetUserType() == "inductor")
                 { 
@@ -112,8 +110,6 @@ public class AuthManager : MonoBehaviour
                             {"latitude", currentLatitude},
                             {"longitude", currentLongitude}
                         });
-                        //Aquí desactivo el botón de cambio de mapa para los neos//
-                        //buttonChangeMapNeos.SetActive(false);
                         Debug.Log("actualiza locacion en la DB");
                     }
                 }  
@@ -124,7 +120,7 @@ public class AuthManager : MonoBehaviour
 
             if (GetUserType() == "student")
             {                
-                // Cerrar la sesión si al inductor elimina la sala
+                // Cerrar la sesión si el inductor elimina la sala
                 LogOutStudent();
 
                 // Mostrar las trivias
