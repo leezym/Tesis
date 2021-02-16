@@ -33,10 +33,10 @@ RectTransform:
   m_Father: {fileID: 8519562726406854993}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 270, y: -349}
-  m_SizeDelta: {x: 74.42926, y: 74.472855}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -90, y: 291}
+  m_SizeDelta: {x: 74.42926, y: 74.47284}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6578575101776299831
 CanvasRenderer:
@@ -249,10 +249,10 @@ RectTransform:
   m_Father: {fileID: 8519562726406854993}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 269.62, y: -513}
-  m_SizeDelta: {x: 180.75949, y: 75.21069}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -90.380005, y: 127}
+  m_SizeDelta: {x: 180.75952, y: 75.21069}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6918939850564822185
 CanvasRenderer:
@@ -378,10 +378,10 @@ RectTransform:
   m_Father: {fileID: 8519562726406854993}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 270, y: -430.48}
-  m_SizeDelta: {x: 173.32227, y: 72.11618}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -90, y: 209.51999}
+  m_SizeDelta: {x: 173.32227, y: 72.11621}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6918939851048735672
 CanvasRenderer:
@@ -507,10 +507,10 @@ RectTransform:
   m_Father: {fileID: 8519562726406854993}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 268, y: -597}
-  m_SizeDelta: {x: 168.75113, y: 70.21423}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -92, y: 43}
+  m_SizeDelta: {x: 168.7511, y: 70.21423}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6918939851107032021
 CanvasRenderer:
@@ -653,7 +653,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7122611428941958190}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
