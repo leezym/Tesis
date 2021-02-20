@@ -6,7 +6,7 @@ using System;
 
 public class LocationsManager : MonoBehaviour
 {
-    public static LocationsManager instance;
+    private static LocationsManager instance;
     public static LocationsManager Instance { get => instance; set => instance = value; }
 
     public void Awake()

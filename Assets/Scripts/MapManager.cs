@@ -16,7 +16,8 @@ public class MapManager : MonoBehaviour
     public Canvas canvasGeoMap;
     public GameObject mainCamera, mapCamera, arCamera, scriptStreet, scriptBuilding, plane;
     public GameObject buttonChangeMapNeos;
-    float latitude = 0, longitude = 0;
+    float currentLatitude = 0, currentLongitude = 0;
+    string idInductor = "";
 
     void Awake()
     {
@@ -26,10 +27,49 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         googleMap = GameObject.FindObjectOfType<GoogleMap>();  
+        StartCoroutine(Location());
+    }
+
+    public IEnumerator Location()
+    {
+        // First, check if user has location service enabled
+        if (!Input.location.isEnabledByUser)
+            yield break;
+
+        // Start service before querying location
         Input.location.Start();
-        googleMap.centerLocation.latitude = Input.location.lastData.latitude;
-        googleMap.centerLocation.longitude = Input.location.lastData.longitude;        
-        Input.location.Stop();    
+
+        // Wait until service initializes
+        int maxWait = 20;
+        while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
+        {
+            yield return new WaitForSeconds(1);
+            maxWait--;
+        }
+
+        // Service didn't initialize in 20 seconds
+        if (maxWait < 1)
+        {
+            print("Timed out");
+            yield break;
+        }
+
+        // Connection has failed
+        if (Input.location.status == LocationServiceStatus.Failed)
+        {
+            print("Unable to determine device location");
+            yield break;
+        }
+        else
+        {
+            // Access granted and location value could be retrieved
+            print("Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude);
+            googleMap.centerLocation.latitude = Input.location.lastData.latitude;
+            googleMap.centerLocation.longitude = Input.location.lastData.longitude;
+        }
+
+        // Stop service if there is no need to query location updates continuously
+        Input.location.Stop();
     }
 
     void Update() 
@@ -56,9 +96,35 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    public async void PutLocation()
+    {
+        if (AuthManager.Instance.GetUserType() == "student")
+        {
+            // Mapa
+            string idStudent = AuthManager.Instance.GetUserId();
+            await UsersManager.Instance.PutUserAsync("Students", idStudent, new Dictionary<string, object>{
+                {"latitude", currentLatitude},
+                {"longitude", currentLongitude}
+            });
+        }
+        else if(AuthManager.Instance.GetUserType() == "inductor")
+        { 
+            // Mapa
+            if(idInductor == "")
+                idInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
+            else
+            {
+                await UsersManager.Instance.PutUserAsync("Inductors", idInductor, new Dictionary<string, object>{
+                    {"latitude", currentLatitude},
+                    {"longitude", currentLongitude}
+                });
+            }
+        }
+    }
+
     public void Refresh()
     {
-        MyCurrentLocation();
+        StartCoroutine(Location());
         OthersCurrentLocation();
     }
 
@@ -74,21 +140,6 @@ public class MapManager : MonoBehaviour
         if (googleMap.zoom >= 0)
             googleMap.zoom--;
         Refresh();
-    }
-
-    void MyCurrentLocation()
-    {
-        Input.location.Start();
-        googleMap.markers[0].locations[0].latitude = Input.location.lastData.latitude;
-        googleMap.markers[0].locations[0].longitude = Input.location.lastData.longitude;;
-        Input.location.Stop();
-
-        //punto A
-        /*Input.location.Start();
-        googleMap.markers[0].locations[0].latitude = 3.3478998f;
-        googleMap.markers[0].locations[0].longitude = -76.5324315f;
-        Input.location.Stop();*/
-
     }
 
     async void OthersCurrentLocation()
