@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 public class TriviasChallengesManager : MonoBehaviour
 {
-    public static TriviasChallengesManager instance;
+    private static TriviasChallengesManager instance;
     public static TriviasChallengesManager Instance { get => instance; set => instance = value; }
 
     void Awake() 
@@ -40,6 +40,32 @@ public class TriviasChallengesManager : MonoBehaviour
     {
         return await DataBaseManager.Instance.SearchTriviaDataByBuilding(idInductor);
     }    
+
+    public async void ShowTriviasStudent(string idInductor, bool triviaInProgress, Canvas canvasMenuStudent, Canvas canvasPuntuacionesStudent)
+    {
+        if (!triviaInProgress)
+        {
+            List<Dictionary<string, object>> listAvailableTrivias = await DataBaseManager.Instance.SearchByAttribute("InductorTriviasChallenges", "idInductor", idInductor, "available", true);
+            foreach(Dictionary<string, object> availableTrivia in listAvailableTrivias)
+            {
+                foreach(KeyValuePair<string, object> pair in availableTrivia)
+                {
+                    if(pair.Key == "idBuilding")
+                    {
+                        triviaInProgress = true;
+
+                        ScenesManager.Instance.LoadNewCanvas(LoadingScreenManager.Instance.canvasTimerTriviaLoading);
+                        ScenesManager.Instance.DeleteCurrentCanvas(canvasMenuStudent);
+                        ScenesManager.Instance.DeleteCurrentCanvas(canvasPuntuacionesStudent);
+
+                        LoadingScreenManager.Instance.SetTimeTimerTrivia(LoadingScreenManager.Instance.timer);
+                        LoadingScreenManager.Instance.SetIdTriviaBuilding(pair.Value.ToString());
+                        LoadingScreenManager.Instance.SetListTrivias(await TriviasManager.Instance.GetTriviaByIdBuilding(pair.Value.ToString()));
+                    }
+                }
+            }
+        }
+    }
 
     public async Task DeleteTriviaChallenge(string db, string idHintChallenge)
     {
