@@ -144,7 +144,7 @@ public class EditHints : MonoBehaviour
 
     async void Delete()
     {
-        await TriviasManager.Instance.DeleteTrivia(idHint);
+        await HintsManager.Instance.DeleteHint(idHint);
         ScenesManager.Instance.LoadNewCanvas(canvasConfigHints);
         ScenesManager.Instance.DeleteCurrentCanvas(canvasHintDetail);
     }

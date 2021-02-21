@@ -37,8 +37,6 @@ public class EditTrivias : MonoBehaviour
         toggleTriviaAnswerOneDetail.interactable = false;
         toggleTriviaAnswerTwoDetail.interactable = false;
         toggleTriviaAnswerThreeDetail.interactable = false;
-        GameObject.FindObjectOfType<ListTrivias>().buildingsDropdown.value = 0;
-
     }
 
     public void EnableToggle(Toggle toggle)
@@ -242,7 +240,19 @@ public class EditTrivias : MonoBehaviour
 
     async void Delete()
     {
+    
         await TriviasManager.Instance.DeleteTrivia(idTrivia);
+        GameObject.FindObjectOfType<ListTrivias>().SearchTrivias();
+
+        string idBuilding = await DataBaseManager.Instance.SearchId("Buildings", "name", GameObject.FindObjectOfType<ListTrivias>().buildingName);
+
+        // Actualizar Edificios
+        Dictionary<string, object> newBuildingData = new Dictionary<string, object>
+        {
+            {"amongQuestions", GameObject.FindObjectOfType<ListTrivias>().currentSizeTrivias - 1 }
+        };
+        await DataBaseManager.Instance.UpdateAsync("Buildings", idBuilding, newBuildingData);
+
         ScenesManager.Instance.LoadNewCanvas(canvasConfigTrivias);
         ScenesManager.Instance.DeleteCurrentCanvas(canvasTriviaDetail);
     }

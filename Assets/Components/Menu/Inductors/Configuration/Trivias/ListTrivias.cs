@@ -16,7 +16,9 @@ public class ListTrivias : MonoBehaviour
 
     List<Dictionary<string,object>> triviasList = new List<Dictionary<string,object>>();
     public List<GameObject> currentTrivias = new List<GameObject>();
-    int currentSizeTrivias = 0, newSizeTrivias = 0;
+
+    [HideInInspector]
+    public int currentSizeTrivias = 0, newSizeTrivias = 0;
 
     public InputField inputTriviaQuestion, inputTriviaAnswerOne, inputTriviaAnswerTwo, inputTriviaAnswerThree;
     public Toggle toggleTriviaAnswerOne, toggleTriviaAnswerTwo, toggleTriviaAnswerThree;
@@ -24,7 +26,8 @@ public class ListTrivias : MonoBehaviour
     public Text placeholderTriviaAnswerOne, placeholderTriviaAnswerTwo, placeholderTriviaAnswerThree;
     public Sprite backgroundCorrectAnswer, backgroundRegularAnswer;
     
-    string buildingName = "";
+    [HideInInspector]
+    public string buildingName = "";
 
     async void Start()
     {
@@ -44,7 +47,6 @@ public class ListTrivias : MonoBehaviour
         toggleTriviaAnswerOne.isOn = true;
         toggleTriviaAnswerTwo.isOn = false;
         toggleTriviaAnswerThree.isOn = false;
-        buildingsDropdown.value = 0;
     }
 
     void Update()
@@ -222,7 +224,7 @@ public class ListTrivias : MonoBehaviour
                 NotificationsManager.Instance.SetSuccessNotificationMessage("Pregunta creada.");
             }
             else
-            NotificationsManager.Instance.SetFailureNotificationMessage("Ya existe esa pregunta. Por favor intenta con otra.");
+                NotificationsManager.Instance.SetFailureNotificationMessage("Ya existe esa pregunta. Por favor intenta con otra.");
         }else
             NotificationsManager.Instance.SetFailureNotificationMessage("Campos Incompletos. Por favor llene todos los campos.");
     }   
