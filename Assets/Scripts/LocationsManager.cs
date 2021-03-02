@@ -17,13 +17,12 @@ public class LocationsManager : MonoBehaviour
     public async Task<List<Coords>> GetLocationAsync(string userType)
     {
         List<Coords> coordsList = new List<Coords>();
-        if(AuthManager.Instance.GetUserType() == "inductor")
+        if(userType == "inductor")
         {
             string idInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
             coordsList = await DataBaseManager.Instance.GetOthersInductorsLocation(idInductor);
-            Debug.Log("coordenadas");
         }
-        else if (AuthManager.Instance.GetUserType() == "student")
+        else if (userType == "student")
         {
             string idStudent = AuthManager.Instance.GetUserId();
             coordsList = await DataBaseManager.Instance.GetMyInductorLocation(idStudent);

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Firebase.Database;
 using Firebase.Firestore;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -20,13 +19,12 @@ public class AuthManager : MonoBehaviour
     // DataBase
     private Dictionary<string, object> snapshot;
 
-    // Canvas Iniciar Sesion
+    [Header("CANVAS INICIAR SESIÓN")]
     public Canvas canvasGeneralSessions;
     public Canvas canvasLoginInductor, canvasNombreInductor, canvasMenuInductor;
     public Canvas canvasLoginStudent, canvasMenuStudent, canvasPuntuacionesStudent;
     public InputField inputFieldUser, inputFieldPassword, inputRoomName, inputInductorRoomSize;
     public InputField inputFieldDocument, inputFieldName;
-    //public GameObject buttonChangeMapNeos;
 
 
     // UserData
@@ -146,7 +144,7 @@ public class AuthManager : MonoBehaviour
             userFirebase = authFirebase.CurrentUser;
             if (signedIn)
             {
-                Debug.Log("inicio " + GetUserType());
+                Debug.Log("inicio " + GetUserId());
                 if (GetUserType() == "inductor")
                 {
                     Debug.Log("spy un inductor");
@@ -211,6 +209,7 @@ public class AuthManager : MonoBehaviour
                         {
                             if (task.IsFaulted)
                             {
+                                Debug.Log("error sdfdsfsdfds");
                                 foreach (System.Exception exception in task.Exception.InnerExceptions)
                                 {
                                     Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;

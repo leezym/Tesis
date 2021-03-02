@@ -10,7 +10,7 @@ using System.Linq;
 
 public class DataBaseManager : MonoBehaviour
 {
-    public static DataBaseManager instance;
+    private static DataBaseManager instance;
     public static DataBaseManager Instance { get => instance; set => instance = value; }
 
     FirebaseFirestore reference;
@@ -251,9 +251,9 @@ public class DataBaseManager : MonoBehaviour
         foreach (KeyValuePair<string, object> pair in location)
         {
             if(pair.Key == "latitude")
-                latitude = (float)pair.Value;
+                latitude = (float)Convert.ToDecimal(pair.Value);
             if(pair.Key == "longitude")
-                longitude = (float)pair.Value;
+                longitude = (float)Convert.ToDecimal(pair.Value);
         }
         coordsList.Add(new Coords(latitude, longitude));
         return coordsList;

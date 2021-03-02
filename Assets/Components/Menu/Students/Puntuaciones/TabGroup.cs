@@ -9,8 +9,7 @@ public class TabGroup : MonoBehaviour
     public List<TabButton> tabButtons;
     public Sprite tabIdle, tabHover, tabActive;
     public TabButton selectedTab;
-    public List<Canvas> objectsToSwap;
-    
+    public List<Canvas> objectsToSwap;    
 
     public void Subscribe(TabButton button)
     {
@@ -21,16 +20,19 @@ public class TabGroup : MonoBehaviour
         tabButtons.Add(button);
     }
 
-    public void OnTabEnter(TabButton button){
+    public void OnTabEnter(TabButton button)
+    {
         ResetTabs();
         if(selectedTab == null || button != selectedTab){
             button.background.sprite = tabHover;
         }
     }
-    public void OnTabExit(TabButton button){
+    public void OnTabExit(TabButton button)
+    {
         ResetTabs();
     }
-    public void OnTabSelected(TabButton button){
+    public void OnTabSelected(TabButton button)
+    {
         selectedTab = button;
         ResetTabs();
         button.background.sprite = tabActive;
@@ -45,8 +47,10 @@ public class TabGroup : MonoBehaviour
         }
     }
 
-    public void ResetTabs(){
-        foreach(TabButton button in tabButtons){
+    public void ResetTabs()
+    {
+        foreach(TabButton button in tabButtons)
+        {
             if(selectedTab!=null && button==selectedTab){ continue; }
             button.background.sprite = tabIdle;
         }

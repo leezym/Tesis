@@ -11,19 +11,11 @@ public class ListGroupRanking : MonoBehaviour
     public Transform content;
     public Text textMyGroupRanking, textMyGroupScore;
     List<GameObject> currentGroups = new List<GameObject>();
-    List<Dictionary<string, object>> groupsList = new List<Dictionary<string, object>>();
     int count = 1;
 
-    // Update is called once per frame
-    void Update()
+    public void Refresh()
     {
-        if (canvasPuntuaciones.enabled && canvasGroupRanking.enabled && groupsList.Count == 0)
-            SearchPosition();
-        else
-        {
-            count = 1;
-            groupsList = new List<Dictionary<string, object>>();
-        }
+        SearchPosition();
     }
 
     void ClearCurrentGroups()
@@ -36,12 +28,12 @@ public class ListGroupRanking : MonoBehaviour
         currentGroups.Clear();
     }
 
-    public async void SearchPosition()
+    async void SearchPosition()
     {
-        groupsList = await RoomsManager.Instance.GetRoomsByOrderOfScore();
+        List<Dictionary<string, object>> groupsList = await RoomsManager.Instance.GetRoomsByOrderOfScore();
         object idRoom = await DataBaseManager.Instance.SearchAttribute("Students", AuthManager.Instance.GetUserId(), "idRoom");
         object myGroupScore = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom.ToString(), "score");
-        object nameRoom = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom.ToString(),"name");
+        object nameRoom = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom.ToString(), "room");
 
         textMyGroupScore.text = myGroupScore.ToString();
 
@@ -63,7 +55,7 @@ public class ListGroupRanking : MonoBehaviour
                 {
                     groupElement.transform.Find("NameLabel").GetComponent<Text>().text = pair.Value.ToString();
                     
-                    if (pair.Value.ToString() == nameRoom.ToString() && nameRoom != null)
+                    if (pair.Value.ToString() == nameRoom.ToString())
                     {
                         textMyGroupRanking.text = count.ToString();
                     }

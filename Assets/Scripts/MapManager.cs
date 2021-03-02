@@ -15,7 +15,7 @@ public class MapManager : MonoBehaviour
     public CanvasGroup canvasARMap;
     public Canvas canvasGeoMap;
     public GameObject mainCamera, mapCamera, arCamera, scriptStreet, scriptBuilding, plane;
-    public GameObject buttonChangeMapNeos;
+    public GameObject buttonChangeMapNeos, backButtonInductor, backButtonStudent;
     float currentLatitude = 0, currentLongitude = 0;
     string idInductor = "";
 
@@ -74,6 +74,17 @@ public class MapManager : MonoBehaviour
 
     void Update() 
     {
+        SetMap();
+        
+        if(AuthManager.Instance.GetUserType() == "student"){
+            SetChangeMapButtonActive();
+        }else{
+            SetChangeMapButtonNotActive();
+        }
+    }
+
+    void SetMap()
+    {
         if(canvasARMap.alpha == 1)
         {
             mainCamera.SetActive(false);
@@ -87,12 +98,6 @@ public class MapManager : MonoBehaviour
             mapCamera.SetActive(false);
             scriptStreet.SetActive(false);
             scriptBuilding.SetActive(false);
-        }
-
-        if(AuthManager.Instance.GetUserType()=="student"){
-            SetChangeMapButtonActive();
-        }else{
-            SetChangeMapButtonNotActive();
         }
     }
 
@@ -159,15 +164,17 @@ public class MapManager : MonoBehaviour
         StartCoroutine(googleMap._Refresh());
     }
 
-    void SetChangeMapButtonActive(){
+    void SetChangeMapButtonActive()
+    {
         buttonChangeMapNeos.SetActive(true);
+        backButtonInductor.SetActive(false);
+        backButtonStudent.SetActive(true);
     }
 
-    void SetChangeMapButtonNotActive(){
+    void SetChangeMapButtonNotActive()
+    {
         buttonChangeMapNeos.SetActive(false);
-    }
-
-    public void ChangeMapFromAR(){
-        canvasARMap.alpha = 0;
+        backButtonInductor.SetActive(true);
+        backButtonStudent.SetActive(false);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Firebase.Database;
 using Firebase.Firestore;
 using System.Threading.Tasks;
 using System.Collections.Generic;

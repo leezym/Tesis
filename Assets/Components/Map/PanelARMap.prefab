@@ -1204,7 +1204,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1927834595673412086, guid: a1ed1b4e56ba8344f93b28b376460e50,
           type: 3}
-        m_MethodName: LoadNewCanvas
+        m_MethodName: DeleteCurrentCanvas
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 5627771913887366518}
@@ -1215,7 +1215,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 0}
-        m_MethodName: ChangeMapFromAR
+        m_MethodName: SetMap
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

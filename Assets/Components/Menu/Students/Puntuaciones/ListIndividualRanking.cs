@@ -11,19 +11,11 @@ public class ListIndividualRanking : MonoBehaviour
     public Transform content;
     public Text textMyRanking, textMyScore;
     List<GameObject> currentStudents = new List<GameObject>();
-    List<Dictionary<string, object>> studentsList = new List<Dictionary<string, object>>();
     int count = 1;
 
-    // Update is called once per frame
-    void Update()
+    public void Refresh()
     {
-        if (canvasPuntuaciones.enabled && canvasIndividualRanking.enabled && studentsList.Count == 0)
-            SearchPosition();
-        else
-        {
-            count = 1;
-            studentsList = new List<Dictionary<string, object>>();
-        }
+        SearchPosition();
     }
 
     void ClearCurrentStudents()
@@ -36,9 +28,9 @@ public class ListIndividualRanking : MonoBehaviour
         currentStudents.Clear();
     }
 
-    public async void SearchPosition()
+    async void SearchPosition()
     {
-        studentsList = await UsersManager.Instance.GetStudentsByOrderOfScore();
+        List<Dictionary<string, object>> studentsList = await UsersManager.Instance.GetStudentsByOrderOfScore();
         object myScore = await DataBaseManager.Instance.SearchAttribute("Students", AuthManager.Instance.GetUserId(), "score");
         object nameStudent = await DataBaseManager.Instance.SearchAttribute("Students", AuthManager.Instance.GetUserId(), "name");
 

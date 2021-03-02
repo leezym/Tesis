@@ -9,31 +9,23 @@ public class MyProfile : MonoBehaviour
     public Canvas canvasPuntuaciones, canvasMyProfile;
     public Text textGroupName, textInductorName, content;
     List<string> NeoJaverianos = new List<string>();
-    int currentSizeStudents = 0, newSizeStudents = 0;
     object idRoom, idInductor;
 
-    async void Update()
+    public async void Refresh()
     {
-        if (canvasPuntuaciones.enabled && canvasMyProfile.enabled)
+        if (idRoom == null)
         {
-            if (idRoom == null)
+            idRoom = await DataBaseManager.Instance.SearchAttribute("Students", AuthManager.Instance.GetUserId(), "idRoom");
+            if (idInductor == null)
             {
-                idRoom = await DataBaseManager.Instance.SearchAttribute("Students", AuthManager.Instance.GetUserId(), "idRoom");
-                if (idInductor == null)
-                {
-                    idInductor = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom.ToString(), "idInductor");
-                }
+                idInductor = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom.ToString(), "idInductor");
             }
-            if (idRoom != null && idInductor != null)
+        }
+
+        if (idRoom != null && idInductor != null)
                 SearchGroupData();
-            if (idInductor != null)
-                SearchStudents();
-        }
-        else
-        {
-            idRoom = null;
-            idInductor = null;
-        }
+        if (idInductor != null)
+            SearchStudents();
     }
 
     async void SearchGroupData()
@@ -50,16 +42,10 @@ public class MyProfile : MonoBehaviour
     async void SearchStudents()
     {
         NeoJaverianos = await GroupManager.Instance.ListNameStudents(idInductor.ToString());
-        newSizeStudents = NeoJaverianos.Count;
-
-        if (currentSizeStudents != newSizeStudents)
+        content.text = "";
+        foreach(string name in NeoJaverianos)
         {
-            content.text = "";
-            foreach(string name in NeoJaverianos)
-            {
-                content.text += name + "\n\n";
-            }
-            currentSizeStudents = newSizeStudents;
+            content.text += name + "\n\n";
         }
     }
 }
