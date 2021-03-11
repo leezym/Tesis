@@ -19,12 +19,17 @@ public class AuthManager : MonoBehaviour
     // DataBase
     private Dictionary<string, object> snapshot;
 
-    [Header("CANVAS INICIAR SESIÓN")]
     public Canvas canvasGeneralSessions;
+    [Header("CANVAS INDUCTOR")]
     public Canvas canvasLoginInductor, canvasNombreInductor, canvasMenuInductor;
-    public Canvas canvasLoginStudent, canvasMenuStudent, canvasPuntuacionesStudent;
     public InputField inputFieldUser, inputFieldPassword, inputRoomName, inputInductorRoomSize;
+
+    [Header("CANVAS ESTUDIANTES")]
+    public Canvas canvasLoginStudent, canvasMenuStudent, canvasPuntuacionesStudent, canvasGeoMap;
+    public CanvasGroup canvasARMap;
     public InputField inputFieldDocument, inputFieldName;
+    
+
 
 
     // UserData
@@ -72,7 +77,7 @@ public class AuthManager : MonoBehaviour
         AuthStateChanged(this, null);
     }
 
-    void Update()
+    async void Update()
     {
         if (signedIn)
         {         
@@ -87,29 +92,34 @@ public class AuthManager : MonoBehaviour
 
             if (GetUserType() == "student")
             {                
-                // Cerrar la sesión si el inductor elimina la sala
-                LogOutStudent();
+                if(idInductor == "")
+                    idInductor = await UsersManager.Instance.GetInductorByStudent(GetUserId());
+                else
+                {
+                    // Cerrar la sesión si el inductor elimina la sala
+                    LogOutStudent();
 
-                // Mostrar las trivias cuando el inductor las active
-                ShowTrivias();
+                    // Mostrar las trivias cuando el inductor las active
+                    ShowTrivias();
+                }
             }            
         }
     }
 
     async void LogOutStudent()
     {
-        SetSnapshot(await UsersManager.Instance.GetUserAsync("Students", GetUserId()));
+        SetSnapshot(await UsersManager.Instance.GetUserAsync("Inductors", idInductor));
+
         if (GetSnapshot() == null)
         {
-            Exit();
-            GameObject.Find("PanelGeneralSessions").GetComponent<Canvas>().enabled = true;
+            Debug.Log("saca al neo porque no existe sala");
+            InitializeAtributes();
+            authFirebase.SignOut();
         }
     }    
 
-    async void ShowTrivias()
+    void ShowTrivias()
     {
-        if(idInductor == "")
-            idInductor = await UsersManager.Instance.GetInductorByStudent(GetUserId());
         TriviasChallengesManager.Instance.ShowTriviasStudent(idInductor, triviaInProgress, canvasMenuStudent, canvasPuntuacionesStudent);
     }
 
@@ -131,14 +141,18 @@ public class AuthManager : MonoBehaviour
             if (!signedIn && userFirebase != null)
             {
                 Debug.Log("salir " + GetUserType());
-
+                ScenesManager.Instance.LoadNewCanvas(canvasGeneralSessions);
+                
                 if (GetUserType() == "inductor")
                 {
-                    Debug.Log("Se salio el inductor");
+                    ScenesManager.Instance.DeleteCurrentCanvas(canvasMenuInductor);
                 }
                 else if (GetUserType() == "student")
                 {
-                    Debug.Log("Se salio el neo");
+                    ScenesManager.Instance.DeleteCurrentCanvas(canvasMenuStudent);
+                    ScenesManager.Instance.DeleteCurrentCanvas(canvasPuntuacionesStudent);
+                    ScenesManager.Instance.DeleteCurrentCanvas(canvasGeoMap);
+                    ScenesManager.Instance.DeleteCurrentCanvas(canvasARMap);
                 }
             }
             userFirebase = authFirebase.CurrentUser;
@@ -147,14 +161,12 @@ public class AuthManager : MonoBehaviour
                 Debug.Log("inicio " + GetUserId());
                 if (GetUserType() == "inductor")
                 {
-                    Debug.Log("spy un inductor");
                     ScenesManager.Instance.DeleteCurrentCanvas(canvasLoginInductor);
                     ScenesManager.Instance.LoadNewCanvas(canvasNombreInductor);
                     
                 }
                 else if (GetUserType() == "student")
                 {
-                    Debug.Log("spy un estu");
                     ScenesManager.Instance.DeleteCurrentCanvas(canvasLoginStudent);
                     ScenesManager.Instance.LoadNewCanvas(canvasMenuStudent);
                 }     
@@ -175,10 +187,10 @@ public class AuthManager : MonoBehaviour
         string password = inputFieldPassword.text;
         string email = user + "@javerianacali.edu.co";
 
-        await authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async taskSignIn => {                
-            if (taskSignIn.IsFaulted)
+        await authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async task => {                
+            if (task.IsFaulted)
             {
-                foreach (System.Exception exception in taskSignIn.Exception.InnerExceptions)
+                foreach (System.Exception exception in task.Exception.InnerExceptions)
                 {
                     Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
                     string message = NotificationsManager.Instance.GetErrorMessage(firebaseEx);
@@ -205,11 +217,9 @@ public class AuthManager : MonoBehaviour
                     idRoom = await RoomsManager.Instance.GetAvailableRoom();
                     if(idRoom != null)
                     {
-                        await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task =>
-                        {
+                        await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task => {
                             if (task.IsFaulted)
                             {
-                                Debug.Log("error sdfdsfsdfds");
                                 foreach (System.Exception exception in task.Exception.InnerExceptions)
                                 {
                                     Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
@@ -247,21 +257,14 @@ public class AuthManager : MonoBehaviour
     {
         userFirebase = authFirebase.CurrentUser;
         if (userFirebase != null)
-        {
+        {            
             if (GetUserType() == "inductor")
-            {
                 await UsersManager.Instance.DeleteSession(userFirebase.UserId);
-                ScenesManager.Instance.DeleteCurrentCanvas(canvasMenuInductor);
-            }
-            else if (GetSnapshot() != null || GetUserType() == "student")
-            {
+            else if (GetUserType() == "student")
                 await RoomsManager.Instance.DeleteStudentInRoom(userFirebase.UserId);
-                ScenesManager.Instance.DeleteCurrentCanvas(canvasMenuStudent);
-            }
-            
-            ScenesManager.Instance.LoadNewCanvas(canvasGeneralSessions);
+
             InitializeAtributes();
-            authFirebase.SignOut();            
+            authFirebase.SignOut();
            
                 //authFirebase = null;
             /*await userFirebase.DeleteAsync().ContinueWith(async task =>

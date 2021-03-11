@@ -17,7 +17,7 @@ public class MapManager : MonoBehaviour
     public GameObject mainCamera, mapCamera, arCamera, scriptStreet, scriptBuilding, plane;
     public GameObject buttonChangeMapNeos, backButtonInductor, backButtonStudent;
     float currentLatitude = 0, currentLongitude = 0;
-    string idInductor = "";
+    string idInductor = "", idStudent = "";
 
     void Awake()
     {
@@ -106,11 +106,15 @@ public class MapManager : MonoBehaviour
         if (AuthManager.Instance.GetUserType() == "student")
         {
             // Mapa
-            string idStudent = AuthManager.Instance.GetUserId();
-            await UsersManager.Instance.PutUserAsync("Students", idStudent, new Dictionary<string, object>{
-                {"latitude", currentLatitude},
-                {"longitude", currentLongitude}
-            });
+            if(idStudent == "")
+                idStudent = AuthManager.Instance.GetUserId();
+            else
+            {
+                await UsersManager.Instance.PutUserAsync("Students", idStudent, new Dictionary<string, object>{
+                    {"latitude", currentLatitude},
+                    {"longitude", currentLongitude}
+                });
+            }
         }
         else if(AuthManager.Instance.GetUserType() == "inductor")
         { 
