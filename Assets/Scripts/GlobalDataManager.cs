@@ -8,11 +8,11 @@ public class GlobalDataManager : MonoBehaviour
     public static GlobalDataManager Instance { get => instance; set => instance = value; }
 
     public string userType;
-    public int currentSizeRoom;
 
     [Header("INDUCTOR")]
     public string idUserInductor;
     public string idRoomByInductor;
+    public int currentSizeRoom;
 
     [Header("STUDENT")]
     public string idUserStudent;
