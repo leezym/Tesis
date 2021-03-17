@@ -20,9 +20,8 @@ public class RankingGroup : MonoBehaviour
 
     async void SearchScore()
     {
-        string idInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
-        string idRoom = await RoomsManager.Instance.GetRoomByInductor(idInductor);
-        object score = DataBaseManager.Instance.SearchAttribute("Rooms", idRoom, "score");
+        string idRoom = GlobalDataManager.Instance.idRoomByInductor;
+        object score = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom, "score");
         pointsGroupText.text = score.ToString();
     }
 }

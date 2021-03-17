@@ -29,35 +29,30 @@ public class AuthManager : MonoBehaviour
     public CanvasGroup canvasARMap;
     public InputField inputFieldDocument, inputFieldName;
     
-
-
-
     // UserData
-    [HideInInspector]
-    public string userType;
-    string idInductor;
     bool triviaInProgress;
     float currentLatitude = 0, currentLongitude = 0, newLatitude = -1, newLongitude = 1;
 
     public Dictionary<string, object> GetSnapshot() { return snapshot; }
     public void SetSnapshot(Dictionary<string, object> snapshot) { this.snapshot = snapshot; }
 
-    public void SetUserType(string userType) { this.userType = userType; }
-    public string GetUserType() { return userType; }
-
     private Dictionary<string, Inductor> inductorsData = new Dictionary<string, Inductor>();
 
-    public void Awake() 
+    void Awake() 
     {
         instance = this;
         InitializeFirebase();
+    }
+
+    void Start()
+    {
         InitializeAtributes();       
     }
 
     public void InitializeAtributes() 
     {
-        userType = "";
-        idInductor = "";
+        GlobalDataManager.Instance.userType = "";
+        GlobalDataManager.Instance.idInductorByStudent = "";
         triviaInProgress = false;
 
         inputFieldUser.text = "";
@@ -77,10 +72,11 @@ public class AuthManager : MonoBehaviour
         AuthStateChanged(this, null);
     }
 
-    async void Update()
+    void Update()
     {
         if (signedIn)
         {         
+            Debug.Log("Update signedIn");
             StartCoroutine(MapManager.Instance.Location());
             
             if(currentLatitude != newLatitude || currentLongitude != newLongitude)
@@ -90,11 +86,9 @@ public class AuthManager : MonoBehaviour
                 currentLongitude = newLongitude;
             }
 
-            if (GetUserType() == "student")
+            if (GlobalDataManager.Instance.userType == "student")
             {                
-                if(idInductor == "")
-                    idInductor = await UsersManager.Instance.GetInductorByStudent(GetUserId());
-                else
+                if(GlobalDataManager.Instance.idInductorByStudent != "")
                 {
                     // Cerrar la sesión si el inductor elimina la sala
                     LogOutStudent();
@@ -108,7 +102,7 @@ public class AuthManager : MonoBehaviour
 
     async void LogOutStudent()
     {
-        SetSnapshot(await UsersManager.Instance.GetUserAsync("Inductors", idInductor));
+        SetSnapshot(await UsersManager.Instance.GetUserAsync("Inductors", GlobalDataManager.Instance.idInductorByStudent));
 
         if (GetSnapshot() == null)
         {
@@ -120,7 +114,7 @@ public class AuthManager : MonoBehaviour
 
     void ShowTrivias()
     {
-        TriviasChallengesManager.Instance.ShowTriviasStudent(idInductor, triviaInProgress, canvasMenuStudent, canvasPuntuacionesStudent);
+        TriviasChallengesManager.Instance.ShowTriviasStudent(GlobalDataManager.Instance.idInductorByStudent, triviaInProgress, canvasMenuStudent, canvasPuntuacionesStudent);
     }
 
     public string GetUserId()
@@ -137,17 +131,18 @@ public class AuthManager : MonoBehaviour
     {
         if (authFirebase.CurrentUser != userFirebase)
         {
+            Debug.Log("authFirebase.CurrentUser != userFirebase");
             signedIn = userFirebase != authFirebase.CurrentUser && authFirebase.CurrentUser != null;
             if (!signedIn && userFirebase != null)
             {
-                Debug.Log("salir " + GetUserType());
+                Debug.Log("salir " + GlobalDataManager.Instance.userType);
                 ScenesManager.Instance.LoadNewCanvas(canvasGeneralSessions);
                 
-                if (GetUserType() == "inductor")
+                if (GlobalDataManager.Instance.userType == "inductor")
                 {
                     ScenesManager.Instance.DeleteCurrentCanvas(canvasMenuInductor);
                 }
-                else if (GetUserType() == "student")
+                else if (GlobalDataManager.Instance.userType == "student")
                 {
                     ScenesManager.Instance.DeleteCurrentCanvas(canvasMenuStudent);
                     ScenesManager.Instance.DeleteCurrentCanvas(canvasPuntuacionesStudent);
@@ -158,14 +153,14 @@ public class AuthManager : MonoBehaviour
             userFirebase = authFirebase.CurrentUser;
             if (signedIn)
             {
-                Debug.Log("inicio " + GetUserId());
-                if (GetUserType() == "inductor")
+                Debug.Log("inicio " + GlobalDataManager.Instance.userType);
+                if (GlobalDataManager.Instance.userType == "inductor")
                 {
                     ScenesManager.Instance.DeleteCurrentCanvas(canvasLoginInductor);
                     ScenesManager.Instance.LoadNewCanvas(canvasNombreInductor);
                     
                 }
-                else if (GetUserType() == "student")
+                else if (GlobalDataManager.Instance.userType == "student")
                 {
                     ScenesManager.Instance.DeleteCurrentCanvas(canvasLoginStudent);
                     ScenesManager.Instance.LoadNewCanvas(canvasMenuStudent);
@@ -198,7 +193,9 @@ public class AuthManager : MonoBehaviour
                 }
                 return;
             }
+            
             await UsersManager.Instance.PostNewInductor(AuthManager.Instance.GetUserId(), user);
+            GlobalDataManager.Instance.idUserInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
         });
     }
 
@@ -206,7 +203,6 @@ public class AuthManager : MonoBehaviour
     {
         string name = inputFieldName.text;
         string document = inputFieldDocument.text;
-        string idRoom = null;
 
         if(name != "" && document != "")
         {
@@ -214,8 +210,8 @@ public class AuthManager : MonoBehaviour
             {
                 if (!await DataBaseManager.Instance.IsEmptyTable("Rooms"))
                 {
-                    idRoom = await RoomsManager.Instance.GetAvailableRoom();
-                    if(idRoom != null)
+                    GlobalDataManager.Instance.idRoomByStudent = await RoomsManager.Instance.GetAvailableRoom();
+                    if(GlobalDataManager.Instance.idRoomByStudent != null)
                     {
                         await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task => {
                             if (task.IsFaulted)
@@ -228,10 +224,9 @@ public class AuthManager : MonoBehaviour
                                 }
                                 return;
                             }
-
-                            await UsersManager.Instance.PostNewStudent(userFirebase.UserId, name, document, idRoom);                            
-                            //SetSnapshot(await UsersManager.Instance.GetUserAsync("Students", userFirebase.UserId));
-
+                            await UsersManager.Instance.PostNewStudent(userFirebase.UserId, name, document, GlobalDataManager.Instance.idRoomByStudent);
+                            GlobalDataManager.Instance.idUserStudent = userFirebase.UserId;
+                            GlobalDataManager.Instance.idInductorByStudent = (await DataBaseManager.Instance.SearchAttribute("Rooms", GlobalDataManager.Instance.idRoomByStudent, "idInductor")).ToString();
                         });
                     }else{
                         NotificationsManager.Instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");
@@ -258,10 +253,10 @@ public class AuthManager : MonoBehaviour
         userFirebase = authFirebase.CurrentUser;
         if (userFirebase != null)
         {            
-            if (GetUserType() == "inductor")
-                await UsersManager.Instance.DeleteSession(userFirebase.UserId);
-            else if (GetUserType() == "student")
-                await RoomsManager.Instance.DeleteStudentInRoom(userFirebase.UserId);
+            if (GlobalDataManager.Instance.userType == "inductor")
+                await UsersManager.Instance.DeleteSession();
+            else if (GlobalDataManager.Instance.userType == "student")
+                await RoomsManager.Instance.DeleteStudentInRoom();
 
             InitializeAtributes();
             authFirebase.SignOut();

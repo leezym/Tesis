@@ -10,7 +10,6 @@ using UnityEngine.UIElements;
 public class ListNeos : MonoBehaviour
 {
     public Text content;
-    private string idInductor;
     public Canvas canvasMyGroup;
     List<string> NeoJaverianos = new List<string>();
     int currentSizeStudents = 0, newSizeStudents = 0;
@@ -25,12 +24,9 @@ public class ListNeos : MonoBehaviour
 
     async Task DetectStudent()
     {
-        if (idInductor == null){
-            idInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
-            currentSizeStudents = await GroupManager.Instance.SearchCurrentSizeRoom(idInductor);
-        }
+        currentSizeStudents = GlobalDataManager.Instance.currentSizeRoom;
 
-        NeoJaverianos = await GroupManager.Instance.ListNameStudents(idInductor);
+        NeoJaverianos = await GroupManager.Instance.ListNameStudents(GlobalDataManager.Instance.idUserInductor);
         newSizeStudents = NeoJaverianos.Count;
 
         if (currentSizeStudents != newSizeStudents)

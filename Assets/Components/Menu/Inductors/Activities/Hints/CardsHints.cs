@@ -12,23 +12,16 @@ public class CardsHints : MonoBehaviour
     public Sprite[] backgroundCardHint, backgroundCircleCardHint;
     List<Dictionary<string,object>> hintsList = new List<Dictionary<string,object>>();
     List<GameObject> currentHints = new List<GameObject>();
-    int currentSizeHints = 0, newSizeHints = 0;
-    string idRoom = "";
 
     public GameObject hintsScrollbar;
     public Transform contentCards;
     float scrollPos = 0;
     float[] pos;
 
-    async void Update()
+    void Update()
     {
         if (canvasActHint.enabled)
-        {
-            await SearchHint();
             CardAnimation();
-        }
-        else
-            currentSizeHints = 0;
     }
 
     void ClearCurrentHints()
@@ -41,80 +34,72 @@ public class CardsHints : MonoBehaviour
         currentHints.Clear();
     }
 
-    async Task SearchHint()
+    public async void  SearchHint()
     {
-        if (idRoom == "")
-            idRoom = await RoomsManager.Instance.GetRoomByInductor(await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId()));
-
-        hintsList = await HintsChallengesManager.Instance.GetHintChallengeByRoom(idRoom);
-        newSizeHints = hintsList.Count;
+        hintsList = await HintsChallengesManager.Instance.GetHintChallengeByRoom(GlobalDataManager.Instance.idRoomByInductor);
         int backgroundCount = 0;
 
-        if (currentSizeHints != newSizeHints)
+        ClearCurrentHints();
+        foreach(Dictionary<string,object> hint in hintsList)
         {
-            ClearCurrentHints();
-            foreach(Dictionary<string,object> hint in hintsList)
+            // Reinicar contador de background
+            if (backgroundCount == backgroundCardHint.Length)
+                backgroundCount = 0;
+
+            // Instanciar prefab
+            GameObject hintElement = Instantiate (hintCardPrefab, new Vector3(contentCards.position.x,contentCards.position.y, contentCards.position.z) , Quaternion.identity);
+            hintElement.transform.parent = contentCards.transform;
+            
+            // Editar background
+            hintElement.GetComponent<Image>().sprite = backgroundCardHint[backgroundCount];
+            hintElement.transform.Find("PositionCircle").GetComponent<Image>().sprite = backgroundCircleCardHint[backgroundCount];
+            backgroundCount ++;
+
+            foreach(KeyValuePair<string,object> pair in hint)
             {
-                // Reinicar contador de background
-                if (backgroundCount == backgroundCardHint.Length)
-                    backgroundCount = 0;
-
-                // Instanciar prefab
-                GameObject hintElement = Instantiate (hintCardPrefab, new Vector3(contentCards.position.x,contentCards.position.y, contentCards.position.z) , Quaternion.identity);
-                hintElement.transform.parent = contentCards.transform;
-                
-                // Editar background
-                hintElement.GetComponent<Image>().sprite = backgroundCardHint[backgroundCount];
-                hintElement.transform.Find("PositionCircle").GetComponent<Image>().sprite = backgroundCircleCardHint[backgroundCount];
-                backgroundCount ++;
-
-                foreach(KeyValuePair<string,object> pair in hint)
+                //Editar text
+                if(pair.Key == "name"){                       
+                    
+                    Text hintNameLabel = hintElement.transform.Find("HintNameLabel").GetComponent<Text>();
+                    hintNameLabel.text = pair.Value.ToString();                        
+                }
+                if (pair.Key == "answer"){
+                    Text hintAnswerLabel = hintElement.transform.Find("HintAnswerLabel").GetComponent<Text>();
+                    hintAnswerLabel.text = pair.Value.ToString();  
+                }
+                if(pair.Key == "hour")
                 {
-                    //Editar text
-                    if(pair.Key == "name"){                       
-                        
-                        Text hintNameLabel = hintElement.transform.Find("HintNameLabel").GetComponent<Text>();
-                        hintNameLabel.text = pair.Value.ToString();                        
-                    }
-                    if (pair.Key == "answer"){
-                        Text hintAnswerLabel = hintElement.transform.Find("HintAnswerLabel").GetComponent<Text>();
-                        hintAnswerLabel.text = pair.Value.ToString();  
-                    }
-                    if(pair.Key == "hour")
+                    Text hintTimeLabel = hintElement.transform.Find("HintTimeLabel").GetComponent<Text>();
+                    hintTimeLabel.text = pair.Value.ToString();
+                    if(pair.Value.ToString() != "")
                     {
-                        Text hintTimeLabel = hintElement.transform.Find("HintTimeLabel").GetComponent<Text>();
-                        hintTimeLabel.text = pair.Value.ToString();
-                        if(pair.Value.ToString() != "")
-                        {
-                            hintElement.transform.Find("FinishButton").GetComponent<Button>().interactable = false;
-                            hintElement.transform.Find("HintScoreInput").GetComponent<InputField>().interactable = false;
-                            hintElement.transform.Find("HintPositionNumberInput").GetComponent<InputField>().interactable = false;
-                        }       
-                        else
-                        {
-                            hintElement.transform.Find("FinishButton").GetComponent<Button>().interactable = true;
-                            hintElement.transform.Find("HintScoreInput").GetComponent<InputField>().interactable = true;
-                            hintElement.transform.Find("HintPositionNumberInput").GetComponent<InputField>().interactable = true;
-                        }
+                        hintElement.transform.Find("FinishButton").GetComponent<Button>().interactable = false;
+                        hintElement.transform.Find("HintScoreInput").GetComponent<InputField>().interactable = false;
+                        hintElement.transform.Find("HintPositionNumberInput").GetComponent<InputField>().interactable = false;
+                    }       
+                    else
+                    {
+                        hintElement.transform.Find("FinishButton").GetComponent<Button>().interactable = true;
+                        hintElement.transform.Find("HintScoreInput").GetComponent<InputField>().interactable = true;
+                        hintElement.transform.Find("HintPositionNumberInput").GetComponent<InputField>().interactable = true;
+                    }
 
-                    }
-                    if(pair.Key == "score" && Convert.ToInt32(pair.Value) != 0)
-                    {
-                        InputField hintScoreInput = hintElement.transform.Find("HintScoreInput").GetComponent<InputField>();
-                        hintScoreInput.text = pair.Value.ToString();
-                    }
-                    if(pair.Key == "position" && Convert.ToInt32(pair.Value) != 0)
-                    {
-                        InputField hintPositionNumberInput = hintElement.transform.Find("HintPositionNumberInput").GetComponent<InputField>();
-                        hintPositionNumberInput.text = pair.Value.ToString();
-                    }
-                }   
+                }
+                if(pair.Key == "score" && Convert.ToInt32(pair.Value) != 0)
+                {
+                    InputField hintScoreInput = hintElement.transform.Find("HintScoreInput").GetComponent<InputField>();
+                    hintScoreInput.text = pair.Value.ToString();
+                }
+                if(pair.Key == "position" && Convert.ToInt32(pair.Value) != 0)
+                {
+                    InputField hintPositionNumberInput = hintElement.transform.Find("HintPositionNumberInput").GetComponent<InputField>();
+                    hintPositionNumberInput.text = pair.Value.ToString();
+                }
+            }   
 
-                // Añadir a Lista
-                currentHints.Add(hintElement);
-            }
-            currentSizeHints = newSizeHints;
-        }       
+            // Añadir a Lista
+            currentHints.Add(hintElement);
+        }     
     }
 
     void CardAnimation() 

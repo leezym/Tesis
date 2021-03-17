@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class EditGroup : MonoBehaviour
 { 
-    private int roomCurrentSize;
+    [Header("NDUCTOR")]
     public Text groupNameLabel, inductorNameLabel;
     public Canvas canvasMyGroup, canvasEditGroup, canvasNombreInductor, canvasMenuInductor;
     public InputField inputRoomSize, inputInductorName;
@@ -60,26 +60,13 @@ public class EditGroup : MonoBehaviour
                     inputRoomSize.text = pair.Value.ToString();
                     newInputRoomSize.text = pair.Value.ToString();
                 }
-                else if (pair.Key == "currentsize")
-                {
-                    roomCurrentSize = Convert.ToInt32(pair.Value);
-                }
             }
         }
     }
 
     async void ShowInductorData()
     {
-        Dictionary<string,object> datosInductor = await GroupManager.Instance.GetInductorDataAsync(inductorNameLabel);
-        if (datosInductor != null){
-            foreach(KeyValuePair<string, object> pair in datosInductor)
-            {
-                if (pair.Key == "name")
-                {
-                    inductorNameLabel.text = pair.Value.ToString();
-                }
-            }
-        }
+        inductorNameLabel.text = (await DataBaseManager.Instance.SearchAttribute("Inductor", GlobalDataManager.Instance.idUserInductor, "name")).ToString();
     }
 
     public bool CheckNewData()
@@ -96,13 +83,12 @@ public class EditGroup : MonoBehaviour
     {
         if (CheckNewData())
         {
-            string idInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
-
-            await UsersManager.Instance.PutUserAsync("Inductors", idInductor, new Dictionary<string, object>{
+            await UsersManager.Instance.PutUserAsync("Inductors", GlobalDataManager.Instance.idUserInductor, new Dictionary<string, object>{
                 {"name", inputInductorName.text}
             });
-            await RoomsManager.Instance.PostNewRoom("Grupo de " + inputInductorName.text, Convert.ToInt32(inputRoomSize.text), idInductor);
-            
+            await RoomsManager.Instance.PostNewRoom("Grupo de " + inputInductorName.text, Convert.ToInt32(inputRoomSize.text), GlobalDataManager.Instance.idUserInductor);
+            GlobalDataManager.Instance.idRoomByInductor = await DataBaseManager.Instance.SearchId("Rooms", "room", "Grupo de " + inputInductorName.text);
+
             ScenesManager.Instance.DeleteCurrentCanvas(canvasNombreInductor);
             ScenesManager.Instance.LoadNewCanvas(canvasMenuInductor);
 
@@ -115,18 +101,15 @@ public class EditGroup : MonoBehaviour
 
     public async void SendNewRoomInfo()
     {
-        if (Convert.ToInt32(newInputRoomSize.text) >= roomCurrentSize)
+        if (Convert.ToInt32(newInputRoomSize.text) >= GlobalDataManager.Instance.currentSizeRoom)
         {
-            string inductorId = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
-            string roomId = await RoomsManager.Instance.GetRoomByInductor(inductorId);
-
             Dictionary<string, object> newRoomData = new Dictionary<string, object>
             {
                 { "size" , Convert.ToInt32(newInputRoomSize.text)},
                 { "room" , newInputRoomName.text}
             };
 
-            await RoomsManager.Instance.PutRoomAsync(roomId, newRoomData);
+            await RoomsManager.Instance.PutRoomAsync(GlobalDataManager.Instance.idRoomByInductor, newRoomData);
             NotificationsManager.Instance.SetSuccessNotificationMessage("El grupo "+newInputRoomName.text+" fue editado.");
         }
         else
@@ -137,9 +120,7 @@ public class EditGroup : MonoBehaviour
 
     public async void FinishedGroup()
     {
-        string idInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
-        string idRoom = await DataBaseManager.Instance.GetRoomByInductor(idInductor);
-        await RoomsManager.Instance.PutRoomAsync(idRoom, new Dictionary<string, object>{
+        await RoomsManager.Instance.PutRoomAsync(GlobalDataManager.Instance.idRoomByInductor, new Dictionary<string, object>{
             {"finished", true}
         });  
     }

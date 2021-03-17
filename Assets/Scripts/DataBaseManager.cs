@@ -242,12 +242,11 @@ public class DataBaseManager : MonoBehaviour
         else return false;
     }
 
-    public async Task<List<Coords>> GetMyInductorLocation(string idStudent)
+    public async Task<List<Coords>> GetMyInductorLocation()
     {
         float latitude = 0, longitude = 0;
-        List<Coords> coordsList = new List<Coords>();
-        string idInductor = await UsersManager.Instance.GetInductorByStudent(idStudent);        
-        Dictionary<string, object> location = await SearchById("Inductors", idInductor);
+        List<Coords> coordsList = new List<Coords>();    
+        Dictionary<string, object> location = await SearchById("Inductors", GlobalDataManager.Instance.idInductorByStudent);
         foreach (KeyValuePair<string, object> pair in location)
         {
             if(pair.Key == "latitude")
@@ -259,14 +258,14 @@ public class DataBaseManager : MonoBehaviour
         return coordsList;
     }
 
-    public async Task<List<Coords>> GetOthersInductorsLocation(string idInductor)
+    public async Task<List<Coords>> GetOthersInductorsLocation()
     {
         float latitude = 0, longitude = 0;  
         List<Coords> coordsList = new List<Coords>();    
         List<DocumentSnapshot> locationList = await SearchByCollection("Inductors");
         foreach(DocumentSnapshot location in locationList)
         {
-            if (location.Id != idInductor)
+            if (location.Id != GlobalDataManager.Instance.idUserInductor)
             {
                 foreach (KeyValuePair<string, object> pair in location.ToDictionary())
                 {
@@ -289,32 +288,25 @@ public class DataBaseManager : MonoBehaviour
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
         {
             Dictionary<string, object> data = documentSnapshot.ToDictionary();
-            int size = 0, currentSize = 0;
+            int size = 0;
             foreach (KeyValuePair<string, object> pair in data)
             {
                 if (pair.Key == "size")
                 {
                     size = Convert.ToInt32(pair.Value);
                 }
-                else if (pair.Key == "currentSize") 
-                {
-                    currentSize = Convert.ToInt32(pair.Value);
-                }
             }
 
-            if (currentSize < size) 
+            if (GlobalDataManager.Instance.currentSizeRoom < size)
             {
-                await reference.Collection(dbRoom).Document(documentSnapshot.Id).UpdateAsync(new Dictionary<string, object>
-                {
-                    { "currentSize", currentSize+1 }
-                });
+                GlobalDataManager.Instance.currentSizeRoom++;
                 return documentSnapshot.Id;
             }
         }
         return null;
     }
     
-    public async Task<string> GetRoomByInductor(string idInductor)
+    /*public async Task<string> GetRoomByInductor(string idInductor)
     {
         Query RoomMembersQuery = reference.Collection("Rooms").WhereEqualTo("idInductor", idInductor);
         QuerySnapshot RoomMembersQuerySnapshot = await RoomMembersQuery.GetSnapshotAsync();
@@ -323,13 +315,13 @@ public class DataBaseManager : MonoBehaviour
             return documentSnapshotRooms.Id;
         }
         return null;
-    }  
+    }  */
 
     public async Task<Dictionary<string, object>> ListStudentsByGroup(string db, string idInductor)
     {  
-        string RoomId = await GetRoomByInductor(idInductor);        
+        string idRoom = GlobalDataManager.Instance.idRoomByInductor;      
 
-        Query MembersQuery = reference.Collection(db).WhereEqualTo("idRoom", RoomId);
+        Query MembersQuery = reference.Collection(db).WhereEqualTo("idRoom", idRoom);
         QuerySnapshot MembersQuerySnapshot = await MembersQuery.GetSnapshotAsync();
         
         foreach (DocumentSnapshot documentSnapshotMembers in MembersQuerySnapshot.Documents)
@@ -387,22 +379,18 @@ public class DataBaseManager : MonoBehaviour
         return dataTrivias;
     }
 
-    public async Task DeleteSession(string idInductor)
+    public async Task DeleteSession()
     {
+        string idInductor = GlobalDataManager.Instance.idUserInductor;
+        string idRoom = GlobalDataManager.Instance.idRoomByInductor;
+
         // Eliminar inductor
         DocumentReference docRefInductor = reference.Collection("Inductors").Document(idInductor);
         await docRefInductor.DeleteAsync();
 
         // Eliminar sala
-        Query queryValue = reference.Collection("Rooms").WhereEqualTo("idInductor", idInductor);
-        QuerySnapshot querySnapshotRoom = await queryValue.GetSnapshotAsync();
-        string idRoom = "";
-        foreach (DocumentSnapshot documentSnapshot in querySnapshotRoom.Documents)
-        {
-            idRoom = documentSnapshot.Id;
-            DocumentReference docRefRoom = documentSnapshot.Reference;
-            await docRefRoom.DeleteAsync();
-        }
+        DocumentReference docRefRoom = reference.Collection("Rooms").Document(idRoom);
+        await docRefRoom.DeleteAsync();
 
         // Eliminar estudiantes de la sala
         Query queryCol = reference.Collection("Students").WhereEqualTo("idRoom", idRoom);
@@ -415,30 +403,13 @@ public class DataBaseManager : MonoBehaviour
         }
     }
 
-    public async Task DeleteStudentInRoom(string idStudent)
+    public async Task DeleteStudentInRoom()
     {
-        Dictionary<string, object> data = await SearchById("Students", idStudent);
-        string idRoom = "";
-        if (data != null)
-        {
-            foreach (KeyValuePair<string, object> pair in data)
-            {
-                if(pair.Key == "idRoom")      
-                    idRoom = pair.Value.ToString();    
-            }
-        }
+        string idStudent = GlobalDataManager.Instance.idUserStudent;
 
         DocumentReference docRef = reference.Collection("Students").Document(idStudent);
         await docRef.DeleteAsync();
 
-        data = await SearchById("Rooms", idRoom);
-        foreach (KeyValuePair<string, object> pair in data)
-        {
-            if(pair.Key == "currentSize")
-                await reference.Collection("Rooms").Document(idRoom).UpdateAsync(new Dictionary<string, object>
-                {
-                    { "currentSize", Convert.ToInt32(pair.Value)-1 }
-                });
-        }
+        GlobalDataManager.Instance.currentSizeRoom--;
     }
 }

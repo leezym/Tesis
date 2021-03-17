@@ -88,7 +88,7 @@ public class LoadingScreenManager : MonoBehaviour
             canvasInductorLoading.enabled = false;
             await TriviasChallengesManager.Instance.PutInductorTriviaChallengeAsync
             (
-                await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId()), 
+                GlobalDataManager.Instance.idUserInductor, 
                 idBuilding,
                 new Dictionary<string, object> () {
                     { "available", false }

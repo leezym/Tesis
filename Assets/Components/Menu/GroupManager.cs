@@ -9,6 +9,7 @@ using UnityEngine.UIElements;
 
 public class GroupManager : MonoBehaviour
 {
+    [Header ("INDUCTOR")]
     public static GroupManager instance;
     public static GroupManager Instance { get => instance; set => instance = value; }
 
@@ -34,34 +35,22 @@ public class GroupManager : MonoBehaviour
         return Estudiantes;
     }
 
-    public async Task<int> SearchCurrentSizeRoom(string idInductor)
-    {
-        string idRoom = await RoomsManager.Instance.GetRoomByInductor(idInductor);
-        Dictionary<string, object> data = await DataBaseManager.Instance.SearchById("Rooms", idRoom);
-        foreach (KeyValuePair<string, object> pair in data)
-        {
-            if (pair.Key == "currentSize")
-                return Convert.ToInt32(pair.Value);
-        }
-        return 0;
-    }
-
     public async Task<Dictionary<string,object>> GetRoomDataAsync()
     {
-        string roomId = await RoomsManager.Instance.GetRoomByInductor(await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId()));
-        return await RoomsManager.Instance.GetRoomAsync(roomId);
+        return await RoomsManager.Instance.GetRoomAsync(GlobalDataManager.Instance.idRoomByInductor);
     }
 
     public async Task<Dictionary<string,object>> GetInductorDataAsync(Text inductorNameLabel)
     {
-        return await UsersManager.Instance.GetUserAsync("Inductors", await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId()));        
+        return await UsersManager.Instance.GetUserAsync("Inductors", GlobalDataManager.Instance.idUserInductor);        
     }
 
     public async Task<List<Dictionary<string, string>>> GetOtherGroupsDataAsync()
     {
-        string nameInductor = "", nameRoom  = "", idInductor = "";
+        string nameRoom  = "";
         List<Dictionary<string, string>> Salas = new List<Dictionary<string, string>>();
         List<DocumentSnapshot> rooms = await DataBaseManager.Instance.SearchByCollection("Rooms");
+        
         foreach (DocumentSnapshot room in rooms)
         {
             foreach (KeyValuePair<string, object> pairRoom in room.ToDictionary())
@@ -70,30 +59,13 @@ public class GroupManager : MonoBehaviour
                 {
                     nameRoom = pairRoom.Value.ToString();
                 }
-                else if (pairRoom.Key == "idInductor")
-                {
-                    idInductor = pairRoom.Value.ToString();
-                    Dictionary<string, object> inductor = await UsersManager.Instance.GetUserAsync("Inductors", idInductor);
-                    if (inductor != null)
-                    {
-                        foreach (KeyValuePair<string, object> pairInductor in inductor)
-                        {   
-                            if (pairInductor.Key == "name")
-                            {
-                                nameInductor = pairInductor.Value.ToString();
-                            }
-                        }
-                    }
-                }
             }
 
-            if (idInductor != await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId()))
-            {
-                Salas.Add(new Dictionary<string, string> () {
-                    {"nameInductor", nameInductor},
-                    {"nameRoom", nameRoom}
-                });
-            }
+            string nameInductor = (await DataBaseManager.Instance.SearchAttribute("Inductors", GlobalDataManager.Instance.idUserInductor, "name")).ToString();
+            Salas.Add(new Dictionary<string, string> () {
+                {"nameInductor", nameInductor},
+                {"nameRoom", nameRoom}
+            });
         }        
         return Salas;
     }

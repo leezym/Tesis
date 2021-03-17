@@ -52,7 +52,7 @@ public class TriviaElement : MonoBehaviour
         idBuilding = await DataBaseManager.Instance.SearchId("Buildings", "name", buildingName);
         
 
-        await TriviasChallengesManager.Instance.PostNewInductorTriviaChallenge(await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId()), idBuilding, true);
+        await TriviasChallengesManager.Instance.PostNewInductorTriviaChallenge(GlobalDataManager.Instance.idUserInductor, idBuilding, true);
         ScenesManager.Instance.LoadNewCanvas(LoadingScreenManager.Instance.canvasInductorLoading);
         
         LoadingScreenManager.Instance.SetTimeInductorLoading(timeQuestions);

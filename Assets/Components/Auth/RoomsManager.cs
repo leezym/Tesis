@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 public class RoomsManager : MonoBehaviour
 {
-    public static RoomsManager instance;
+    private static RoomsManager instance;
     public static RoomsManager Instance { get => instance; set => instance = value; }
 
     public void Awake()
@@ -35,20 +35,14 @@ public class RoomsManager : MonoBehaviour
         return await DataBaseManager.Instance.GetAvailableRoom("Rooms");
     }
 
-    public async Task<string> GetRoomByInductor(string idInductor)
-    {
-        return await DataBaseManager.Instance.GetRoomByInductor(idInductor);
-
-    }
-
     public async Task<List<Dictionary<string, object>>> GetRoomsByOrderOfScore()
     {
         return await DataBaseManager.Instance.SearchByOrderDescending("Rooms", "score");
     }
 
-    public async Task DeleteStudentInRoom(string idStudent)
+    public async Task DeleteStudentInRoom()
     {
-        await DataBaseManager.Instance.DeleteStudentInRoom(idStudent);
+        await DataBaseManager.Instance.DeleteStudentInRoom();
     }
 }
 
@@ -56,7 +50,6 @@ public class Room
 {
     public string room;
     public int size;
-    public int currentSize;
     public int score = 0;
     public bool finished = false;
     public string idInductor;
@@ -67,7 +60,6 @@ public class Room
     {
         this.room = room;
         this.size = size;
-        this.currentSize = 0;
         this.idInductor = idInductor;
     }
 
@@ -78,7 +70,6 @@ public class Room
         return new Dictionary<string, object>() {
             { "room", this.room },
             { "size", this.size },
-            { "currentSize", this.currentSize },
             { "score", this.score},
             { "finished", this.finished},
             { "idInductor", this.idInductor }

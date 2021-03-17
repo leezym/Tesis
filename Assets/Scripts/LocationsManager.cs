@@ -19,13 +19,11 @@ public class LocationsManager : MonoBehaviour
         List<Coords> coordsList = new List<Coords>();
         if(userType == "inductor")
         {
-            string idInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
-            coordsList = await DataBaseManager.Instance.GetOthersInductorsLocation(idInductor);
+            coordsList = await DataBaseManager.Instance.GetOthersInductorsLocation();
         }
         else if (userType == "student")
         {
-            string idStudent = AuthManager.Instance.GetUserId();
-            coordsList = await DataBaseManager.Instance.GetMyInductorLocation(idStudent);
+            coordsList = await DataBaseManager.Instance.GetMyInductorLocation();
         }
         
         return coordsList;

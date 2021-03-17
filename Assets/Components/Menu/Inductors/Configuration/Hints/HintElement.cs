@@ -50,13 +50,12 @@ public class HintElement : MonoBehaviour
         
 
         // Crear la pista con puntuaciones
-        string idRoom = await RoomsManager.Instance.GetRoomByInductor(await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId()));
         string idHint = await HintsManager.Instance.GetIdHintByName(hintName);
-        await HintsChallengesManager.Instance.PostNewHintChallenge(idRoom, idHint, Convert.ToInt32(score), Convert.ToInt32(position), hour);
+        await HintsChallengesManager.Instance.PostNewHintChallenge(GlobalDataManager.Instance.idRoomByInductor, idHint, Convert.ToInt32(score), Convert.ToInt32(position), hour);
 
         // Asignar puntuaciones totales a la sala
-        object currentRoomScore = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom, "score");
-        await RoomsManager.Instance.PutRoomAsync(idRoom, new Dictionary<string, object> {
+        object currentRoomScore = await DataBaseManager.Instance.SearchAttribute("Rooms", GlobalDataManager.Instance.idRoomByInductor, "score");
+        await RoomsManager.Instance.PutRoomAsync(GlobalDataManager.Instance.idRoomByInductor, new Dictionary<string, object> {
             {"score", Convert.ToInt32(currentRoomScore) + score}
         });
         

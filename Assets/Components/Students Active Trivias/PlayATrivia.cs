@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 public class PlayATrivia : MonoBehaviour
 {
+    [Header ("STUDENT")]
     public Canvas canvasPodiumStudent;
     public Button[] answerButtons;
     public Text question, finalScore;
     public Sprite wrongAnswer, rightAnswer;
     public GameObject[] placeLabels;
-    string idStudent = "";
 
     public async void DetectAnswer(Button button)
     {
@@ -42,16 +42,14 @@ public class PlayATrivia : MonoBehaviour
 
     async void RegisterPoints(string idTrivia)
     {
-        idStudent = AuthManager.Instance.GetUserId();
-
         // Crear trivia resuelta
         object points = await DataBaseManager.Instance.SearchAttribute("Trivias", idTrivia, "points");
-        await TriviasChallengesManager.Instance.PostNewStudentTriviaChallenge(idStudent, idTrivia, Convert.ToInt32(points));
+        await TriviasChallengesManager.Instance.PostNewStudentTriviaChallenge(GlobalDataManager.Instance.idUserStudent, idTrivia, Convert.ToInt32(points));
         
         // Asignar puntuaciones totales al estudiante
-        object currentScore = await DataBaseManager.Instance.SearchAttribute("Students", idStudent, "score");
+        object currentScore = await DataBaseManager.Instance.SearchAttribute("Students", GlobalDataManager.Instance.idUserStudent, "score");
         int score = Convert.ToInt32(currentScore) + Convert.ToInt32(points);
-        await UsersManager.Instance.PutUserAsync("Students", idStudent, new Dictionary<string, object>{
+        await UsersManager.Instance.PutUserAsync("Students", GlobalDataManager.Instance.idUserStudent, new Dictionary<string, object>{
             {"score", score}
         });
 
@@ -69,8 +67,7 @@ public class PlayATrivia : MonoBehaviour
 
     public async void ShowFinalRanking()
     {
-        object idRoom = await DataBaseManager.Instance.SearchAttribute("Students", idStudent, "idRoom");
-        List<Dictionary<string, object>> rankingList = await UsersManager.Instance.GetFinalTriviasRanking(idRoom.ToString());
+        List<Dictionary<string, object>> rankingList = await UsersManager.Instance.GetFinalTriviasRanking(GlobalDataManager.Instance.idRoomByStudent);
         foreach(Dictionary<string, object> ranking in rankingList)
         {
             foreach(KeyValuePair<string, object> pair in ranking)

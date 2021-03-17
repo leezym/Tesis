@@ -12,6 +12,7 @@ public class ListGroupRanking : MonoBehaviour
     public Text textMyGroupRanking, textMyGroupScore;
     List<GameObject> currentGroups = new List<GameObject>();
     int count = 1;
+    string nameRoom;
 
     public void Refresh()
     {
@@ -31,11 +32,14 @@ public class ListGroupRanking : MonoBehaviour
     async void SearchPosition()
     {
         List<Dictionary<string, object>> groupsList = await RoomsManager.Instance.GetRoomsByOrderOfScore();
-        object idRoom = await DataBaseManager.Instance.SearchAttribute("Students", AuthManager.Instance.GetUserId(), "idRoom");
-        object myGroupScore = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom.ToString(), "score");
-        object nameRoom = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom.ToString(), "room");
+        Dictionary<string, object> data = await RoomsManager.Instance.GetRoomAsync(GlobalDataManager.Instance.idRoomByStudent);
 
-        textMyGroupScore.text = myGroupScore.ToString();
+        foreach(KeyValuePair<string, object> pair in data){
+            if(pair.Key == "score")
+                textMyGroupScore.text = pair.Value.ToString();
+            if(pair.Key == "room")
+                nameRoom = pair.Value.ToString();
+        }
 
         ClearCurrentGroups();
         count = 1;
@@ -55,7 +59,7 @@ public class ListGroupRanking : MonoBehaviour
                 {
                     groupElement.transform.Find("NameLabel").GetComponent<Text>().text = pair.Value.ToString();
                     
-                    if (pair.Value.ToString() == nameRoom.ToString())
+                    if (pair.Value.ToString() == nameRoom)
                     {
                         textMyGroupRanking.text = count.ToString();
                     }

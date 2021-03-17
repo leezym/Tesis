@@ -6,32 +6,21 @@ using UnityEngine.UI;
 
 public class MyProfile : MonoBehaviour
 {
+    [Header ("STUDENT")]
     public Canvas canvasPuntuaciones, canvasMyProfile;
     public Text textGroupName, textInductorName, content;
     List<string> NeoJaverianos = new List<string>();
-    object idRoom, idInductor;
 
-    public async void Refresh()
+    public void Refresh()
     {
-        if (idRoom == null)
-        {
-            idRoom = await DataBaseManager.Instance.SearchAttribute("Students", AuthManager.Instance.GetUserId(), "idRoom");
-            if (idInductor == null)
-            {
-                idInductor = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom.ToString(), "idInductor");
-            }
-        }
-
-        if (idRoom != null && idInductor != null)
-                SearchGroupData();
-        if (idInductor != null)
-            SearchStudents();
+        SearchGroupData();
+        SearchStudents();
     }
 
     async void SearchGroupData()
     {
-        object roomName = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom.ToString(), "room");
-        object inductorName = await DataBaseManager.Instance.SearchAttribute("Inductors", idInductor.ToString(), "name");
+        object roomName = await DataBaseManager.Instance.SearchAttribute("Rooms", GlobalDataManager.Instance.idRoomByStudent, "room");
+        object inductorName = await DataBaseManager.Instance.SearchAttribute("Inductors", GlobalDataManager.Instance.idInductorByStudent, "name");
 
         if(roomName != null)
             textGroupName.text = roomName.ToString();
@@ -41,7 +30,7 @@ public class MyProfile : MonoBehaviour
 
     async void SearchStudents()
     {
-        NeoJaverianos = await GroupManager.Instance.ListNameStudents(idInductor.ToString());
+        NeoJaverianos = await GroupManager.Instance.ListNameStudents(GlobalDataManager.Instance.idUserInductor);
         content.text = "";
         foreach(string name in NeoJaverianos)
         {

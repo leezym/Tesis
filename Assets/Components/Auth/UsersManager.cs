@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class UsersManager : MonoBehaviour
 {
-    public static UsersManager instance;
+    private static UsersManager instance;
     public static UsersManager Instance { get => instance; set => instance = value; }
 
     public void Awake()
@@ -51,13 +51,6 @@ public class UsersManager : MonoBehaviour
         return await DataBaseManager.Instance.SearchByOrderDescendingAndLimit("Students", "score", 3, "idRoom", idRoom);
     }
 
-    public async Task<string> GetInductorByStudent(string idStudent)
-    {
-        object idRoom = await DataBaseManager.Instance.SearchAttribute("Students", idStudent, "idRoom");
-        object idInductor = await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom.ToString(), "idInductor");
-        return idInductor.ToString();
-    }
-
     public async Task<bool> ExistUserByDocument(string db, string document)
     {
         List<Dictionary<string, object>> data = await DataBaseManager.Instance.SearchByAttribute(db, "document", document);
@@ -73,10 +66,9 @@ public class UsersManager : MonoBehaviour
         await DataBaseManager.Instance.DeleteAsync(db, userId);
     }  */
 
-    public async Task DeleteSession(string idAuth) 
+    public async Task DeleteSession() 
     {
-        string idInductor = await GetInductorIdByAuth(idAuth);
-        await DataBaseManager.Instance.DeleteSession(idInductor);
+        await DataBaseManager.Instance.DeleteSession();
     }
 }
 

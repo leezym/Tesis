@@ -17,7 +17,6 @@ public class MapManager : MonoBehaviour
     public GameObject mainCamera, mapCamera, arCamera, scriptStreet, scriptBuilding, plane;
     public GameObject buttonChangeMapNeos, backButtonInductor, backButtonStudent;
     float currentLatitude = 0, currentLongitude = 0;
-    string idInductor = "", idStudent = "";
 
     void Awake()
     {
@@ -76,7 +75,7 @@ public class MapManager : MonoBehaviour
     {
         SetMap();
         
-        if(AuthManager.Instance.GetUserType() == "student"){
+        if(GlobalDataManager.Instance.userType == "student"){
             SetChangeMapButtonActive();
         }else{
             SetChangeMapButtonNotActive();
@@ -103,27 +102,23 @@ public class MapManager : MonoBehaviour
 
     public async void PutLocation()
     {
-        if (AuthManager.Instance.GetUserType() == "student")
+        if (GlobalDataManager.Instance.userType == "student")
         {
             // Mapa
-            if(idStudent == "")
-                idStudent = AuthManager.Instance.GetUserId();
-            else
+            if (GlobalDataManager.Instance.idUserStudent != "")
             {
-                await UsersManager.Instance.PutUserAsync("Students", idStudent, new Dictionary<string, object>{
+                await UsersManager.Instance.PutUserAsync("Students", GlobalDataManager.Instance.idUserStudent, new Dictionary<string, object>{
                     {"latitude", currentLatitude},
                     {"longitude", currentLongitude}
                 });
             }
         }
-        else if(AuthManager.Instance.GetUserType() == "inductor")
+        else if(GlobalDataManager.Instance.userType == "inductor")
         { 
             // Mapa
-            if(idInductor == "")
-                idInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
-            else
+            if(GlobalDataManager.Instance.idUserInductor != "")
             {
-                await UsersManager.Instance.PutUserAsync("Inductors", idInductor, new Dictionary<string, object>{
+                await UsersManager.Instance.PutUserAsync("Inductors", GlobalDataManager.Instance.idUserInductor, new Dictionary<string, object>{
                     {"latitude", currentLatitude},
                     {"longitude", currentLongitude}
                 });
@@ -153,7 +148,7 @@ public class MapManager : MonoBehaviour
 
     async void OthersCurrentLocation()
     {
-        List<Coords> coordsList = await LocationsManager.Instance.GetLocationAsync(AuthManager.Instance.GetUserType());
+        List<Coords> coordsList = await LocationsManager.Instance.GetLocationAsync(GlobalDataManager.Instance.userType);
         List<GoogleMapLocation> locationsList = new List<GoogleMapLocation>();
         foreach(Coords coords in coordsList)
         {
