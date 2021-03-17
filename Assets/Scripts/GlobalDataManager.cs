@@ -33,14 +33,6 @@ public class GlobalDataManager : MonoBehaviour
         instance = this;
     }
 
-    void Start(){
-        /*idUserInductor = "";
-        idUserStudent = "";
-        userType = "";
-        idInductorByStudent = "";
-        idRoomByInductor = "";
-        idRoomByStudent = "";
-        currentSizeRoom = 0;*/
-    }
+    public void SetUserType(string userType) { this.userType = userType; }
 
 }
