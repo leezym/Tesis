@@ -21,13 +21,22 @@ public class AuthManager : MonoBehaviour
 
     public Canvas canvasGeneralSessions;
     [Header("CANVAS INDUCTOR")]
-    public Canvas canvasLoginInductor, canvasNombreInductor, canvasMenuInductor;
-    public InputField inputFieldUser, inputFieldPassword, inputRoomName, inputInductorRoomSize;
+    public Canvas canvasLoginInductor;
+    public Canvas canvasNombreInductor; 
+    public Canvas canvasMenuInductor;
+    public InputField inputFieldUser;
+    public InputField inputFieldPassword;
+    public InputField inputRoomName;
+    public InputField inputInductorRoomSize;
 
     [Header("CANVAS ESTUDIANTES")]
-    public Canvas canvasLoginStudent, canvasMenuStudent, canvasPuntuacionesStudent, canvasGeoMap;
+    public Canvas canvasLoginStudent;
+    public Canvas canvasMenuStudent;
+    public Canvas canvasPuntuacionesStudent;
+    public Canvas canvasGeoMap;
     public CanvasGroup canvasARMap;
-    public InputField inputFieldDocument, inputFieldName;
+    public InputField inputFieldDocument;
+    public InputField inputFieldName;
     
     // UserData
     bool triviaInProgress;
@@ -76,7 +85,6 @@ public class AuthManager : MonoBehaviour
     {
         if (signedIn)
         {         
-            Debug.Log("Update signedIn");
             StartCoroutine(MapManager.Instance.Location());
             
             if(currentLatitude != newLatitude || currentLongitude != newLongitude)
@@ -181,22 +189,31 @@ public class AuthManager : MonoBehaviour
         string user = inputFieldUser.text;
         string password = inputFieldPassword.text;
         string email = user + "@javerianacali.edu.co";
-
-        await authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async task => {                
-            if (task.IsFaulted)
-            {
-                foreach (System.Exception exception in task.Exception.InnerExceptions)
+        
+        if(password != "" && email != "")
+        {
+            await authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async task => {                
+                if (task.IsFaulted)
                 {
-                    Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
-                    string message = NotificationsManager.Instance.GetErrorMessage(firebaseEx);
-                    NotificationsManager.Instance.SetFailureNotificationMessage(message);
+                    foreach (System.Exception exception in task.Exception.InnerExceptions)
+                    {
+                        Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
+                        string message = NotificationsManager.Instance.GetErrorMessage(firebaseEx);
+                        NotificationsManager.Instance.SetFailureNotificationMessage(message);
+                    }
+                    return;
                 }
-                return;
-            }
-            
-            await UsersManager.Instance.PostNewInductor(AuthManager.Instance.GetUserId(), user);
-            GlobalDataManager.Instance.idUserInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
-        });
+                
+                await UsersManager.Instance.PostNewInductor(AuthManager.Instance.GetUserId(), user);
+                GlobalDataManager.Instance.idUserInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
+                GameObject.FindObjectOfType<ListTrivias>().SearchBuilding();
+
+            });
+
+        }else{
+            NotificationsManager.Instance.SetFailureNotificationMessage("Por favor llena los campos.");
+        }
+
     }
 
     public async void SignInStudent()

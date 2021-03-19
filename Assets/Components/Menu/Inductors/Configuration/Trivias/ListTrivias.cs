@@ -12,7 +12,6 @@ public class ListTrivias : MonoBehaviour
     public Canvas canvasConfigTrivias, canvasAddTrivias;
     public Dropdown buildingsDropdown;
     public Button addTrivia;
-    List<DocumentSnapshot> buildingsList = new List<DocumentSnapshot>();
 
     List<Dictionary<string,object>> triviasList = new List<Dictionary<string,object>>();
     public List<GameObject> currentTrivias = new List<GameObject>();
@@ -29,10 +28,9 @@ public class ListTrivias : MonoBehaviour
     [HideInInspector]
     public string buildingName = "";
 
-    async void Start()
+    void Start()
     {
         InitializeAtributes();
-        await SearchBuilding();
         buildingsDropdown.onValueChanged.AddListener(delegate {
             SelectBuilding();
         });
@@ -62,8 +60,8 @@ public class ListTrivias : MonoBehaviour
         }
     }
 
-    async Task SearchBuilding(){
-        buildingsList = await DataBaseManager.Instance.SearchByCollection("Buildings");
+    public async void SearchBuilding(){
+        List<DocumentSnapshot> buildingsList = await DataBaseManager.Instance.SearchByCollection("Buildings");
         foreach(DocumentSnapshot buildings in buildingsList){
             foreach(KeyValuePair<string,object> pair in buildings.ToDictionary()){
                 if(pair.Key == "name"){
