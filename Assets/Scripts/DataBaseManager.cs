@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Firebase;
-using Firebase.Unity.Editor;
+//using Firebase.Unity.Editor;
 using Firebase.Firestore;
 using System.Threading.Tasks;
 using System;
