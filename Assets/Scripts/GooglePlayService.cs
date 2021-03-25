@@ -5,16 +5,17 @@ using UnityEngine;
 
 public class GooglePlayService : MonoBehaviour
 {    
+    protected Firebase.FirebaseApp app;
+    
     void Awake()
     {
         Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
             var dependencyStatus = task.Result;
             if (dependencyStatus == Firebase.DependencyStatus.Available)
             {
-                //AuthManager.Instance.InitializeFirebase();
                 // Create and hold a reference to your FirebaseApp,
                 // where app is a Firebase.FirebaseApp property of your application class.
-                //   app = Firebase.FirebaseApp.DefaultInstance;
+                app = Firebase.FirebaseApp.DefaultInstance;
 
                 // Set a flag here to indicate whether Firebase is ready to use by your app.
             }
