@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1022901419679:android:3b14055d8836be909fecaa",
+        "mobilesdk_app_id": "1:1022901419679:android:71936a9dd83684909fecaa",
         "android_client_info": {
-          "package_name": "com.Tesis.Firebase"
+          "package_name": "com.JaverianaCali.YincanaPUJ"
         }
       },
       "oauth_client": [

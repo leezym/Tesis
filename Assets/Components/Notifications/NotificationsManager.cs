@@ -8,7 +8,7 @@ using Firebase.Auth;
 
 public class NotificationsManager : MonoBehaviour
 {
-    public static NotificationsManager instance;
+    private static NotificationsManager instance;
     public static NotificationsManager Instance { get => instance; set => instance = value; }
 
     public Canvas canvasNotificationFailure, canvasNotificationSuccess, canvasNotificationQuestion;
