@@ -37,10 +37,10 @@ public class EditGroup : MonoBehaviour
         {
             ShowRoomData();
             ShowInductorData();           
-        }
 
-        if(countTrivias == 1 && countHints == await DataBaseManager.Instance.SizeTable("Hints"))
-            finishButton.interactable = true;     
+            if(countTrivias == 1 && countHints == await DataBaseManager.Instance.SizeTable("Hints"))
+                finishButton.interactable = true;
+        }
     }   
 
     async void ShowRoomData ()

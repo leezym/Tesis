@@ -57,10 +57,6 @@ public class AuthManager : MonoBehaviour
     void Awake() 
     {
         instance = this;
-    }
-
-    void Start()
-    {
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
             dependencyStatus = task.Result;
             if (dependencyStatus == DependencyStatus.Available)
@@ -81,7 +77,10 @@ public class AuthManager : MonoBehaviour
                 NotificationsManager.Instance.SetFailureNotificationMessage("No se puede inicializar Firebase");
             }
         });
+    }
 
+    void Start()
+    { 
         InitializeAtributes();       
     }
 
@@ -111,7 +110,8 @@ public class AuthManager : MonoBehaviour
     void Update()
     {
         if (signedIn)
-        {         
+        {                 
+            LoadingScreenManager.Instance.ShowFinalRankingYincana();
             StartCoroutine(MapManager.Instance.Location());
             
             if(currentLatitude != newLatitude || currentLongitude != newLongitude)
@@ -209,7 +209,7 @@ public class AuthManager : MonoBehaviour
     {
         if (authFirebase != null) {
             authFirebase.StateChanged -= AuthStateChanged;
-            authFirebase = null;
+            //authFirebase = null;
             Exit();
         }
         //authFirebase.StateChanged -= AuthStateChanged;

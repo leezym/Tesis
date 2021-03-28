@@ -7,7 +7,7 @@ using Random=System.Random;
 
 public class LoadingScreenManager : MonoBehaviour
 {
-    public static LoadingScreenManager instance;
+    private static LoadingScreenManager instance;
     public static LoadingScreenManager Instance { get => instance; set => instance = value; }
 
     // Contadores
@@ -50,9 +50,7 @@ public class LoadingScreenManager : MonoBehaviour
     }
     
     void Update()
-    {   
-        ShowFinalRankingYincana();
-
+    {
         // Carga del inductor
         if (canvasInductorLoading.enabled)
             InductorLoading();
@@ -219,7 +217,7 @@ public class LoadingScreenManager : MonoBehaviour
         }
     }
 
-    async void ShowFinalRankingYincana()
+    public async void ShowFinalRankingYincana()
     {
         int sizeRoomsTable = await DataBaseManager.Instance.SizeTable("Rooms");
         int sizeFinishedRoomsTable = await DataBaseManager.Instance.SizeTable("Rooms", "finished", true);
