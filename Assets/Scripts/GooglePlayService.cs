@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
 using Firebase;
+using Firebase.Auth;
 using Firebase.Firestore;
+using Firebase.Extensions;
 
 public class GooglePlayService : MonoBehaviour
 {    
@@ -12,17 +15,15 @@ public class GooglePlayService : MonoBehaviour
     
     void Awake()
     {
-        Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
             var dependencyStatus = task.Result;
-            if (dependencyStatus == Firebase.DependencyStatus.Available)
+            if (dependencyStatus == DependencyStatus.Available)
             {
                 // Create and hold a reference to your FirebaseApp,
                 // where app is a Firebase.FirebaseApp property of your application class.
-                app = Firebase.FirebaseApp.DefaultInstance;
+                
 
                 // Set a flag here to indicate whether Firebase is ready to use by your app.
-                DataBaseManager.Instance.reference = FirebaseFirestore.DefaultInstance;
-                AuthManager.Instance.InitializeAuthFirebase();
                 ScenesManager.Instance.LoadNewCanvas(canvasGeneralSessions);
             }
             else

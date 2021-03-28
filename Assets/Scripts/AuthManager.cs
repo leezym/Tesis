@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Firebase.Firestore;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Collections;
+using UnityEngine.Events;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Firebase;
+using Firebase.Auth;
+using Firebase.Firestore;
+using Firebase.Extensions;
 
 public class AuthManager : MonoBehaviour
 {
@@ -14,7 +18,9 @@ public class AuthManager : MonoBehaviour
     // Firebase
     protected Firebase.Auth.FirebaseAuth authFirebase;
     protected Firebase.Auth.FirebaseUser userFirebase;
-    protected Firebase.FirebaseApp app;
+    Firebase.FirebaseApp app;
+    Firebase.DependencyStatus dependencyStatus = Firebase.DependencyStatus.UnavailableOther;
+
     private bool signedIn;
 
     // DataBase
@@ -55,7 +61,36 @@ public class AuthManager : MonoBehaviour
 
     void Start()
     {
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
+            dependencyStatus = task.Result;
+            if (dependencyStatus == DependencyStatus.Available)
+            {
+                // Create and hold a reference to your FirebaseApp,
+                // where app is a Firebase.FirebaseApp property of your application class.
+                app = FirebaseApp.DefaultInstance;
+
+                // Set a flag here to indicate whether Firebase is ready to use by your app.
+                DataBaseManager.Instance.reference = FirebaseFirestore.DefaultInstance;
+                InitializeFirebase();
+                ScenesManager.Instance.LoadNewCanvas(canvasGeneralSessions);
+            }
+            else
+            {
+                Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
+                // Firebase Unity SDK is not safe to use here.
+                NotificationsManager.Instance.SetFailureNotificationMessage("No se puede inicializar Firebase");
+            }
+        });
+
         InitializeAtributes();       
+    }
+
+    protected virtual void InitializeFirebase()
+    {
+        authFirebase = FirebaseAuth.DefaultInstance;
+        //authFirebase.SignOut();
+        authFirebase.StateChanged += AuthStateChanged;
+        AuthStateChanged(this, null);
     }
 
     public void InitializeAtributes() 
@@ -71,14 +106,6 @@ public class AuthManager : MonoBehaviour
         inputRoomName.text = "";
         inputInductorRoomSize.text = "";
 
-    }
-
-    public void InitializeAuthFirebase()
-    {
-        authFirebase = Firebase.Auth.FirebaseAuth.DefaultInstance;
-        authFirebase.SignOut();
-        authFirebase.StateChanged += AuthStateChanged;
-        AuthStateChanged(this, null);
     }
 
     void Update()
@@ -180,9 +207,14 @@ public class AuthManager : MonoBehaviour
 
     void OnDestroy()
     {
-        authFirebase.StateChanged -= AuthStateChanged;
+        if (authFirebase != null) {
+            authFirebase.StateChanged -= AuthStateChanged;
+            authFirebase = null;
+            Exit();
+        }
+        //authFirebase.StateChanged -= AuthStateChanged;
         //authFirebase = null;
-        Exit();
+        //Exit();
     }
 
     public async void SignInInductor() {
