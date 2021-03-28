@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
+using Firebase;
+using Firebase.Firestore;
 
 public class GooglePlayService : MonoBehaviour
 {    
     protected Firebase.FirebaseApp app;
+    public Canvas canvasGeneralSessions;
     
     void Awake()
     {
@@ -18,6 +21,9 @@ public class GooglePlayService : MonoBehaviour
                 app = Firebase.FirebaseApp.DefaultInstance;
 
                 // Set a flag here to indicate whether Firebase is ready to use by your app.
+                DataBaseManager.Instance.reference = FirebaseFirestore.DefaultInstance;
+                AuthManager.Instance.InitializeAuthFirebase();
+                ScenesManager.Instance.LoadNewCanvas(canvasGeneralSessions);
             }
             else
             {

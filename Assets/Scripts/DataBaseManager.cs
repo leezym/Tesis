@@ -13,15 +13,11 @@ public class DataBaseManager : MonoBehaviour
     private static DataBaseManager instance;
     public static DataBaseManager Instance { get => instance; set => instance = value; }
 
-    FirebaseFirestore reference;
+    public FirebaseFirestore reference;
 
     public void Awake()
     {
         instance = this;
-    }
-
-    public void Start() {
-        reference = FirebaseFirestore.DefaultInstance;
     }
 
     public async Task<List<DocumentSnapshot>> SearchByCollection(string db)

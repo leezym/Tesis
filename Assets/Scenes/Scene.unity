@@ -10250,8 +10250,13 @@ PrefabInstance:
     - target: {fileID: 3067486925929233042, guid: 18a8812b8a88dbf45886dfac5ec70021,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3067486925929233043, guid: 18a8812b8a88dbf45886dfac5ec70021,
+        type: 3}
+      propertyPath: canvasGeneralSessions
+      value: 
+      objectReference: {fileID: 8175921638679259858}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 18a8812b8a88dbf45886dfac5ec70021, type: 3}
 --- !u!33 &3113976305200454674
