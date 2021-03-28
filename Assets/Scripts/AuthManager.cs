@@ -68,7 +68,7 @@ public class AuthManager : MonoBehaviour
                 // Set a flag here to indicate whether Firebase is ready to use by your app.
                 DataBaseManager.Instance.reference = FirebaseFirestore.DefaultInstance;
                 InitializeFirebase();
-                ScenesManager.Instance.LoadNewCanvas(canvasGeneralSessions);
+                //ScenesManager.Instance.LoadNewCanvas(canvasGeneralSessions);
             }
             else
             {

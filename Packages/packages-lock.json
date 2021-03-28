@@ -16,6 +16,24 @@
       },
       "url": "https://unityregistry-pa.googleapis.com"
     },
+    "com.google.firebase.auth": {
+      "version": "7.1.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.google.firebase.app": "7.1.0"
+      },
+      "url": "https://unityregistry-pa.googleapis.com"
+    },
+    "com.google.firebase.firestore": {
+      "version": "7.1.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.google.firebase.app": "7.1.0"
+      },
+      "url": "https://unityregistry-pa.googleapis.com"
+    },
     "com.ptc.vuforia.engine": {
       "version": "file:C:/Users/Elyz/Downloads/com.ptc.vuforia.engine",
       "depth": 0,

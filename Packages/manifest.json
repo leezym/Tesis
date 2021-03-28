@@ -10,6 +10,8 @@
   ],
   "dependencies": {
     "com.google.firebase.app": "7.1.0",
+    "com.google.firebase.auth": "7.1.0",
+    "com.google.firebase.firestore": "7.1.0",
     "com.ptc.vuforia.engine": "file:C:/Users/Elyz/Downloads/com.ptc.vuforia.engine",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
