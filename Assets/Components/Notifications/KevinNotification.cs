@@ -44,9 +44,13 @@ public class KevinNotification : MonoBehaviour
         if(correctAnswer==1){
             int randomQuote = random.Next(SuccessQuotesList.Count);
             quote = SuccessQuotesList[randomQuote];
+            GlobalDataManager.Instance.sounds.clip = GlobalDataManager.Instance.win;
+            GlobalDataManager.Instance.sounds.Play();
         }else{
             int randomQuote = random.Next(FailQuotesList.Count);
             quote = FailQuotesList[randomQuote];
+            GlobalDataManager.Instance.sounds.clip = GlobalDataManager.Instance.lose;
+            GlobalDataManager.Instance.sounds.Play();
         }
         kevinQuote.text = quote;
     }

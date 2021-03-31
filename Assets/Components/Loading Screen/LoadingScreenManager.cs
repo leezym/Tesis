@@ -129,6 +129,8 @@ public class LoadingScreenManager : MonoBehaviour
             kevinQuote.text = "";
             canvasTimeOver.enabled = true;
             canvasKevinNotification.enabled = false;
+            GlobalDataManager.Instance.sounds.clip = GlobalDataManager.Instance.lose;
+            GlobalDataManager.Instance.sounds.Play();
         }
     }
 
