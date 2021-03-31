@@ -14,9 +14,9 @@ public class UsersManager : MonoBehaviour
         instance = this;
     }
 
-    public async Task PostNewInductor(string uid, string name)
+    public async Task PostNewInductor(string uid, string name, string user)
     {
-        Inductor element = new Inductor(uid, name);
+        Inductor element = new Inductor(uid, name, user);
         await DataBaseManager.Instance.InsertWithoutId("Inductors", element.ConvertJson());
     }
 
@@ -61,6 +61,16 @@ public class UsersManager : MonoBehaviour
         return false;
     }
 
+    public async Task<bool> ExistUserByUser(string db, string user)
+    {
+        List<Dictionary<string, object>> data = await DataBaseManager.Instance.SearchByAttribute(db, "user", user);
+        if (data.Count != 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
     /*public async Task DeleteAsync(string db, string userId) 
     {
         await DataBaseManager.Instance.DeleteAsync(db, userId);
@@ -75,13 +85,14 @@ public class UsersManager : MonoBehaviour
 public class Inductor
 {
     public string idAuth;
+    public string user;
     public string name;
     public float latitude = 0;
     public float longitude = 0;
 
     public Inductor() { }
 
-    public Inductor(string idAuth, string name)
+    public Inductor(string idAuth, string name, string user)
     {
         this.idAuth = idAuth;
         this.name = name;

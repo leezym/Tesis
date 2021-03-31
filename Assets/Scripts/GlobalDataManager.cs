@@ -9,6 +9,11 @@ public class GlobalDataManager : MonoBehaviour
 
     public string userType;
 
+    [Header("SONIDOS")]
+    public AudioSource sounds;
+    public AudioClip win;
+    public AudioClip lose;
+
     [Header("INDUCTOR")]
     public string idUserInductor;
     public string idRoomByInductor;

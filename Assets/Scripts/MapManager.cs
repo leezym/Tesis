@@ -26,18 +26,27 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         googleMap = GameObject.FindObjectOfType<GoogleMap>();  
-        StartCoroutine(Location());
+        StartCoroutine(CheckLocationOn());
     }
 
-    public IEnumerator Location()
+    public IEnumerator CheckLocationOn()
     {
         // First, check if user has location service enabled
-        if (!Input.location.isEnabledByUser)
+        if (!Input.location.isEnabledByUser){
+            NotificationsManager.Instance.SetFailureNotificationMessage("Por favor otorga persmisos a la aplicación para acceder a tu ubicación y activa la ubicación de tu dispositivo.\n Cierra la aplicación y vuelve a intentar.");
             yield break;
-
+        }
+        else
+        {
+            StartCoroutine(Location());
+        }
+    }
+    public IEnumerator Location()
+    {
         // Start service before querying location
         Input.location.Start();
-
+        
+        //NotificationsManager.Instance.SetSuccessNotificationMessage("GPS enabled");
         // Wait until service initializes
         int maxWait = 20;
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
@@ -49,26 +58,34 @@ public class MapManager : MonoBehaviour
         // Service didn't initialize in 20 seconds
         if (maxWait < 1)
         {
-            print("Timed out");
+            Debug.Log("Timed out");
             yield break;
         }
 
         // Connection has failed
         if (Input.location.status == LocationServiceStatus.Failed)
         {
-            print("Unable to determine device location");
+            Debug.Log("Unable to determine device location");
             yield break;
         }
-        else
+        else if (Input.location.status == LocationServiceStatus.Running)
         {
             // Access granted and location value could be retrieved
-            print("Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude);
+            Debug.Log("Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude);
             googleMap.centerLocation.latitude = Input.location.lastData.latitude;
             googleMap.centerLocation.longitude = Input.location.lastData.longitude;
-        }
 
+            GoogleMapLocation loc = new GoogleMapLocation();
+            loc.address = "";
+            loc.latitude = googleMap.centerLocation.latitude;
+            loc.longitude = googleMap.centerLocation.longitude;
+            googleMap.markers[0].locations[0] = loc;
+        }
+        
         // Stop service if there is no need to query location updates continuously
         Input.location.Stop();
+
+        StopCoroutine(Location());
     }
 
     void Update() 
@@ -128,8 +145,9 @@ public class MapManager : MonoBehaviour
 
     public void Refresh()
     {
-        StartCoroutine(Location());
+        StartCoroutine(CheckLocationOn());
         OthersCurrentLocation();
+        StartCoroutine(googleMap._Refresh());
     }
 
 
@@ -160,7 +178,6 @@ public class MapManager : MonoBehaviour
         }
 
         googleMap.markers[1].locations = locationsList.ToArray();
-        StartCoroutine(googleMap._Refresh());
     }
 
     void SetChangeMapButtonActive()
