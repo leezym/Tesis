@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GlobalDataManager : MonoBehaviour
 {
@@ -38,11 +39,16 @@ public class GlobalDataManager : MonoBehaviour
         instance = this;
     }
 
-    public void SetUserType(string userType) { this.userType = userType; }
-
-    void Update() {
-        if (Input.GetMouseButton(0))
-            click.Play();   
+    void Start()
+    {
+        Button[] buttons = GameObject.FindObjectsOfType<Button>();
+        foreach(Button button in buttons)
+        {
+            button.onClick.AddListener(()=>{
+                click.Play();
+            });
+        }
     }
 
+    public void SetUserType(string userType) { this.userType = userType; }
 }

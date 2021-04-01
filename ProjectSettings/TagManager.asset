@@ -6,6 +6,7 @@ TagManager:
   tags:
   - general
   - Marker
+  - Button
   layers:
   - Default
   - TransparentFX
