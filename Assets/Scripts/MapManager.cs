@@ -33,7 +33,7 @@ public class MapManager : MonoBehaviour
     {
         // First, check if user has location service enabled
         if (!Input.location.isEnabledByUser){
-            NotificationsManager.Instance.SetFailureNotificationMessage("Por favor otorga persmisos a la aplicación para acceder a tu ubicación y activa la ubicación de tu dispositivo.\n Cierra la aplicación y vuelve a intentar.");
+            NotificationsManager.Instance.SetFailureNotificationMessage("Por favor otorga persmisos a la aplicación para acceder a tu ubicación y activa la ubicación de tu dispositivo.\n Cierra sesión y vuelve a intentar.");
             yield break;
         }
         else

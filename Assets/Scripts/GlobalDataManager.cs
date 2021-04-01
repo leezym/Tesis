@@ -10,9 +10,9 @@ public class GlobalDataManager : MonoBehaviour
     public string userType;
 
     [Header("SONIDOS")]
-    public AudioSource sounds;
-    public AudioClip win;
-    public AudioClip lose;
+    public AudioSource click;
+    public AudioSource win;
+    public AudioSource lose;
 
     [Header("INDUCTOR")]
     public string idUserInductor;
@@ -39,5 +39,10 @@ public class GlobalDataManager : MonoBehaviour
     }
 
     public void SetUserType(string userType) { this.userType = userType; }
+
+    void Update() {
+        if (Input.GetMouseButton(0))
+            click.Play();   
+    }
 
 }

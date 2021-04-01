@@ -129,8 +129,7 @@ public class LoadingScreenManager : MonoBehaviour
             kevinQuote.text = "";
             canvasTimeOver.enabled = true;
             canvasKevinNotification.enabled = false;
-            GlobalDataManager.Instance.sounds.clip = GlobalDataManager.Instance.lose;
-            GlobalDataManager.Instance.sounds.Play();
+            GlobalDataManager.Instance.lose.Play();
         }
     }
 
@@ -213,9 +212,11 @@ public class LoadingScreenManager : MonoBehaviour
         if(correctAnswer){
             int randomQuote = random.Next(SuccessQuotesList.Count);
             kevinQuote.text = SuccessQuotesList[randomQuote];
+            GlobalDataManager.Instance.win.Play();
         }else{
             int randomQuote = random.Next(FailQuotesList.Count);
             kevinQuote.text = FailQuotesList[randomQuote];
+            GlobalDataManager.Instance.lose.Play();
         }
     }
 

@@ -44,9 +44,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   userType: 
-  currentSizeRoom: 0
+  click: {fileID: 0}
+  win: {fileID: 0}
+  lose: {fileID: 0}
   idUserInductor: 
   idRoomByInductor: 
+  currentSizeRoom: 0
   idUserStudent: 
   idInductorByStudent: 
   idRoomByStudent: 
