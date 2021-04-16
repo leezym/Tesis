@@ -20,7 +20,7 @@ public class MyProfile : MonoBehaviour
     async void SearchGroupData()
     {
         object roomName = await DataBaseManager.Instance.SearchAttribute("Rooms", GlobalDataManager.Instance.idRoomByStudent, "room");
-        object inductorName = await DataBaseManager.Instance.SearchAttribute("Inductors", GlobalDataManager.Instance.idInductorByStudent, "name");
+        object inductorName = GlobalDataManager.Instance.nameInductor;
 
         if(roomName != null)
             textGroupName.text = roomName.ToString();

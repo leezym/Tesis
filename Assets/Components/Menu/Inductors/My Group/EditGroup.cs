@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class EditGroup : MonoBehaviour
 { 
     [Header("NDUCTOR")]
-    public Text groupNameLabel, inductorNameLabel;
+    public Text groupNameLabel, inductorNameLabel, puntajeLabel;
     public Canvas canvasMyGroup, canvasEditGroup, canvasNombreInductor, canvasMenuInductor;
     public InputField inputRoomSize, inputInductorName;
     public InputField newInputRoomSize, newInputRoomName;
@@ -19,6 +19,12 @@ public class EditGroup : MonoBehaviour
     void Start()
     {
         InitializeAttributes();
+        finishButton.onClick.AddListener(async ()=>{
+            await RoomsManager.Instance.PutRoomAsync(GlobalDataManager.Instance.idRoomByInductor, new Dictionary<string, object> {
+                {"finished", true}
+            });
+            NotificationsManager.Instance.SetSuccessNotificationMessage("¡Felicitaciones, han completado la yincana!. Ahora deben esperar que los demás grupos finalicen para visualizar el ranking final.");
+        });
     }
 
     public void InitializeAttributes()
@@ -36,9 +42,9 @@ public class EditGroup : MonoBehaviour
         if(canvasMyGroup.enabled && !canvasEditGroup.enabled)
         {
             ShowRoomData();
-            ShowInductorData();           
+            ShowInductorData();
 
-            if(countTrivias == 1 && countHints == await DataBaseManager.Instance.SizeTable("Hints"))
+            if(countTrivias == 4 && countHints == await DataBaseManager.Instance.SizeTable("Hints"))
                 finishButton.interactable = true;
         }
     }   
@@ -60,20 +66,31 @@ public class EditGroup : MonoBehaviour
                     inputRoomSize.text = pair.Value.ToString();
                     newInputRoomSize.text = pair.Value.ToString();
                 }
+                else if (pair.Key == "score")
+                {
+                    puntajeLabel.text = pair.Value.ToString();
+                }
+                else if (pair.Key == "currentsize")
+                {
+                    GlobalDataManager.Instance.currentSizeRoom = Convert.ToInt32(pair.Value);
+                }
             }
         }
     }
 
-    async void ShowInductorData()
+    void ShowInductorData()
     {
-        inductorNameLabel.text = (await DataBaseManager.Instance.SearchAttribute("Inductor", GlobalDataManager.Instance.idUserInductor, "name")).ToString();
+        inductorNameLabel.text = GlobalDataManager.Instance.nameInductor;
     }
 
     public bool CheckNewData()
     {
         if( inputInductorName.text != "" && inputRoomSize.text != "")
-        {            
-            return true;
+        {   
+            if(Convert.ToInt32(inputRoomSize.text) <= 0)         
+                return false;  
+            else
+                return true;
         }
 
         return false;
@@ -83,6 +100,7 @@ public class EditGroup : MonoBehaviour
     {
         if (CheckNewData())
         {
+            GlobalDataManager.Instance.nameInductor = inputInductorName.text;
             await UsersManager.Instance.PutUserAsync("Inductors", GlobalDataManager.Instance.idUserInductor, new Dictionary<string, object>{
                 {"name", inputInductorName.text}
             });
@@ -91,7 +109,6 @@ public class EditGroup : MonoBehaviour
 
             ScenesManager.Instance.DeleteCurrentCanvas(canvasNombreInductor);
             ScenesManager.Instance.LoadNewCanvas(canvasMenuInductor);
-
         }
         else
         {
@@ -101,6 +118,7 @@ public class EditGroup : MonoBehaviour
 
     public async void SendNewRoomInfo()
     {
+        Debug.Log(Convert.ToInt32(newInputRoomSize.text) + " >= " + GlobalDataManager.Instance.currentSizeRoom);
         if (Convert.ToInt32(newInputRoomSize.text) >= GlobalDataManager.Instance.currentSizeRoom)
         {
             Dictionary<string, object> newRoomData = new Dictionary<string, object>

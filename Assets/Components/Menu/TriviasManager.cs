@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 public class TriviasManager : MonoBehaviour
 {
-    public static TriviasManager instance;
+    private static TriviasManager instance;
     public static TriviasManager Instance { get => instance; set => instance = value; }
 
     void Awake() {

@@ -68,6 +68,7 @@ public class PlayATrivia : MonoBehaviour
     public async void ShowFinalRanking()
     {
         List<Dictionary<string, object>> rankingList = await UsersManager.Instance.GetFinalTriviasRanking(GlobalDataManager.Instance.idRoomByStudent);
+        Debug.Log("ShowFinalRanking "+rankingList.Count);
         foreach(Dictionary<string, object> ranking in rankingList)
         {
             foreach(KeyValuePair<string, object> pair in ranking)

@@ -36,32 +36,33 @@ public class HintElement : MonoBehaviour
     async void SaveHint()
     {
         GameObject.FindObjectOfType<EditGroup>().countHints ++;
-        Debug.Log(GameObject.FindObjectOfType<EditGroup>().countHints);
+        //Debug.Log(GameObject.FindObjectOfType<EditGroup>().countHints);
         
+        // Boton Finalizar
+        this.transform.Find("FinishButton").GetComponent<Button>().interactable = false;
+        
+        // Hora
         Text hourText = this.transform.Find("HintTimeLabel").GetComponent<Text>();
         string currentTime = System.DateTime.Now.ToString(("HH:mm"));
         hourText.text = currentTime;
 
+        // Score
         this.transform.Find("HintScoreInput").GetComponent<InputField>().interactable = false;
         this.transform.Find("HintPositionNumberInput").GetComponent<InputField>().interactable = false;
 
         string hintName = this.transform.Find("HintNameLabel").GetComponent<Text>().text;
         string hour = this.transform.Find("HintTimeLabel").GetComponent<Text>().text;
         
-
         // Crear la pista con puntuaciones
         string idHint = await HintsManager.Instance.GetIdHintByName(hintName);
         await HintsChallengesManager.Instance.PostNewHintChallenge(GlobalDataManager.Instance.idRoomByInductor, idHint, Convert.ToInt32(score), Convert.ToInt32(position), hour);
 
         // Asignar puntuaciones totales a la sala
-        object currentRoomScore = await DataBaseManager.Instance.SearchAttribute("Rooms", GlobalDataManager.Instance.idRoomByInductor, "score");
+        int currentRoomScore = Convert.ToInt32(await DataBaseManager.Instance.SearchAttribute("Rooms", GlobalDataManager.Instance.idRoomByInductor, "score"));
         await RoomsManager.Instance.PutRoomAsync(GlobalDataManager.Instance.idRoomByInductor, new Dictionary<string, object> {
-            {"score", Convert.ToInt32(currentRoomScore) + score}
-        });
+            {"score", currentRoomScore + Convert.ToInt32(score)}
+        });       
         
-        if(this.transform.Find("HintTimeLabel").GetComponent<Text>().text != "")
-            this.transform.Find("FinishButton").GetComponent<Button>().interactable = false;
-        else
-            this.transform.Find("FinishButton").GetComponent<Button>().interactable = true;
-}
+        NotificationsManager.Instance.acceptQuestionButton.onClick.RemoveAllListeners();     
+    }
 }

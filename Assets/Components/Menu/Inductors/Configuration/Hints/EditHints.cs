@@ -147,5 +147,6 @@ public class EditHints : MonoBehaviour
         await HintsManager.Instance.DeleteHint(idHint);
         ScenesManager.Instance.LoadNewCanvas(canvasConfigHints);
         ScenesManager.Instance.DeleteCurrentCanvas(canvasHintDetail);
+        NotificationsManager.Instance.acceptQuestionButton.onClick.RemoveAllListeners();
     }
 }

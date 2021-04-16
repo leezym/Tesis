@@ -16,9 +16,13 @@ public class LoadingScreenManager : MonoBehaviour
     [HideInInspector]
     public float isOver = 1.5f, waiting = 1.5f;
 
+    public bool triviaInProgress, finalRanking = true;
+
     public Canvas canvasInductorLoading, canvasTimerTriviaLoading, canvasQuestionLoading, canvasWaitingTriviaLoading, canvasPodiumStudent, canvasTimeOver, canvasKevinNotification, canvasRankingFinal;
     public Sprite normalAnswer;
     public Text kevinQuote;
+
+    public Button backButtonRankingFinal;
 
     public GameObject[] placeIndividualLabels;
     public GameObject[] placeGrupalLabels;
@@ -46,7 +50,18 @@ public class LoadingScreenManager : MonoBehaviour
 
     void Start()
     {
+        canvasRankingFinal.enabled = false;
+
         canvasWaitingTriviaLoading.transform.Find("TimeSlider").GetComponent<Slider>().maxValue = waiting;
+        
+        // Ranking Final Advertencia
+        LoadingScreenManager.Instance.backButtonRankingFinal.onClick.AddListener(()=>{
+            NotificationsManager.Instance.SetQuestionNotificationMessage("Recuerda tomar captura de las puntuaciones individuales y grupales antes de salir. Una vez se cierra el ranking no puedes abrirlo nuevamente, ¿Seguro que deseas salir?.");
+            NotificationsManager.Instance.acceptQuestionButton.onClick.AddListener(()=>{                           
+                ScenesManager.Instance.DeleteCurrentCanvas(LoadingScreenManager.Instance.canvasRankingFinal);
+                NotificationsManager.Instance.acceptQuestionButton.onClick.RemoveAllListeners();
+            });
+        });
     }
     
     void Update()
@@ -180,9 +195,11 @@ public class LoadingScreenManager : MonoBehaviour
     // Informacion de la pregunta
     async void ShowTrivia()
     {
-        object buildingName = await DataBaseManager.Instance.SearchById("Buildings", idBuilding,"name");
-        canvasQuestionLoading.transform.Find("BuildingNameLabel").GetComponent<Text>().text = buildingName.ToString();            
+        string buildingName = (await DataBaseManager.Instance.SearchById("Buildings", idBuilding,"name")).ToString();
+        canvasQuestionLoading.transform.Find("BuildingNameLabel").GetComponent<Text>().text = buildingName;            
 
+        Debug.Log("Edificio: "+buildingName);
+        Debug.Log(index +">"+listTrivias.Length);
         if(index < listTrivias.Length)
         {
             Dictionary<string, object> trivia = listTrivias[index];        
@@ -203,6 +220,7 @@ public class LoadingScreenManager : MonoBehaviour
         else{
             GameObject.FindObjectOfType<PlayATrivia>().ShowFinalRanking();
             ScenesManager.Instance.LoadNewCanvas(canvasPodiumStudent);
+            triviaInProgress = false;
         }
     }
 
@@ -224,11 +242,17 @@ public class LoadingScreenManager : MonoBehaviour
     {
         int sizeRoomsTable = await DataBaseManager.Instance.SizeTable("Rooms");
         int sizeFinishedRoomsTable = await DataBaseManager.Instance.SizeTable("Rooms", "finished", true);
-        if (sizeFinishedRoomsTable == sizeRoomsTable && sizeRoomsTable != 0)
+        if (sizeFinishedRoomsTable == sizeRoomsTable && sizeRoomsTable != 0 && finalRanking)
         {
             IndividualRanking();
             GroupRanking();
             ScenesManager.Instance.LoadNewCanvas(LoadingScreenManager.Instance.canvasRankingFinal);
+            finalRanking = false;
+            
+            if(GlobalDataManager.Instance.userType == "inductor")
+                NotificationsManager.Instance.SetFailureNotificationMessage("Recuerda tomar captura de las puntuaciones individuales y grupales antes de salir. ¡No queremos que nuestros neojaverianos se pongan tristes!");
+            else
+                NotificationsManager.Instance.SetFailureNotificationMessage("Si lo deseas, puedes tomar captura de las puntuaciones individuales y grupales antes de salir.");
         }
     }
 

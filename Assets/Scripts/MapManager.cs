@@ -26,6 +26,9 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         googleMap = GameObject.FindObjectOfType<GoogleMap>();  
+    }
+
+    public void CheckLocation(){
         StartCoroutine(CheckLocationOn());
     }
 
@@ -33,7 +36,7 @@ public class MapManager : MonoBehaviour
     {
         // First, check if user has location service enabled
         if (!Input.location.isEnabledByUser){
-            NotificationsManager.Instance.SetFailureNotificationMessage("Por favor otorga persmisos a la aplicación para acceder a tu ubicación y activa la ubicación de tu dispositivo.\n Cierra sesión y vuelve a intentar.");
+            NotificationsManager.Instance.SetFailureNotificationMessage("Por favor otorga permisos a la aplicación para acceder a tu ubicación y activa la ubicación de tu dispositivo.\n Cierra sesión y vuelve a intentar.");
             yield break;
         }
         else
@@ -145,7 +148,7 @@ public class MapManager : MonoBehaviour
 
     public void Refresh()
     {
-        StartCoroutine(CheckLocationOn());
+        CheckLocation();
         OthersCurrentLocation();
         StartCoroutine(googleMap._Refresh());
     }

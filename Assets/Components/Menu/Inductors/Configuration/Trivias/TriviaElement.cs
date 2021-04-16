@@ -22,7 +22,7 @@ public class TriviaElement : MonoBehaviour
     {
         int amoungQuestions = Convert.ToInt32(this.transform.Find("AmountQuestionsLabel").GetComponent<Text>().text);
 
-        if(amoungQuestions != 0)
+        if(amoungQuestions > 0)
         {
             NotificationsManager.Instance.SetQuestionNotificationMessage("¿Está seguro que desea iniciar la trivia? Una vez iniciada, no se pueden restaurar los cambios.");
             NotificationsManager.Instance.acceptQuestionButton.onClick.AddListener(ExecuteTrivia);
@@ -36,7 +36,7 @@ public class TriviaElement : MonoBehaviour
     async void ExecuteTrivia()
     {
         GameObject.FindObjectOfType<EditGroup>().countTrivias ++;
-        Debug.Log(GameObject.FindObjectOfType<EditGroup>().countTrivias);
+        //Debug.Log(GameObject.FindObjectOfType<EditGroup>().countTrivias);
         
         this.transform.Find("InitializeTriviaButton").GetComponent<Button>().interactable = false;
 
@@ -49,13 +49,29 @@ public class TriviaElement : MonoBehaviour
         
         // Datos edificio
         string buildingName = this.transform.Find("BuildingNameLabel").GetComponent<Text>().text;
-        idBuilding = await DataBaseManager.Instance.SearchId("Buildings", "name", buildingName);
-        
+        if(buildingName == GlobalDataManager.nameBuildingPalmas)
+        {
+            idBuilding = GlobalDataManager.idBuildingPalmas;
+        }
+        else if(buildingName == GlobalDataManager.nameBuildingGuayacanes)
+        {
+            idBuilding = GlobalDataManager.idBuildingGuayacanes;
+        }
+        else if(buildingName == GlobalDataManager.nameBuildingLago)
+        {
+            idBuilding = GlobalDataManager.idBuildingLago;
+        }
+        else if(buildingName == GlobalDataManager.nameBuildingRaulPosada)
+        {
+            idBuilding = GlobalDataManager.idBuildingRaulPosada;
+        }        
 
         await TriviasChallengesManager.Instance.PostNewInductorTriviaChallenge(GlobalDataManager.Instance.idUserInductor, idBuilding, true);
         ScenesManager.Instance.LoadNewCanvas(LoadingScreenManager.Instance.canvasInductorLoading);
         
         LoadingScreenManager.Instance.SetTimeInductorLoading(timeQuestions);
         LoadingScreenManager.Instance.SetIdTriviaBuilding(idBuilding);
+
+        NotificationsManager.Instance.acceptQuestionButton.onClick.RemoveAllListeners();
     }
 }

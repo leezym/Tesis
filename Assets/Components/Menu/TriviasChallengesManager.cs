@@ -41,9 +41,9 @@ public class TriviasChallengesManager : MonoBehaviour
         return await DataBaseManager.Instance.SearchTriviaDataByBuilding(idInductor);
     }    
 
-    public async void ShowTriviasStudent(string idInductor, bool triviaInProgress, Canvas canvasMenuStudent, Canvas canvasPuntuacionesStudent)
+    public async void ShowTriviasStudent(string idInductor, Canvas canvasMenuStudent, Canvas canvasPuntuacionesStudent)
     {
-        if (!triviaInProgress)
+        if (!LoadingScreenManager.Instance.triviaInProgress)
         {
             List<Dictionary<string, object>> listAvailableTrivias = await DataBaseManager.Instance.SearchByAttribute("InductorTriviasChallenges", "idInductor", idInductor, "available", true);
             foreach(Dictionary<string, object> availableTrivia in listAvailableTrivias)
@@ -52,7 +52,7 @@ public class TriviasChallengesManager : MonoBehaviour
                 {
                     if(pair.Key == "idBuilding")
                     {
-                        triviaInProgress = true;
+                        LoadingScreenManager.Instance.triviaInProgress = true;
 
                         ScenesManager.Instance.LoadNewCanvas(LoadingScreenManager.Instance.canvasTimerTriviaLoading);
                         ScenesManager.Instance.DeleteCurrentCanvas(canvasMenuStudent);

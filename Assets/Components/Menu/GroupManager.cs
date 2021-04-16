@@ -61,7 +61,7 @@ public class GroupManager : MonoBehaviour
                 }
             }
 
-            string nameInductor = (await DataBaseManager.Instance.SearchAttribute("Inductors", GlobalDataManager.Instance.idUserInductor, "name")).ToString();
+            string nameInductor = GlobalDataManager.Instance.nameInductor;
             Salas.Add(new Dictionary<string, string> () {
                 {"nameInductor", nameInductor},
                 {"nameRoom", nameRoom}

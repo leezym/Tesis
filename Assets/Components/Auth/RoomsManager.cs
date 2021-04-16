@@ -50,6 +50,7 @@ public class Room
 {
     public string room;
     public int size;
+    public int currentSize = 0;
     public int score = 0;
     public bool finished = false;
     public string idInductor;

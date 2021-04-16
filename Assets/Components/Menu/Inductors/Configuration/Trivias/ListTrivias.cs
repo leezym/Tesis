@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
 using Firebase.Firestore;
+using System;
 
 public class ListTrivias : MonoBehaviour
 {
@@ -16,9 +17,6 @@ public class ListTrivias : MonoBehaviour
     List<Dictionary<string,object>> triviasList = new List<Dictionary<string,object>>();
     public List<GameObject> currentTrivias = new List<GameObject>();
 
-    [HideInInspector]
-    public int currentSizeTrivias = 0, newSizeTrivias = 0;
-
     public InputField inputTriviaQuestion, inputTriviaAnswerOne, inputTriviaAnswerTwo, inputTriviaAnswerThree;
     public Toggle toggleTriviaAnswerOne, toggleTriviaAnswerTwo, toggleTriviaAnswerThree;
     public Text textTriviaAnswerOne, textTriviaAnswerTwo, textTriviaAnswerThree;
@@ -26,14 +24,15 @@ public class ListTrivias : MonoBehaviour
     public Sprite backgroundCorrectAnswer, backgroundRegularAnswer;
     
     [HideInInspector]
-    public string buildingName = "";
+    public string buildingName = "", idBuilding = "";
+    public int currentAmongQuestions = 0;
 
     void Start()
     {
         InitializeAtributes();
-        buildingsDropdown.onValueChanged.AddListener(delegate {
+        /*buildingsDropdown.onValueChanged.AddListener(delegate {
             SelectBuilding();
-        });
+        });*/
     }
 
     public void InitializeAtributes() 
@@ -49,9 +48,8 @@ public class ListTrivias : MonoBehaviour
 
     void Update()
     {
-        if(buildingsDropdown.value != 0 && canvasConfigTrivias.enabled)
+        if(buildingsDropdown.value != 0)
         {
-            SearchTrivias();
             addTrivia.enabled = true;
         }
         else
@@ -60,7 +58,7 @@ public class ListTrivias : MonoBehaviour
         }
     }
 
-    public async void SearchBuilding(){
+    /*public async void SearchBuilding(){
         List<DocumentSnapshot> buildingsList = await DataBaseManager.Instance.SearchByCollection("Buildings");
         foreach(DocumentSnapshot buildings in buildingsList){
             foreach(KeyValuePair<string,object> pair in buildings.ToDictionary()){
@@ -71,12 +69,15 @@ public class ListTrivias : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 
-    public void SelectBuilding()
+    public async void SelectBuilding()
     {
         int valueBuilding = buildingsDropdown.value;
         buildingName = buildingsDropdown.options[valueBuilding].text;
+        triviasList = await TriviasManager.Instance.GetTriviaByBuilding(buildingName);
+
+        SearchTrivias();
     }
 
     void ClearCurrentTrivias()
@@ -145,33 +146,27 @@ public class ListTrivias : MonoBehaviour
         }
     }
 
-    public async void SearchTrivias()
+    void SearchTrivias()
     {
-        triviasList = await TriviasManager.Instance.GetTriviaByBuilding(buildingName);
-        newSizeTrivias = triviasList.Count;
+        ClearCurrentTrivias();
 
-        if (currentSizeTrivias != newSizeTrivias)
+        foreach(Dictionary<string,object> trivia in triviasList)
         {
-            ClearCurrentTrivias();
-            foreach(Dictionary<string,object> trivia in triviasList)
+            foreach(KeyValuePair<string,object> pair in trivia)
             {
-                foreach(KeyValuePair<string,object> pair in trivia)
-                {
-                    if(pair.Key == "question"){
-                        // Instanciar prefab
-                        GameObject triviaElement = Instantiate (triviaPrefab, new Vector3(triviaContent.position.x, triviaContent.position.y, triviaContent.position.z) , Quaternion.identity);
-                        triviaElement.transform.parent = triviaContent.transform;
-                        
-                        // Editar texto
-                        Text triviaText = triviaElement.GetComponentInChildren<Text>();
-                        triviaText.text = pair.Value.ToString();
+                if(pair.Key == "question"){
+                    // Instanciar prefab
+                    GameObject triviaElement = Instantiate (triviaPrefab, new Vector3(triviaContent.position.x, triviaContent.position.y, triviaContent.position.z) , Quaternion.identity);
+                    triviaElement.transform.parent = triviaContent.transform;
+                    
+                    // Editar texto
+                    Text triviaText = triviaElement.GetComponentInChildren<Text>();
+                    triviaText.text = pair.Value.ToString();
 
-                        // Añadir a Lista
-                        currentTrivias.Add(triviaElement);
-                    }
+                    // Añadir a Lista
+                    currentTrivias.Add(triviaElement);
                 }
             }
-            currentSizeTrivias = newSizeTrivias;
         }
     }
     
@@ -199,18 +194,34 @@ public class ListTrivias : MonoBehaviour
     }
 
     public async void SaveTrivia()
-    {    
+    {
         if (CheckNewData())
         {
             List<Dictionary<string, object>> newTrivia = await TriviasManager.Instance.GetTriviaByQuestion(inputTriviaQuestion.text);
             if (newTrivia.Count == 0)
             {
-                string idBuilding = await DataBaseManager.Instance.SearchId("Buildings", "name", buildingName);
-
+                if(buildingName == GlobalDataManager.nameBuildingPalmas)
+                {
+                    idBuilding = GlobalDataManager.idBuildingPalmas;
+                }
+                else if(buildingName == GlobalDataManager.nameBuildingGuayacanes)
+                {
+                    idBuilding = GlobalDataManager.idBuildingGuayacanes;
+                }
+                else if(buildingName == GlobalDataManager.nameBuildingLago)
+                {
+                    idBuilding = GlobalDataManager.idBuildingLago;
+                }
+                else if(buildingName == GlobalDataManager.nameBuildingRaulPosada)
+                {
+                    idBuilding = GlobalDataManager.idBuildingRaulPosada;
+                }
+                
+                currentAmongQuestions = Convert.ToInt32(await DataBaseManager.Instance.SearchAttribute("Buildings", idBuilding, "amongQuestions"));
                 // Actualizar Edificios
                 Dictionary<string, object> newBuildingData = new Dictionary<string, object>
                 {
-                    {"amongQuestions", currentSizeTrivias + 1 }
+                    {"amongQuestions", currentAmongQuestions + 1 }
                 };
                 await DataBaseManager.Instance.UpdateAsync("Buildings", idBuilding, newBuildingData);
 

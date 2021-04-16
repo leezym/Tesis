@@ -276,7 +276,7 @@ public class DataBaseManager : MonoBehaviour
         return coordsList;
     }
 
-    public async Task<string> GetAvailableRoom(string dbRoom) 
+    public async Task<string> GetAvailableRoom(string dbRoom)
     {
         Query queryCol = reference.Collection(dbRoom);
         QuerySnapshot querySnapshot = await queryCol.GetSnapshotAsync();
@@ -291,11 +291,18 @@ public class DataBaseManager : MonoBehaviour
                 {
                     size = Convert.ToInt32(pair.Value);
                 }
+                else if(pair.Key == "currentSize")
+                {
+                    GlobalDataManager.Instance.currentSizeRoom = Convert.ToInt32(pair.Value);
+                }
             }
 
             if (GlobalDataManager.Instance.currentSizeRoom < size)
             {
                 GlobalDataManager.Instance.currentSizeRoom++;
+                await RoomsManager.Instance.PutRoomAsync(documentSnapshot.Id, new Dictionary<string, object>{
+                    {"currentSize", GlobalDataManager.Instance.currentSizeRoom}
+                });
                 return documentSnapshot.Id;
             }
         }

@@ -46,7 +46,6 @@ public class AuthManager : MonoBehaviour
     public InputField inputFieldName;
     
     // UserData
-    bool triviaInProgress;
     float currentLatitude = 0, currentLongitude = 0, newLatitude = -1, newLongitude = 1;
 
     public Dictionary<string, object> GetSnapshot() { return snapshot; }
@@ -81,7 +80,7 @@ public class AuthManager : MonoBehaviour
 
     void Start()
     { 
-        InitializeAtributes();       
+        InitializeAtributes();
     }
 
     protected virtual void InitializeFirebase()
@@ -96,7 +95,6 @@ public class AuthManager : MonoBehaviour
     {
         GlobalDataManager.Instance.userType = "";
         GlobalDataManager.Instance.idInductorByStudent = "";
-        triviaInProgress = false;
 
         inputFieldUser.text = "";
         inputFieldPassword.text = "";
@@ -104,14 +102,19 @@ public class AuthManager : MonoBehaviour
         inputFieldName.text = "";
         inputRoomName.text = "";
         inputInductorRoomSize.text = "";
-
     }
 
     void Update()
     {
+        // Sacar a un inductor por si cerró la aplicación y dejó la sesión abierta
+        if(canvasGeneralSessions.enabled){
+            Exit();
+        }
+
         if (signedIn)
         {                 
             LoadingScreenManager.Instance.ShowFinalRankingYincana();
+                
             StartCoroutine(MapManager.Instance.Location());
             
             if(currentLatitude != newLatitude || currentLongitude != newLongitude)
@@ -141,7 +144,6 @@ public class AuthManager : MonoBehaviour
 
         if (GetSnapshot() == null)
         {
-            Debug.Log("saca al neo porque no existe sala");
             InitializeAtributes();
             authFirebase.SignOut();
         }
@@ -149,7 +151,7 @@ public class AuthManager : MonoBehaviour
 
     void ShowTrivias()
     {
-        TriviasChallengesManager.Instance.ShowTriviasStudent(GlobalDataManager.Instance.idInductorByStudent, triviaInProgress, canvasMenuStudent, canvasPuntuacionesStudent);
+        TriviasChallengesManager.Instance.ShowTriviasStudent(GlobalDataManager.Instance.idInductorByStudent, canvasMenuStudent, canvasPuntuacionesStudent);
     }
 
     public string GetUserId()
@@ -172,6 +174,7 @@ public class AuthManager : MonoBehaviour
             {
                 Debug.Log("salir " + GlobalDataManager.Instance.userType);
                 ScenesManager.Instance.LoadNewCanvas(canvasGeneralSessions);
+                ScenesManager.Instance.DeleteCurrentCanvas(LoadingScreenManager.Instance.canvasRankingFinal);
                 
                 if (GlobalDataManager.Instance.userType == "inductor")
                 {
@@ -212,9 +215,6 @@ public class AuthManager : MonoBehaviour
             //authFirebase = null;
             Exit();
         }
-        //authFirebase.StateChanged -= AuthStateChanged;
-        //authFirebase = null;
-        //Exit();
     }
 
     public async void SignInInductor() {
@@ -240,7 +240,7 @@ public class AuthManager : MonoBehaviour
                     
                     await UsersManager.Instance.PostNewInductor(AuthManager.Instance.GetUserId(), "", user);
                     GlobalDataManager.Instance.idUserInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
-                    GameObject.FindObjectOfType<ListTrivias>().SearchBuilding();
+                    //GameObject.FindObjectOfType<ListTrivias>().SearchBuilding();
 
                 });
             }else{
@@ -281,6 +281,7 @@ public class AuthManager : MonoBehaviour
                             await UsersManager.Instance.PostNewStudent(userFirebase.UserId, name, document, GlobalDataManager.Instance.idRoomByStudent);
                             GlobalDataManager.Instance.idUserStudent = userFirebase.UserId;
                             GlobalDataManager.Instance.idInductorByStudent = (await DataBaseManager.Instance.SearchAttribute("Rooms", GlobalDataManager.Instance.idRoomByStudent, "idInductor")).ToString();
+                            GlobalDataManager.Instance.nameInductor = (await DataBaseManager.Instance.SearchAttribute("Inductors", GlobalDataManager.Instance.idInductorByStudent, "name")).ToString();
                         });
                     }else{
                         NotificationsManager.Instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");
@@ -337,7 +338,8 @@ public class AuthManager : MonoBehaviour
                 //authFirebase = null;
                 authFirebase.SignOut();
             });*/
-        }        
+        }   
+        NotificationsManager.Instance.acceptQuestionButton.onClick.RemoveAllListeners();     
     }
 
 }

@@ -19,6 +19,7 @@ public class GlobalDataManager : MonoBehaviour
     public string idUserInductor;
     public string idRoomByInductor;
     public int currentSizeRoom;
+    public string nameInductor;
 
     [Header("STUDENT")]
     public string idUserStudent;

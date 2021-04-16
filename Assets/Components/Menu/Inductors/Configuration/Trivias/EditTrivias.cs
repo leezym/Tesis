@@ -239,21 +239,22 @@ public class EditTrivias : MonoBehaviour
     }
 
     async void Delete()
-    {
-    
+    {    
         await TriviasManager.Instance.DeleteTrivia(idTrivia);
-        GameObject.FindObjectOfType<ListTrivias>().SearchTrivias();
+        GameObject.FindObjectOfType<ListTrivias>().SelectBuilding();
 
-        string idBuilding = await DataBaseManager.Instance.SearchId("Buildings", "name", GameObject.FindObjectOfType<ListTrivias>().buildingName);
+        string idBuilding = GameObject.FindObjectOfType<ListTrivias>().idBuilding;
 
         // Actualizar Edificios
         Dictionary<string, object> newBuildingData = new Dictionary<string, object>
         {
-            {"amongQuestions", GameObject.FindObjectOfType<ListTrivias>().currentSizeTrivias - 1 }
+            {"amongQuestions", GameObject.FindObjectOfType<ListTrivias>().currentAmongQuestions - 1 }
         };
         await DataBaseManager.Instance.UpdateAsync("Buildings", idBuilding, newBuildingData);
 
         ScenesManager.Instance.LoadNewCanvas(canvasConfigTrivias);
         ScenesManager.Instance.DeleteCurrentCanvas(canvasTriviaDetail);
+
+        NotificationsManager.Instance.acceptQuestionButton.onClick.RemoveAllListeners();     
     }
 }
