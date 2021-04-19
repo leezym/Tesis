@@ -71,6 +71,7 @@ public class Room
         return new Dictionary<string, object>() {
             { "room", this.room },
             { "size", this.size },
+            { "currentSize", this.currentSize },
             { "score", this.score},
             { "finished", this.finished},
             { "idInductor", this.idInductor }

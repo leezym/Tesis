@@ -104,11 +104,38 @@ public class AuthManager : MonoBehaviour
         inputInductorRoomSize.text = "";
     }
 
-    void Update()
+    async void Update()
     {
         // Sacar a un inductor por si cerró la aplicación y dejó la sesión abierta
-        if(canvasGeneralSessions.enabled){
-            Exit();
+        if (Input.GetKeyDown(KeyCode.Escape)) 
+        { 
+             userFirebase = authFirebase.CurrentUser;
+            if (userFirebase != null)
+                LogOut();
+            else
+                Application.Quit();
+        }
+
+        if(canvasGeneralSessions.enabled)
+        {
+            userFirebase = authFirebase.CurrentUser;
+            if (userFirebase != null)
+            {   
+                GlobalDataManager.Instance.idUserInductor = await UsersManager.Instance.GetInductorIdByAuth(userFirebase.UserId);
+                if(GlobalDataManager.Instance.idUserInductor != null){
+                    GlobalDataManager.Instance.idRoomByInductor = await DataBaseManager.Instance.SearchId("Rooms", "idInductor", GlobalDataManager.Instance.idUserInductor);
+                    await UsersManager.Instance.DeleteSession();
+                }
+                /*else
+                {
+                    GlobalDataManager.Instance.idUserStudent = userFirebase.UserId;
+                    if(GlobalDataManager.Instance.idUserStudent != null)
+                        await RoomsManager.Instance.DeleteStudentInRoom();
+                }*/
+
+                InitializeAtributes();
+                authFirebase.SignOut();
+            }
         }
 
         if (signedIn)
@@ -168,12 +195,10 @@ public class AuthManager : MonoBehaviour
     {
         if (authFirebase.CurrentUser != userFirebase)
         {
-            Debug.Log("authFirebase.CurrentUser != userFirebase");
             signedIn = userFirebase != authFirebase.CurrentUser && authFirebase.CurrentUser != null;
             if (!signedIn && userFirebase != null)
             {
                 Debug.Log("salir " + GlobalDataManager.Instance.userType);
-                ScenesManager.Instance.LoadNewCanvas(canvasGeneralSessions);
                 ScenesManager.Instance.DeleteCurrentCanvas(LoadingScreenManager.Instance.canvasRankingFinal);
                 
                 if (GlobalDataManager.Instance.userType == "inductor")
@@ -187,6 +212,7 @@ public class AuthManager : MonoBehaviour
                     ScenesManager.Instance.DeleteCurrentCanvas(canvasGeoMap);
                     ScenesManager.Instance.DeleteCurrentCanvas(canvasARMap);
                 }
+                ScenesManager.Instance.LoadNewCanvas(canvasGeneralSessions);
             }
             userFirebase = authFirebase.CurrentUser;
             if (signedIn)
@@ -213,7 +239,7 @@ public class AuthManager : MonoBehaviour
         if (authFirebase != null) {
             authFirebase.StateChanged -= AuthStateChanged;
             //authFirebase = null;
-            Exit();
+            Exit();            
         }
     }
 
@@ -238,8 +264,8 @@ public class AuthManager : MonoBehaviour
                         return;
                     }
                     
-                    await UsersManager.Instance.PostNewInductor(AuthManager.Instance.GetUserId(), "", user);
-                    GlobalDataManager.Instance.idUserInductor = await UsersManager.Instance.GetInductorIdByAuth(AuthManager.Instance.GetUserId());
+                    await UsersManager.Instance.PostNewInductor(GetUserId(), "", user);
+                    GlobalDataManager.Instance.idUserInductor = await UsersManager.Instance.GetInductorIdByAuth(GetUserId());
                     //GameObject.FindObjectOfType<ListTrivias>().SearchBuilding();
 
                 });
@@ -315,6 +341,7 @@ public class AuthManager : MonoBehaviour
 
             InitializeAtributes();
             authFirebase.SignOut();
+            Application.Quit();
            
                 //authFirebase = null;
             /*await userFirebase.DeleteAsync().ContinueWith(async task =>

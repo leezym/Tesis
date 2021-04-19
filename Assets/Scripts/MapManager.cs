@@ -196,4 +196,9 @@ public class MapManager : MonoBehaviour
         backButtonInductor.SetActive(true);
         backButtonStudent.SetActive(false);
     }
+
+    public void DeleteMap()
+    {
+        spriteMapRenderer.sprite = null;
+    }
 }

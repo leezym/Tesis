@@ -45,5 +45,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvasNotificationFailure: {fileID: 0}
   canvasNotificationSuccess: {fileID: 0}
+  canvasNotificationQuestion: {fileID: 0}
   NotificationFailureText: {fileID: 0}
   NotificationSuccessText: {fileID: 0}
+  NotificationQuestionText: {fileID: 0}
+  acceptQuestionButton: {fileID: 0}

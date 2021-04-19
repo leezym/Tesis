@@ -11,9 +11,9 @@ public class LoadingScreenManager : MonoBehaviour
     public static LoadingScreenManager Instance { get => instance; set => instance = value; }
 
     // Contadores
-    [HideInInspector]
+
     public int timer = 3, question = 20;
-    [HideInInspector]
+
     public float isOver = 1.5f, waiting = 1.5f;
 
     public bool triviaInProgress, finalRanking = true;
@@ -27,10 +27,13 @@ public class LoadingScreenManager : MonoBehaviour
     public GameObject[] placeIndividualLabels;
     public GameObject[] placeGrupalLabels;
     
-    private List<string> SuccessQuotesList = new List<string>{"Buena esa, crack.", "Eres un Máquina", "Eres un Fiera", "Un Titán", "Caballo"};
-    private List<string> FailQuotesList = new List<string>{"Mejor suerte para la próxima, crack.", "Lamenteibol.", "Llórelo papá."};
+    private List<string> SuccessQuotesList = new List<string>{"Buena esa, crack.", "Eres máquina, sigue así.", "Eres un Fiera", "Titán"};
+    private List<string> FailQuotesList = new List<string>{"Mejor suerte para la próxima, crack.", "Lamenteibol.", "Llórelo."};
 
-    float timeInductorLoading = 0, timeTimerTrivia = 0, timeTriviaLoading = 0, timeWaitingTrivia = 0, timeIsOver = 0;
+    float timeInductorLoading = 0, timeTimerTrivia = 0, timeWaitingTrivia = 0, timeIsOver = 0; 
+    [HideInInspector]
+    public float timeTriviaLoading = 0;
+    
     string idBuilding = "";
     int index = 0;
     Dictionary<string,object>[] listTrivias;
@@ -162,6 +165,7 @@ public class LoadingScreenManager : MonoBehaviour
             canvasTimeOver.enabled = false;
             canvasQuestionLoading.enabled = false;
             canvasWaitingTriviaLoading.enabled = true;
+            GameObject.FindObjectOfType<PlayATrivia>().DetectAnswer();
         }
     }
 
@@ -197,9 +201,7 @@ public class LoadingScreenManager : MonoBehaviour
     {
         string buildingName = (await DataBaseManager.Instance.SearchById("Buildings", idBuilding,"name")).ToString();
         canvasQuestionLoading.transform.Find("BuildingNameLabel").GetComponent<Text>().text = buildingName;            
-
-        Debug.Log("Edificio: "+buildingName);
-        Debug.Log(index +">"+listTrivias.Length);
+        Debug.Log(index +"<"+listTrivias.Length);
         if(index < listTrivias.Length)
         {
             Dictionary<string, object> trivia = listTrivias[index];        
@@ -218,9 +220,9 @@ public class LoadingScreenManager : MonoBehaviour
             canvasQuestionLoading.enabled = true;
         }
         else{
+            triviaInProgress = false;
             GameObject.FindObjectOfType<PlayATrivia>().ShowFinalRanking();
             ScenesManager.Instance.LoadNewCanvas(canvasPodiumStudent);
-            triviaInProgress = false;
         }
     }
 

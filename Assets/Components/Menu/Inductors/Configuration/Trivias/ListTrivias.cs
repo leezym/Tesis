@@ -48,13 +48,16 @@ public class ListTrivias : MonoBehaviour
 
     void Update()
     {
-        if(buildingsDropdown.value != 0)
+        if(canvasConfigTrivias.enabled)
         {
-            addTrivia.enabled = true;
-        }
-        else
-        {
-            addTrivia.enabled = false;
+            if(buildingsDropdown.value != 0)
+            {
+                addTrivia.enabled = true;
+            }
+            else
+            {
+                addTrivia.enabled = false;
+            }
         }
     }
 

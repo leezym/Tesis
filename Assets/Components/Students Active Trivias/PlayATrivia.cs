@@ -14,18 +14,31 @@ public class PlayATrivia : MonoBehaviour
     public Sprite wrongAnswer, rightAnswer;
     public GameObject[] placeLabels;
 
+    [HideInInspector]
+    public int points = 0;
+    string correctAnswer = "";
+
+
     public async void DetectAnswer(Button button)
     {
-        string answer = button.GetComponentInChildren<Text>().text;
-        
+        string answer = button.GetComponentInChildren<Text>().text;        
         string idTrivia = await TriviasManager.Instance.GetIdTriviaByQuestion(question.text);
-        object correctAnswer = await DataBaseManager.Instance.SearchAttribute("Trivias", idTrivia, "correctAnswer");
+
+
+        Dictionary<string, object> trivia = await TriviasManager.Instance.GetTriviaAsync(idTrivia);        
+        foreach(KeyValuePair<string, object> pair in trivia)
+        {
+            if(pair.Key == "correctAnswer")
+                correctAnswer = pair.Value.ToString();
+            else if(pair.Key == "points")
+                points = Convert.ToInt32(pair.Value);
+        }
 
         if(answer == correctAnswer.ToString())
         {
             button.image.sprite = rightAnswer;
             LoadingScreenManager.Instance.SetKevinQuote(true);
-            RegisterPoints(idTrivia);
+            points += Convert.ToInt32(LoadingScreenManager.Instance.timeTriviaLoading);
         }
         else
         {
@@ -36,15 +49,24 @@ public class PlayATrivia : MonoBehaviour
                 if(answerButton.GetComponentInChildren<Text>().text == correctAnswer.ToString())
                     answerButton.image.sprite = rightAnswer;
             }
+            points = 0;
         }
+        RegisterPoints(idTrivia);
         ScenesManager.Instance.LoadNewCanvas(LoadingScreenManager.Instance.canvasKevinNotification);
+    }
+
+    public async void DetectAnswer()
+    {    
+        string idTrivia = await TriviasManager.Instance.GetIdTriviaByQuestion(question.text);
+        points = 0;
+        RegisterPoints(idTrivia);
     }
 
     async void RegisterPoints(string idTrivia)
     {
         // Crear trivia resuelta
-        object points = await DataBaseManager.Instance.SearchAttribute("Trivias", idTrivia, "points");
-        await TriviasChallengesManager.Instance.PostNewStudentTriviaChallenge(GlobalDataManager.Instance.idUserStudent, idTrivia, Convert.ToInt32(points));
+        Debug.Log("LOS PUNTOS: "+points);
+        await TriviasChallengesManager.Instance.PostNewStudentTriviaChallenge(GlobalDataManager.Instance.idUserStudent, idTrivia, points);
         
         // Asignar puntuaciones totales al estudiante
         object currentScore = await DataBaseManager.Instance.SearchAttribute("Students", GlobalDataManager.Instance.idUserStudent, "score");
@@ -68,7 +90,6 @@ public class PlayATrivia : MonoBehaviour
     public async void ShowFinalRanking()
     {
         List<Dictionary<string, object>> rankingList = await UsersManager.Instance.GetFinalTriviasRanking(GlobalDataManager.Instance.idRoomByStudent);
-        Debug.Log("ShowFinalRanking "+rankingList.Count);
         foreach(Dictionary<string, object> ranking in rankingList)
         {
             foreach(KeyValuePair<string, object> pair in ranking)

@@ -64,7 +64,6 @@ public class Trivia
     public string answerThree;
     public string correctAnswer;
     public int points = 10;
-    public bool available = true;
 
     public Trivia() { }
 
@@ -87,8 +86,7 @@ public class Trivia
             { "answerTwo", this.answerTwo },
             { "answerThree", this.answerThree },
             { "correctAnswer", this.correctAnswer },
-            { "points", this.points },
-            { "available", this.available }
+            { "points", this.points }
         };
     }
 }

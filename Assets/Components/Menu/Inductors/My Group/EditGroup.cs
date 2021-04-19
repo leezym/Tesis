@@ -70,7 +70,7 @@ public class EditGroup : MonoBehaviour
                 {
                     puntajeLabel.text = pair.Value.ToString();
                 }
-                else if (pair.Key == "currentsize")
+                else if (pair.Key == "currentSize")
                 {
                     GlobalDataManager.Instance.currentSizeRoom = Convert.ToInt32(pair.Value);
                 }
@@ -118,7 +118,6 @@ public class EditGroup : MonoBehaviour
 
     public async void SendNewRoomInfo()
     {
-        Debug.Log(Convert.ToInt32(newInputRoomSize.text) + " >= " + GlobalDataManager.Instance.currentSizeRoom);
         if (Convert.ToInt32(newInputRoomSize.text) >= GlobalDataManager.Instance.currentSizeRoom)
         {
             Dictionary<string, object> newRoomData = new Dictionary<string, object>

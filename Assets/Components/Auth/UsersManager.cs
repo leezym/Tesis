@@ -96,11 +96,13 @@ public class Inductor
     {
         this.idAuth = idAuth;
         this.name = name;
+        this.user = user;
     }
     public Dictionary<string, object> ConvertJson()
     {
         return new Dictionary<string, object>() {
             { "idAuth", this.idAuth },
+            { "user", this.user },
             { "name", this.name },
             { "latitude", this.latitude },
             { "longitude", this.longitude }

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Firebase;
-//using Firebase.Unity.Editor;
 using Firebase.Firestore;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+
 
 public class DataBaseManager : MonoBehaviour
 {
@@ -154,13 +154,14 @@ public class DataBaseManager : MonoBehaviour
     public async Task<List<Dictionary<string, object>>> SearchByOrderDescendingAndLimit(string db, string attribute, int limit, string filterAttribute, object filterValue)
     {
         Query colRef = reference.Collection(db).WhereEqualTo(filterAttribute, filterValue);
-        Query queryAttribute = colRef.OrderByDescending(attribute).Limit(limit);
-        QuerySnapshot querySnapshot = await queryAttribute.GetSnapshotAsync();
+        //Query queryAttribute = colRef.OrderByDescending(filterAttribute).Limit(limit);
+        QuerySnapshot querySnapshot = await colRef.GetSnapshotAsync();
         List<Dictionary<string,object>> data = new List<Dictionary<string, object>>();
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
         {
             data.Add(documentSnapshot.ToDictionary());
         }
+        data.OrderByDescending(x => x.ContainsKey(attribute) ? x[attribute] : string.Empty).Take(limit);
         return data;
     }
     
@@ -392,27 +393,34 @@ public class DataBaseManager : MonoBehaviour
         await docRefInductor.DeleteAsync();
 
         // Eliminar sala
-        DocumentReference docRefRoom = reference.Collection("Rooms").Document(idRoom);
-        await docRefRoom.DeleteAsync();
+        if(idRoom != ""){
+            DocumentReference docRefRoom = reference.Collection("Rooms").Document(idRoom);
+            await docRefRoom.DeleteAsync();
+        
+            // Eliminar estudiantes de la sala
+            Query queryCol = reference.Collection("Students").WhereEqualTo("idRoom", idRoom);
+            QuerySnapshot querySnapshotStudent = await queryCol.GetSnapshotAsync();
 
-        // Eliminar estudiantes de la sala
-        Query queryCol = reference.Collection("Students").WhereEqualTo("idRoom", idRoom);
-        QuerySnapshot querySnapshotStudent = await queryCol.GetSnapshotAsync();
-
-        foreach (DocumentSnapshot documentSnapshot in querySnapshotStudent.Documents)
-        {
-            DocumentReference docRefStudent = documentSnapshot.Reference;
-            await docRefStudent.DeleteAsync();
+            foreach (DocumentSnapshot documentSnapshot in querySnapshotStudent.Documents)
+            {
+                DocumentReference docRefStudent = documentSnapshot.Reference;
+                await docRefStudent.DeleteAsync();
+            }
         }
     }
 
     public async Task DeleteStudentInRoom()
     {
         string idStudent = GlobalDataManager.Instance.idUserStudent;
+        string idRoom = GlobalDataManager.Instance.idRoomByStudent;
 
         DocumentReference docRef = reference.Collection("Students").Document(idStudent);
         await docRef.DeleteAsync();
 
-        GlobalDataManager.Instance.currentSizeRoom--;
+        GlobalDataManager.Instance.currentSizeRoom = Convert.ToInt32(await DataBaseManager.Instance.SearchAttribute("Rooms", idRoom, "currentSize"));
+        await reference.Collection("Rooms").Document(idRoom).UpdateAsync(new Dictionary<string, object>
+        {
+            { "currentSize", GlobalDataManager.Instance.currentSizeRoom - 1 }
+        });
     }
 }
