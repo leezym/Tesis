@@ -12,7 +12,7 @@ public class EditGroup : MonoBehaviour
     public Canvas canvasMyGroup, canvasEditGroup, canvasNombreInductor, canvasMenuInductor;
     public InputField inputRoomSize, inputInductorName;
     public InputField newInputRoomSize, newInputRoomName;
-    public Button finishButton;
+    public Button finishButton, rankingsButton;
     [HideInInspector]
     public int countTrivias = 0, countHints = 0;
     
@@ -24,6 +24,8 @@ public class EditGroup : MonoBehaviour
                 {"finished", true}
             });
             NotificationsManager.Instance.SetSuccessNotificationMessage("¡Felicitaciones, han completado la yincana!. Ahora deben esperar que los demás grupos finalicen para visualizar el ranking final.");
+            finishButton.gameObject.SetActive(false);
+            rankingsButton.gameObject.SetActive(true);
         });
     }
 

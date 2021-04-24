@@ -11,7 +11,6 @@ public class ListNeos : MonoBehaviour
 {
     public Text content;
     public Canvas canvasMyGroup;
-    List<string> NeoJaverianos = new List<string>();
     int currentSizeStudents = 0, newSizeStudents = 0;
 
     async void Update()
@@ -26,7 +25,7 @@ public class ListNeos : MonoBehaviour
     {
         currentSizeStudents = GlobalDataManager.Instance.currentSizeRoom;
 
-        NeoJaverianos = await GroupManager.Instance.ListNameStudents(GlobalDataManager.Instance.idUserInductor);
+        List<string> NeoJaverianos = await GroupManager.Instance.ListNameStudents(GlobalDataManager.Instance.idUserInductor);
         newSizeStudents = NeoJaverianos.Count;
 
         if (currentSizeStudents != newSizeStudents)

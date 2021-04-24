@@ -22,6 +22,7 @@ public class AuthManager : MonoBehaviour
     Firebase.DependencyStatus dependencyStatus = Firebase.DependencyStatus.UnavailableOther;
 
     private bool signedIn;
+    GoogleMap googleMap;
 
     // DataBase
     private Dictionary<string, object> snapshot;
@@ -46,7 +47,9 @@ public class AuthManager : MonoBehaviour
     public InputField inputFieldName;
     
     // UserData
-    float currentLatitude = 0, currentLongitude = 0, newLatitude = -1, newLongitude = 1;
+    float currentLatitude = 0, currentLongitude = 0;
+    [HideInInspector]
+    public float newLatitude = 0, newLongitude = 0;
 
     public Dictionary<string, object> GetSnapshot() { return snapshot; }
     public void SetSnapshot(Dictionary<string, object> snapshot) { this.snapshot = snapshot; }
@@ -81,6 +84,7 @@ public class AuthManager : MonoBehaviour
     void Start()
     { 
         InitializeAtributes();
+        googleMap = GameObject.FindObjectOfType<GoogleMap>();
     }
 
     protected virtual void InitializeFirebase()
@@ -106,7 +110,7 @@ public class AuthManager : MonoBehaviour
 
     async void Update()
     {
-        // Sacar a un inductor por si cerró la aplicación y dejó la sesión abierta
+        // Cerrar sesión con le botón de atrás del dispositivo
         if (Input.GetKeyDown(KeyCode.Escape)) 
         { 
              userFirebase = authFirebase.CurrentUser;
@@ -115,7 +119,8 @@ public class AuthManager : MonoBehaviour
             else
                 Application.Quit();
         }
-
+        
+        // Sacar a un inductor o neojaveriano por si cerró la aplicación y dejó la sesión abierta
         if(canvasGeneralSessions.enabled)
         {
             userFirebase = authFirebase.CurrentUser;
@@ -141,15 +146,21 @@ public class AuthManager : MonoBehaviour
         if (signedIn)
         {                 
             LoadingScreenManager.Instance.ShowFinalRankingYincana();
-                
-            StartCoroutine(MapManager.Instance.Location());
             
-            if(currentLatitude != newLatitude || currentLongitude != newLongitude)
+            // Actualizar la latitud y longitud en la DB
+            if (GlobalDataManager.Instance.idUserStudent != "" || GlobalDataManager.Instance.idUserInductor != "")
             {
-                MapManager.Instance.PutLocation();
-                currentLatitude = newLatitude;
-                currentLongitude = newLongitude;
-            }
+                StartCoroutine(MapManager.Instance.Location());
+                newLatitude = googleMap.centerLocation.latitude;
+                newLongitude = googleMap.centerLocation.longitude;
+
+                if(currentLatitude != newLatitude || currentLongitude != newLongitude)
+                {
+                    MapManager.Instance.PutLocation(newLatitude, newLongitude);
+                    currentLatitude = newLatitude;
+                    currentLongitude = newLongitude;
+                }
+            }  
 
             if (GlobalDataManager.Instance.userType == "student")
             {                

@@ -21,14 +21,15 @@ public class LoadingScreenManager : MonoBehaviour
     public Canvas canvasInductorLoading, canvasTimerTriviaLoading, canvasQuestionLoading, canvasWaitingTriviaLoading, canvasPodiumStudent, canvasTimeOver, canvasKevinNotification, canvasRankingFinal;
     public Sprite normalAnswer;
     public Text kevinQuote;
+    public GameObject backButtonRankingFinalInductor, backButtonRankingFinalEstudiante;
 
-    public Button backButtonRankingFinal;
+    //public Button backButtonRankingFinal;
 
     public GameObject[] placeIndividualLabels;
     public GameObject[] placeGrupalLabels;
     
-    private List<string> SuccessQuotesList = new List<string>{"Buena esa, crack.", "Eres máquina, sigue así.", "Eres un Fiera", "Titán"};
-    private List<string> FailQuotesList = new List<string>{"Mejor suerte para la próxima, crack.", "Lamenteibol.", "Llórelo."};
+    private List<string> SuccessQuotesList = new List<string>{"Buena esa, crack.", "Eres máquina, sigue así.", "Eres una fiera"};
+    private List<string> FailQuotesList = new List<string>{"Mejor suerte para la próxima, crack.", "No te desanimes :c", "Llórelo."};
 
     float timeInductorLoading = 0, timeTimerTrivia = 0, timeWaitingTrivia = 0, timeIsOver = 0; 
     [HideInInspector]
@@ -58,17 +59,31 @@ public class LoadingScreenManager : MonoBehaviour
         canvasWaitingTriviaLoading.transform.Find("TimeSlider").GetComponent<Slider>().maxValue = waiting;
         
         // Ranking Final Advertencia
-        LoadingScreenManager.Instance.backButtonRankingFinal.onClick.AddListener(()=>{
+        /*LoadingScreenManager.Instance.backButtonRankingFinal.onClick.AddListener(()=>{
             NotificationsManager.Instance.SetQuestionNotificationMessage("Recuerda tomar captura de las puntuaciones individuales y grupales antes de salir. Una vez se cierra el ranking no puedes abrirlo nuevamente, ¿Seguro que deseas salir?.");
             NotificationsManager.Instance.acceptQuestionButton.onClick.AddListener(()=>{                           
                 ScenesManager.Instance.DeleteCurrentCanvas(LoadingScreenManager.Instance.canvasRankingFinal);
                 NotificationsManager.Instance.acceptQuestionButton.onClick.RemoveAllListeners();
             });
-        });
+        });*/
     }
     
     void Update()
-    {
+    {       
+        if(canvasRankingFinal.enabled)
+        {
+            if(GlobalDataManager.Instance.userType == "student")
+            {
+                backButtonRankingFinalInductor.SetActive(false);
+                backButtonRankingFinalEstudiante.SetActive(true);
+            }
+            else
+            {
+                backButtonRankingFinalInductor.SetActive(true);
+                backButtonRankingFinalEstudiante.SetActive(false);
+            }
+        }
+        
         // Carga del inductor
         if (canvasInductorLoading.enabled)
             InductorLoading();
@@ -251,10 +266,10 @@ public class LoadingScreenManager : MonoBehaviour
             ScenesManager.Instance.LoadNewCanvas(LoadingScreenManager.Instance.canvasRankingFinal);
             finalRanking = false;
             
-            if(GlobalDataManager.Instance.userType == "inductor")
+            /*if(GlobalDataManager.Instance.userType == "inductor")
                 NotificationsManager.Instance.SetFailureNotificationMessage("Recuerda tomar captura de las puntuaciones individuales y grupales antes de salir. ¡No queremos que nuestros neojaverianos se pongan tristes!");
             else
-                NotificationsManager.Instance.SetFailureNotificationMessage("Si lo deseas, puedes tomar captura de las puntuaciones individuales y grupales antes de salir.");
+                NotificationsManager.Instance.SetFailureNotificationMessage("Si lo deseas, puedes tomar captura de las puntuaciones individuales y grupales antes de salir.");*/
         }
     }
 

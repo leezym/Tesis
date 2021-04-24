@@ -46,21 +46,6 @@ public class ListTrivias : MonoBehaviour
         toggleTriviaAnswerThree.isOn = false;
     }
 
-    void Update()
-    {
-        if(canvasConfigTrivias.enabled)
-        {
-            if(buildingsDropdown.value != 0)
-            {
-                addTrivia.enabled = true;
-            }
-            else
-            {
-                addTrivia.enabled = false;
-            }
-        }
-    }
-
     /*public async void SearchBuilding(){
         List<DocumentSnapshot> buildingsList = await DataBaseManager.Instance.SearchByCollection("Buildings");
         foreach(DocumentSnapshot buildings in buildingsList){
@@ -80,7 +65,10 @@ public class ListTrivias : MonoBehaviour
         buildingName = buildingsDropdown.options[valueBuilding].text;
         triviasList = await TriviasManager.Instance.GetTriviaByBuilding(buildingName);
 
-        SearchTrivias();
+        if(buildingsDropdown.value != 0)
+            SearchTrivias();
+        else
+            NotificationsManager.Instance.SetFailureNotificationMessage("Por favor selecciona un edificio para agregar una pregunta.");
     }
 
     void ClearCurrentTrivias()

@@ -55,8 +55,14 @@ public class GoogleMap : MonoBehaviour {
     public GoogleMapPath[] paths;
 
     void Start() {
-        if (autoLocateCenter && (markers.Length == 0 && paths.Length == 0)) {
+        if (autoLocateCenter && (markers.Length == 0 && paths.Length == 0))
+        {
             Debug.LogError("Auto Center will only work if paths or markers are used.");
+        }
+
+        if(loadOnStart)
+        {
+            StartCoroutine(MapManager.Instance.Location());
         }
     }
 

@@ -16,7 +16,6 @@ public class MapManager : MonoBehaviour
     public Canvas canvasGeoMap;
     public GameObject mainCamera, mapCamera, arCamera, scriptStreet, scriptBuilding, plane;
     public GameObject buttonChangeMapNeos, backButtonInductor, backButtonStudent;
-    float currentLatitude = 0, currentLongitude = 0;
 
     void Awake()
     {
@@ -29,10 +28,10 @@ public class MapManager : MonoBehaviour
     }
 
     public void CheckLocation(){
-        StartCoroutine(CheckLocationOn());
+        StartCoroutine(_CheckLocation());
     }
 
-    public IEnumerator CheckLocationOn()
+    public IEnumerator _CheckLocation()
     {
         // First, check if user has location service enabled
         if (!Input.location.isEnabledByUser){
@@ -41,7 +40,7 @@ public class MapManager : MonoBehaviour
         }
         else
         {
-            StartCoroutine(Location());
+            StartCoroutine(Location());            
         }
     }
     public IEnumerator Location()
@@ -120,29 +119,24 @@ public class MapManager : MonoBehaviour
         }
     }
 
-    public async void PutLocation()
+    public async void PutLocation(float newLatitude, float newLongitude)
     {
+        //NotificationsManager.Instance.SetSuccessNotificationMessage("Latitude: "+newLatitude+"\nLongitude: "+newLongitude+"\nusuario: "+GlobalDataManager.Instance.userType+"\nid: "+GlobalDataManager.Instance.idUserInductor);
         if (GlobalDataManager.Instance.userType == "student")
         {
             // Mapa
-            if (GlobalDataManager.Instance.idUserStudent != "")
-            {
-                await UsersManager.Instance.PutUserAsync("Students", GlobalDataManager.Instance.idUserStudent, new Dictionary<string, object>{
-                    {"latitude", currentLatitude},
-                    {"longitude", currentLongitude}
-                });
-            }
+            await UsersManager.Instance.PutUserAsync("Students", GlobalDataManager.Instance.idUserStudent, new Dictionary<string, object>{
+                {"latitude", newLatitude},
+                {"longitude", newLongitude}
+            });
         }
         else if(GlobalDataManager.Instance.userType == "inductor")
         { 
             // Mapa
-            if(GlobalDataManager.Instance.idUserInductor != "")
-            {
-                await UsersManager.Instance.PutUserAsync("Inductors", GlobalDataManager.Instance.idUserInductor, new Dictionary<string, object>{
-                    {"latitude", currentLatitude},
-                    {"longitude", currentLongitude}
-                });
-            }
+            await UsersManager.Instance.PutUserAsync("Inductors", GlobalDataManager.Instance.idUserInductor, new Dictionary<string, object>{
+                {"latitude", newLatitude},
+                {"longitude", newLongitude}
+            });
         }
     }
 
@@ -167,7 +161,7 @@ public class MapManager : MonoBehaviour
         Refresh();
     }
 
-    async void OthersCurrentLocation()
+    public async void OthersCurrentLocation()
     {
         List<Coords> coordsList = await LocationsManager.Instance.GetLocationAsync(GlobalDataManager.Instance.userType);
         List<GoogleMapLocation> locationsList = new List<GoogleMapLocation>();
