@@ -18,23 +18,6 @@ public class GroupManager : MonoBehaviour
         instance = this;
     }
 
-    public async Task<List<string>> ListNameStudents(string idInductor)
-    {
-        Dictionary<string, object> data = await DataBaseManager.Instance.ListStudentsByGroup("Students", idInductor);
-        List<string> Estudiantes = new List<string>();
-        if (data != null)
-        {
-            foreach (KeyValuePair<string, object> pair in data)
-            {
-                if (pair.Key == "name")
-                {
-                    Estudiantes.Add(pair.Value.ToString());
-                }        
-            }
-        }
-        return Estudiantes;
-    }
-
     public async Task<Dictionary<string,object>> GetRoomDataAsync()
     {
         return await RoomsManager.Instance.GetRoomAsync(GlobalDataManager.Instance.idRoomByInductor);

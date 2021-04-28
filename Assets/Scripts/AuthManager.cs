@@ -113,7 +113,8 @@ public class AuthManager : MonoBehaviour
         // Cerrar sesión con le botón de atrás del dispositivo
         if (Input.GetKeyDown(KeyCode.Escape)) 
         { 
-             userFirebase = authFirebase.CurrentUser;
+            // Cerrar sesion o Salir
+            userFirebase = authFirebase.CurrentUser;
             if (userFirebase != null)
                 LogOut();
             else

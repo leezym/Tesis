@@ -23,19 +23,19 @@ public class ListNeos : MonoBehaviour
 
     async Task DetectStudent()
     {
-        currentSizeStudents = GlobalDataManager.Instance.currentSizeRoom;
-
-        List<string> NeoJaverianos = await GroupManager.Instance.ListNameStudents(GlobalDataManager.Instance.idUserInductor);
-        newSizeStudents = NeoJaverianos.Count;
-
+        newSizeStudents = GlobalDataManager.Instance.currentSizeRoom;
         if (currentSizeStudents != newSizeStudents)
         {
-            content.text = "";
-            foreach(string name in NeoJaverianos)
+            List<string> studentsList = await DataBaseManager.Instance.ListStudentsByGroup(GlobalDataManager.Instance.idRoomByInductor);
+            if(studentsList.Count != 0)
             {
-                content.text += name + "\n\n";
+                content.text = "";
+                foreach(string name in studentsList)
+                {
+                    content.text += name + "\n\n";
+                }            
+                currentSizeStudents = newSizeStudents;
             }
-            currentSizeStudents = newSizeStudents;
         }
     }
 }

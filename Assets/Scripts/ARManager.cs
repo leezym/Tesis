@@ -21,22 +21,36 @@ public class ARManager : MonoBehaviour
         {
             if(hit.transform.tag == "Marker")
             {
+                foreach(GameObject marker in markers)
+                {
+                    marker.SetActive(false);
+                }
+
                 MapManager.Instance.arCamera.SetActive(true);
                 MapManager.Instance.mapCamera.SetActive(false);
+
                 MapManager.Instance.canvasARMap.alpha = 0; 
                 MapManager.Instance.plane.SetActive(false);
+
                 MapManager.Instance.scriptBuilding.SetActive(false);
                 MapManager.Instance.scriptStreet.SetActive(false);
             }
         }
     }
 
-    public void Exit()
+    public void ExitAR()
     {
+        foreach(GameObject marker in markers)
+        {
+            marker.SetActive(true);
+        }
+        
         MapManager.Instance.arCamera.SetActive(false);
         MapManager.Instance.mapCamera.SetActive(true);
+
         MapManager.Instance.canvasARMap.alpha = 1; 
         MapManager.Instance.plane.SetActive(true);
+
         MapManager.Instance.scriptBuilding.SetActive(true);
         MapManager.Instance.scriptStreet.SetActive(true);
     }

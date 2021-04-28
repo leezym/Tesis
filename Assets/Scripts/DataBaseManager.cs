@@ -321,18 +321,22 @@ public class DataBaseManager : MonoBehaviour
         return null;
     }  */
 
-    public async Task<Dictionary<string, object>> ListStudentsByGroup(string db, string idInductor)
-    {  
-        string idRoom = GlobalDataManager.Instance.idRoomByInductor;      
-
-        Query MembersQuery = reference.Collection(db).WhereEqualTo("idRoom", idRoom);
+    public async Task<List<string>> ListStudentsByGroup(string idRoom)
+    {
+        Query MembersQuery = reference.Collection("Students").WhereEqualTo("idRoom", idRoom);
         QuerySnapshot MembersQuerySnapshot = await MembersQuery.GetSnapshotAsync();
-        
+        List<string> students = new List<string>();
         foreach (DocumentSnapshot documentSnapshotMembers in MembersQuerySnapshot.Documents)
         {
-            return documentSnapshotMembers.ToDictionary();            
+            foreach (KeyValuePair<string, object> pair in documentSnapshotMembers.ToDictionary())
+            {
+                if (pair.Key == "name")
+                {
+                    students.Add(pair.Value.ToString());
+                }        
+            }          
         }
-        return null;     
+        return students;
     }
 
     public async Task<List<Dictionary<string, object>>> SearchHintDataByRoom(string idRoom)

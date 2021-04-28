@@ -9,7 +9,6 @@ public class MyProfile : MonoBehaviour
     [Header ("STUDENT")]
     public Canvas canvasPuntuaciones, canvasMyProfile;
     public Text textGroupName, textInductorName, content;
-    List<string> NeoJaverianos = new List<string>();
 
     public void Refresh()
     {
@@ -20,17 +19,15 @@ public class MyProfile : MonoBehaviour
     async void SearchGroupData()
     {
         object roomName = await DataBaseManager.Instance.SearchAttribute("Rooms", GlobalDataManager.Instance.idRoomByStudent, "room");
-        object inductorName = GlobalDataManager.Instance.nameInductor;
+        string inductorName = GlobalDataManager.Instance.nameInductor;
 
-        if(roomName != null)
-            textGroupName.text = roomName.ToString();
-        if (inductorName != null)
-            textInductorName.text = inductorName.ToString();    
+        textGroupName.text = roomName.ToString();
+        textInductorName.text = inductorName;    
     }
 
     async void SearchStudents()
     {
-        NeoJaverianos = await GroupManager.Instance.ListNameStudents(GlobalDataManager.Instance.idUserInductor);
+        List<string> NeoJaverianos = await DataBaseManager.Instance.ListStudentsByGroup(GlobalDataManager.Instance.idRoomByStudent);
         content.text = "";
         foreach(string name in NeoJaverianos)
         {
