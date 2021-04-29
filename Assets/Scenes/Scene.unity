@@ -4837,10 +4837,12 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 06d06c1cda3df3d49a999736ca0208d9, type: 3}
   - {fileID: 21300000, guid: f542c333c34ab0f4db8f0666a6fd2d62, type: 3}
   - {fileID: 21300000, guid: ab7fa66b143d2dc4f810202d38f9ec57, type: 3}
+  - {fileID: 21300000, guid: 78c5668927f18fd4fb894f69289de0b5, type: 3}
   backgroundCircleCardHint:
   - {fileID: 21300000, guid: 9aae3e7d988467b44baa3262acaecf58, type: 3}
   - {fileID: 21300000, guid: 8eef25b8eae33fb45b871b3149c62697, type: 3}
   - {fileID: 21300000, guid: 3420fb779e789c044b26b9235bbf25ee, type: 3}
+  - {fileID: 21300000, guid: 208b29249954dd043921b2c41952e53f, type: 3}
   hintsScrollbar: {fileID: 2845700793878434282}
   contentCards: {fileID: 7789521461396350410}
 --- !u!1 &1570381169
