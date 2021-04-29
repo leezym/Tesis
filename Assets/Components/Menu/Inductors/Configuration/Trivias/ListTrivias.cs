@@ -12,7 +12,7 @@ public class ListTrivias : MonoBehaviour
     public Transform triviaContent;
     public Canvas canvasConfigTrivias, canvasAddTrivias;
     public Dropdown buildingsDropdown;
-    public Button addTrivia;
+    public GameObject addTrivia;
 
     List<Dictionary<string,object>> triviasList = new List<Dictionary<string,object>>();
     public List<GameObject> currentTrivias = new List<GameObject>();
@@ -64,11 +64,13 @@ public class ListTrivias : MonoBehaviour
         int valueBuilding = buildingsDropdown.value;
         buildingName = buildingsDropdown.options[valueBuilding].text;
         triviasList = await TriviasManager.Instance.GetTriviaByBuilding(buildingName);
-
+        SearchTrivias();
+        
         if(buildingsDropdown.value != 0)
-            SearchTrivias();
+            addTrivia.SetActive(true);
         else
-            NotificationsManager.Instance.SetFailureNotificationMessage("Por favor selecciona un edificio para agregar una pregunta.");
+            addTrivia.SetActive(false);
+            //NotificationsManager.Instance.SetFailureNotificationMessage("Por favor selecciona un edificio para agregar una pregunta.");
     }
 
     void ClearCurrentTrivias()
