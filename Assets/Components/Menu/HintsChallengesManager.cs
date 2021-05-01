@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 public class HintsChallengesManager : MonoBehaviour
 {
-    public static HintsChallengesManager instance;
+    private static HintsChallengesManager instance;
     public static HintsChallengesManager Instance { get => instance; set => instance = value; }
 
     void Awake() {

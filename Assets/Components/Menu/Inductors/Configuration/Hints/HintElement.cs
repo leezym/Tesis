@@ -32,11 +32,10 @@ public class HintElement : MonoBehaviour
             NotificationsManager.Instance.acceptQuestionButton.onClick.AddListener(SaveHint);
         }
     }
-
+    
     async void SaveHint()
     {
         GameObject.FindObjectOfType<EditGroup>().countHints ++;
-        //Debug.Log(GameObject.FindObjectOfType<EditGroup>().countHints);
         
         // Boton Finalizar
         this.transform.Find("FinishButton").GetComponent<Button>().interactable = false;
@@ -61,8 +60,8 @@ public class HintElement : MonoBehaviour
         int currentRoomScore = Convert.ToInt32(await DataBaseManager.Instance.SearchAttribute("Rooms", GlobalDataManager.Instance.idRoomByInductor, "score"));
         await RoomsManager.Instance.PutRoomAsync(GlobalDataManager.Instance.idRoomByInductor, new Dictionary<string, object> {
             {"score", currentRoomScore + Convert.ToInt32(score)}
-        });       
+        }); 
         
-        NotificationsManager.Instance.acceptQuestionButton.onClick.RemoveAllListeners();     
+        NotificationsManager.Instance.acceptQuestionButton.onClick.RemoveAllListeners();    
     }
 }

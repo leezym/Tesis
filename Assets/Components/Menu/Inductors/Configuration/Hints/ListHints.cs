@@ -10,7 +10,6 @@ public class ListHints : MonoBehaviour
     public GameObject hintPrefab;
     public Transform hintContent;
     public Canvas canvasConfigHints, canvasAddHints;
-    List<DocumentSnapshot> hintsList = new List<DocumentSnapshot>();
     List<GameObject> currentHints = new List<GameObject>();
     int currentSizeHints = 0, newSizeHints = 0;
 
@@ -50,7 +49,7 @@ public class ListHints : MonoBehaviour
     async Task SearchHint()
     {
 
-        hintsList = await DataBaseManager.Instance.SearchByCollection("Hints");
+        List<DocumentSnapshot> hintsList = await DataBaseManager.Instance.SearchByCollection("Hints");
         newSizeHints = hintsList.Count;
 
         if (currentSizeHints != newSizeHints)

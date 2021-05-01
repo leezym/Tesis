@@ -10,7 +10,6 @@ public class CardsHints : MonoBehaviour
     public Canvas canvasActHint;
     public GameObject hintCardPrefab;
     public Sprite[] backgroundCardHint, backgroundCircleCardHint;
-    List<Dictionary<string,object>> hintsList = new List<Dictionary<string,object>>();
     List<GameObject> currentHints = new List<GameObject>();
 
     public GameObject hintsScrollbar;
@@ -36,7 +35,7 @@ public class CardsHints : MonoBehaviour
 
     public async void  SearchHint()
     {
-        hintsList = await HintsChallengesManager.Instance.GetHintChallengeByRoom(GlobalDataManager.Instance.idRoomByInductor);
+        List<Dictionary<string,object>> hintsList = await HintsChallengesManager.Instance.GetHintChallengeByRoom(GlobalDataManager.Instance.idRoomByInductor);
         int backgroundCount = 0;
 
         ClearCurrentHints();
