@@ -107,7 +107,7 @@ public class LoadingScreenManager : MonoBehaviour
             WaitingTriviaLoading();
     }
 
-    async void InductorLoading()
+    void InductorLoading()
     {
         if (timeInductorLoading > 0)
         {
@@ -117,14 +117,14 @@ public class LoadingScreenManager : MonoBehaviour
         else if (timeInductorLoading < 0)
         {
             canvasInductorLoading.enabled = false;
-            await TriviasChallengesManager.Instance.PutInductorTriviaChallengeAsync
+            /*await TriviasChallengesManager.Instance.PutInductorTriviaChallengeAsync
             (
                 GlobalDataManager.Instance.idUserInductor, 
                 idBuilding,
                 new Dictionary<string, object> () {
                     { "available", false }
                 }
-            );
+            );*/
         }
     }
 
