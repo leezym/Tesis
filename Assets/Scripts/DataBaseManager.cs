@@ -154,14 +154,14 @@ public class DataBaseManager : MonoBehaviour
     public async Task<List<Dictionary<string, object>>> SearchByOrderDescendingAndLimit(string db, string attribute, int limit, string filterAttribute, object filterValue)
     {
         Query colRef = reference.Collection(db).WhereEqualTo(filterAttribute, filterValue);
-        //Query queryAttribute = colRef.OrderByDescending(filterAttribute).Limit(limit);
-        QuerySnapshot querySnapshot = await colRef.GetSnapshotAsync();
+        Query queryAttribute = colRef.OrderByDescending(attribute).Limit(limit);
+        QuerySnapshot querySnapshot = await queryAttribute.GetSnapshotAsync();
         List<Dictionary<string,object>> data = new List<Dictionary<string, object>>();
         foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
         {
             data.Add(documentSnapshot.ToDictionary());
         }
-        data.OrderByDescending(x => x.ContainsKey(attribute) ? x[attribute] : string.Empty).Take(limit);
+        
         return data;
     }
     

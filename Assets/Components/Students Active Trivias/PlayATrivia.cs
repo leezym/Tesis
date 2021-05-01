@@ -65,7 +65,6 @@ public class PlayATrivia : MonoBehaviour
     async void RegisterPoints(string idTrivia)
     {
         // Crear trivia resuelta
-        Debug.Log("LOS PUNTOS: "+points);
         await TriviasChallengesManager.Instance.PostNewStudentTriviaChallenge(GlobalDataManager.Instance.idUserStudent, idTrivia, points);
         
         // Asignar puntuaciones totales al estudiante

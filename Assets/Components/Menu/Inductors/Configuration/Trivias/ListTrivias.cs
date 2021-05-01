@@ -70,7 +70,6 @@ public class ListTrivias : MonoBehaviour
             addTrivia.SetActive(true);
         else
             addTrivia.SetActive(false);
-            //NotificationsManager.Instance.SetFailureNotificationMessage("Por favor selecciona un edificio para agregar una pregunta.");
     }
 
     void ClearCurrentTrivias()

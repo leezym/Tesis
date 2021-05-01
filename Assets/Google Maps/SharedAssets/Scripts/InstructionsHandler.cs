@@ -44,7 +44,7 @@ namespace Google.Maps.Examples.Shared {
       Assert.IsNotNull(HelpButton, "Help button is not set!");
       Assert.IsNotNull(GlassPanel, "GlassPanel is not set!");
 
-      InstructionsText.text =
+      /*InstructionsText.text =
         "Arrow keys for pitch and yaw.\nWSAD to move.\nQE for height." +
         "\n\nClick anywhere to close.";
 
@@ -52,7 +52,7 @@ namespace Google.Maps.Examples.Shared {
       InstructionsText.text =
       "Drag knob to move and rotate.\nUp and Down buttons for elevation." +
       "\nGyroscope for pitch. \nPinch screen to zoom.\n\nTap anywhere to close.";
-      #endif
+      #endif*/
 
       ShowHideDialog(false);
     }

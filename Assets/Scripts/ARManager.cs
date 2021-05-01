@@ -30,6 +30,7 @@ public class ARManager : MonoBehaviour
                 MapManager.Instance.mapCamera.SetActive(false);
 
                 MapManager.Instance.canvasARMap.alpha = 0; 
+                MapManager.Instance.canvasARMap.interactable = false;
                 MapManager.Instance.plane.SetActive(false);
 
                 MapManager.Instance.scriptBuilding.SetActive(false);
@@ -48,7 +49,8 @@ public class ARManager : MonoBehaviour
         MapManager.Instance.arCamera.SetActive(false);
         MapManager.Instance.mapCamera.SetActive(true);
 
-        MapManager.Instance.canvasARMap.alpha = 1; 
+        MapManager.Instance.canvasARMap.alpha = 1;
+        MapManager.Instance.canvasARMap.interactable = true;
         MapManager.Instance.plane.SetActive(true);
 
         MapManager.Instance.scriptBuilding.SetActive(true);

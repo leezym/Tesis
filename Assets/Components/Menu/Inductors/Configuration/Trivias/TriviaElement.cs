@@ -36,7 +36,6 @@ public class TriviaElement : MonoBehaviour
     async void ExecuteTrivia()
     {
         GameObject.FindObjectOfType<EditGroup>().countTrivias ++;
-        //Debug.Log(GameObject.FindObjectOfType<EditGroup>().countTrivias);
         
         this.transform.Find("InitializeTriviaButton").GetComponent<Button>().interactable = false;
 
@@ -66,6 +65,7 @@ public class TriviaElement : MonoBehaviour
             idBuilding = GlobalDataManager.idBuildingRaulPosada;
         }        
 
+        // Crear la trivia para el sesion del inductor y habilitarla
         await TriviasChallengesManager.Instance.PostNewInductorTriviaChallenge(GlobalDataManager.Instance.idUserInductor, idBuilding, true);
         ScenesManager.Instance.LoadNewCanvas(LoadingScreenManager.Instance.canvasInductorLoading);
         

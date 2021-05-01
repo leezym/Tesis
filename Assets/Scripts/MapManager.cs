@@ -105,6 +105,7 @@ public class MapManager : MonoBehaviour
     {
         if(canvasARMap.alpha == 1)
         {
+            canvasARMap.interactable = true;
             mainCamera.SetActive(false);
             mapCamera.SetActive(true);
             scriptStreet.SetActive(true);
@@ -112,6 +113,7 @@ public class MapManager : MonoBehaviour
         }
         else
         {
+            canvasARMap.interactable = false;
             mainCamera.SetActive(true);
             mapCamera.SetActive(false);
             scriptStreet.SetActive(false);

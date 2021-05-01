@@ -36,6 +36,7 @@ public class AuthManager : MonoBehaviour
     public InputField inputFieldPassword;
     public InputField inputRoomName;
     public InputField inputInductorRoomSize;
+    public Button signInInductor;
 
     [Header("CANVAS ESTUDIANTES")]
     public Canvas canvasLoginStudent;
@@ -43,8 +44,10 @@ public class AuthManager : MonoBehaviour
     public Canvas canvasPuntuacionesStudent;
     public Canvas canvasGeoMap;
     public CanvasGroup canvasARMap;
+    public Canvas[] canvasTriviasStudent;
     public InputField inputFieldDocument;
     public InputField inputFieldName;
+    public Button signInStudent;
     
     // UserData
     float currentLatitude = 0, currentLongitude = 0;
@@ -190,7 +193,7 @@ public class AuthManager : MonoBehaviour
 
     void ShowTrivias()
     {
-        TriviasChallengesManager.Instance.ShowTriviasStudent(GlobalDataManager.Instance.idInductorByStudent, canvasMenuStudent, canvasPuntuacionesStudent);
+        TriviasChallengesManager.Instance.ShowTriviasStudent(GlobalDataManager.Instance.idInductorByStudent);
     }
 
     public string GetUserId()
@@ -223,6 +226,10 @@ public class AuthManager : MonoBehaviour
                     ScenesManager.Instance.DeleteCurrentCanvas(canvasPuntuacionesStudent);
                     ScenesManager.Instance.DeleteCurrentCanvas(canvasGeoMap);
                     ScenesManager.Instance.DeleteCurrentCanvas(canvasARMap);
+                    foreach(Canvas canvas in canvasTriviasStudent)
+                    {
+                        ScenesManager.Instance.DeleteCurrentCanvas(canvas);
+                    }
                 }
                 ScenesManager.Instance.LoadNewCanvas(canvasGeneralSessions);
             }
@@ -264,7 +271,8 @@ public class AuthManager : MonoBehaviour
         {
             if (!await UsersManager.Instance.ExistUserByUser("Inductors", user))
             {
-                await authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async task => {                
+                signInInductor.interactable = false;
+                await authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async task => {           
                     if (task.IsFaulted)
                     {
                         foreach (System.Exception exception in task.Exception.InnerExceptions)
@@ -279,7 +287,7 @@ public class AuthManager : MonoBehaviour
                     await UsersManager.Instance.PostNewInductor(GetUserId(), "", user);
                     GlobalDataManager.Instance.idUserInductor = await UsersManager.Instance.GetInductorIdByAuth(GetUserId());
                     //GameObject.FindObjectOfType<ListTrivias>().SearchBuilding();
-
+                    signInInductor.interactable = true;
                 });
             }else{
                 NotificationsManager.Instance.SetFailureNotificationMessage("Ya inició sesión un usuario con esas credenciales.");
@@ -305,6 +313,7 @@ public class AuthManager : MonoBehaviour
                     GlobalDataManager.Instance.idRoomByStudent = await RoomsManager.Instance.GetAvailableRoom();
                     if(GlobalDataManager.Instance.idRoomByStudent != null)
                     {
+                        signInStudent.interactable = false;
                         await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task => {
                             if (task.IsFaulted)
                             {
@@ -320,6 +329,7 @@ public class AuthManager : MonoBehaviour
                             GlobalDataManager.Instance.idUserStudent = userFirebase.UserId;
                             GlobalDataManager.Instance.idInductorByStudent = (await DataBaseManager.Instance.SearchAttribute("Rooms", GlobalDataManager.Instance.idRoomByStudent, "idInductor")).ToString();
                             GlobalDataManager.Instance.nameInductor = (await DataBaseManager.Instance.SearchAttribute("Inductors", GlobalDataManager.Instance.idInductorByStudent, "name")).ToString();
+                            signInStudent.interactable = true;
                         });
                     }else{
                         NotificationsManager.Instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");

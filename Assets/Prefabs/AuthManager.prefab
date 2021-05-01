@@ -51,10 +51,22 @@ MonoBehaviour:
   inputFieldPassword: {fileID: 0}
   inputRoomName: {fileID: 0}
   inputInductorRoomSize: {fileID: 0}
+  signInInductor: {fileID: 0}
   canvasLoginStudent: {fileID: 0}
   canvasMenuStudent: {fileID: 0}
   canvasPuntuacionesStudent: {fileID: 0}
   canvasGeoMap: {fileID: 0}
   canvasARMap: {fileID: 0}
+  canvasTriviasStudent:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   inputFieldDocument: {fileID: 0}
   inputFieldName: {fileID: 0}
+  signInStudent: {fileID: 0}
+  newLatitude: 0
+  newLongitude: 0

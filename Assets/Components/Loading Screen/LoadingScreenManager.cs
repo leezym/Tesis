@@ -37,7 +37,7 @@ public class LoadingScreenManager : MonoBehaviour
     
     string idBuilding = "";
     int index = 0;
-    Dictionary<string,object>[] listTrivias;
+    List<Dictionary<string,object>> listTrivias = new List<Dictionary<string,object>>();
 
     public void SetTimeInductorLoading(float timeInductorLoading) { this.timeInductorLoading = timeInductorLoading; }
     public void SetTimeTimerTrivia(float timeTimerTrivia) { this.timeTimerTrivia = timeTimerTrivia; }
@@ -45,7 +45,7 @@ public class LoadingScreenManager : MonoBehaviour
     public void SetTimeOverLoading(float timeIsOver) { this.timeIsOver = timeIsOver; }
 
     public void SetIdTriviaBuilding(string idBuilding){ this.idBuilding = idBuilding; }
-    public void SetListTrivias(List<Dictionary<string,object>> listTrivias){ this.listTrivias = listTrivias.ToArray(); }
+    public void SetListTrivias(List<Dictionary<string,object>> listTrivias){ this.listTrivias = listTrivias; }
 
     void Awake()
     {
@@ -199,28 +199,45 @@ public class LoadingScreenManager : MonoBehaviour
             canvasWaitingTriviaLoading.transform.Find("TimeSlider").GetComponent<Slider>().maxValue = waiting;
             canvasWaitingTriviaLoading.enabled = false;
             timeTriviaLoading = question;
-
-            canvasQuestionLoading.transform.Find("AnswerOne").GetComponent<Button>().interactable = true;
-            canvasQuestionLoading.transform.Find("AnswerTwo").GetComponent<Button>().interactable = true;
-            canvasQuestionLoading.transform.Find("AnswerThree").GetComponent<Button>().interactable = true;
-
-            canvasQuestionLoading.transform.Find("AnswerOne").GetComponent<Button>().image.sprite = normalAnswer;
-            canvasQuestionLoading.transform.Find("AnswerTwo").GetComponent<Button>().image.sprite = normalAnswer;
-            canvasQuestionLoading.transform.Find("AnswerThree").GetComponent<Button>().image.sprite = normalAnswer;
             ShowTrivia();
         }
     }
 
     // Informacion de la pregunta
-    async void ShowTrivia()
+    void ShowTrivia()
     {
-        string buildingName = (await DataBaseManager.Instance.SearchById("Buildings", idBuilding,"name")).ToString();
-        canvasQuestionLoading.transform.Find("BuildingNameLabel").GetComponent<Text>().text = buildingName;            
-        Debug.Log(index +"<"+listTrivias.Length);
-        if(index < listTrivias.Length)
+        // Configurar Pregunta 
+        canvasQuestionLoading.transform.Find("AnswerOne").GetComponent<Button>().interactable = true;
+        canvasQuestionLoading.transform.Find("AnswerTwo").GetComponent<Button>().interactable = true;
+        canvasQuestionLoading.transform.Find("AnswerThree").GetComponent<Button>().interactable = true;
+
+        canvasQuestionLoading.transform.Find("AnswerOne").GetComponent<Button>().image.sprite = normalAnswer;
+        canvasQuestionLoading.transform.Find("AnswerTwo").GetComponent<Button>().image.sprite = normalAnswer;
+        canvasQuestionLoading.transform.Find("AnswerThree").GetComponent<Button>().image.sprite = normalAnswer;
+
+        string buildingName = "";
+
+        if(idBuilding == GlobalDataManager.idBuildingPalmas)
         {
-            Dictionary<string, object> trivia = listTrivias[index];        
-            foreach(KeyValuePair<string, object> pair in trivia)
+            buildingName = GlobalDataManager.nameBuildingPalmas;
+        }
+        else if(idBuilding == GlobalDataManager.idBuildingGuayacanes)
+        {
+            buildingName = GlobalDataManager.nameBuildingGuayacanes;
+        }
+        else if(idBuilding == GlobalDataManager.idBuildingLago)
+        {
+            buildingName = GlobalDataManager.nameBuildingLago;
+        }
+        else if(idBuilding == GlobalDataManager.idBuildingRaulPosada)
+        {
+            buildingName = GlobalDataManager.nameBuildingRaulPosada;
+        }
+
+        canvasQuestionLoading.transform.Find("BuildingNameLabel").GetComponent<Text>().text = buildingName;
+        if(index < listTrivias.Count)
+        {  
+            foreach(KeyValuePair<string, object> pair in listTrivias[index])
             {
                 if(pair.Key == "question")
                     canvasQuestionLoading.transform.Find("QuestionFieldLabel").GetComponent<Text>().text = pair.Value.ToString();
@@ -234,7 +251,8 @@ public class LoadingScreenManager : MonoBehaviour
             index++;
             canvasQuestionLoading.enabled = true;
         }
-        else{
+        else
+        {
             triviaInProgress = false;
             GameObject.FindObjectOfType<PlayATrivia>().ShowFinalRanking();
             ScenesManager.Instance.LoadNewCanvas(canvasPodiumStudent);
