@@ -94,7 +94,7 @@ public class CardsHints : MonoBehaviour
                     InputField hintPositionNumberInput = hintElement.transform.Find("HintPositionNumberInput").GetComponent<InputField>();
                     hintPositionNumberInput.text = pair.Value.ToString();
                 }
-            }   
+            } 
 
             // Añadir a Lista
             currentHints.Add(hintElement);

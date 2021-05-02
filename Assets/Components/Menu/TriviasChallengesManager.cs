@@ -65,12 +65,12 @@ public class TriviasChallengesManager : MonoBehaviour
                         ScenesManager.Instance.LoadNewCanvas(LoadingScreenManager.Instance.canvasTimerTriviaLoading);
                     }
                 }
-            }
 
-            // Deshabilitar trivia (avaiblable = false)
-            await TriviasChallengesManager.Instance.PutInductorTriviaChallengeAsync(GlobalDataManager.Instance.idUserInductor,idBuilding, new Dictionary<string, object>(){
-                { "available", false }
-            });            
+                // Deshabilitar trivia (avaiblable = false)
+                await TriviasChallengesManager.Instance.PutInductorTriviaChallengeAsync(idInductor,idBuilding, new Dictionary<string, object>(){
+                    { "available", false }
+                });            
+            }
         }
     }
 

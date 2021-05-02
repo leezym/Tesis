@@ -31,7 +31,7 @@ RectTransform:
   m_Children:
   - {fileID: 1127506138858326478}
   m_Father: {fileID: 6646039635767968928}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -104,13 +104,13 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 6646039635767968928}
+  m_Father: {fileID: 218021846956060520}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 25.640015, y: 0}
-  m_SizeDelta: {x: -61.210022, y: -0.0000076293945}
+  m_SizeDelta: {x: -108.15143, y: 0.0001449585}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &339964223836149762
 CanvasRenderer:
@@ -181,10 +181,9 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 3634235767191702143}
   - {fileID: 7671660652653815803}
   m_Father: {fileID: 218021846956060520}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -324,7 +323,7 @@ GameObject:
   - component: {fileID: 7695370285100377286}
   - component: {fileID: 6081679972875032137}
   - component: {fileID: 4382096746586948496}
-  - component: {fileID: 6504521262407250532}
+  - component: {fileID: -2558463198118049340}
   m_Layer: 5
   m_Name: HintStudents
   m_TagString: Untagged
@@ -343,6 +342,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 3634235767191702143}
   - {fileID: 6646039635767968928}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -432,7 +432,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6504521262407250532}
+      - m_Target: {fileID: -2558463198118049340}
         m_MethodName: SelectHint
         m_Mode: 1
         m_Arguments:
@@ -443,7 +443,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &6504521262407250532
+--- !u!114 &-2558463198118049340
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -452,6 +452,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6804829831110984287}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c79848903379eec489cf6d756ddd5d16, type: 3}
+  m_Script: {fileID: 11500000, guid: ddf328f4ff855c34994feb91bdc303a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -7,12 +7,22 @@ using UnityEngine.UI;
 
 public class EditGroup : MonoBehaviour
 { 
-    [Header("NDUCTOR")]
-    public Text groupNameLabel, inductorNameLabel, puntajeLabel;
-    public Canvas canvasMyGroup, canvasEditGroup, canvasNombreInductor, canvasMenuInductor;
-    public InputField inputRoomSize, inputInductorName;
-    public InputField newInputRoomSize, newInputRoomName;
-    public Button finishButton, rankingsButton;
+    [Header("INDUCTOR")]
+    public Text groupNameLabel;
+    public Text inductorNameLabel;
+    public Text puntajeLabel;
+    public Canvas canvasMyGroup;
+    public Canvas canvasEditGroup;
+    public Canvas canvasNombreInductor;
+    public Canvas canvasMenuInductor;
+    public InputField inputRoomSize;
+    public InputField inputInductorName;
+    public InputField newInputRoomSize;
+    public InputField newInputRoomName;
+    public Button finishButton;
+    public Button rankingsButton;
+    public int amountBuilding;
+    
     [HideInInspector]
     public int countTrivias = 0, countHints = 0;
     
@@ -46,7 +56,7 @@ public class EditGroup : MonoBehaviour
             ShowRoomData();
             ShowInductorData();
 
-            if(countTrivias == 4 && countHints == await DataBaseManager.Instance.SizeTable("Hints"))
+            if(countTrivias == amountBuilding && countHints == await DataBaseManager.Instance.SizeTable("Hints"))
                 finishButton.interactable = true;
         }
     }   

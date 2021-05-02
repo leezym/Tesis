@@ -11,6 +11,7 @@ public class ListStudentHints : MonoBehaviour
     public GameObject hintElementPrefab;
     public Transform contentList;
     public List<InfoHint> currentHints = new List<InfoHint>();    
+    List<Dictionary<string,object>> hintsList = new List<Dictionary<string, object>>();
 
     int index = 0;
 
@@ -24,10 +25,10 @@ public class ListStudentHints : MonoBehaviour
         currentHints.Clear();
     }
     
-    public async Task SearchHint()
+    public async void SearchHint()
     {
-        List<Dictionary<string,object>> hintsList = await HintsChallengesManager.Instance.GetHintChallengeByRoom(GlobalDataManager.Instance.idRoomByStudent);
-        
+        hintsList = await HintsChallengesManager.Instance.GetHintChallengeByRoom(GlobalDataManager.Instance.idRoomByStudent);
+            
         ClearCurrentHints();
         foreach(Dictionary<string,object> hint in hintsList)
         {
@@ -40,12 +41,14 @@ public class ListStudentHints : MonoBehaviour
             foreach(KeyValuePair<string,object> pair in hint)
             {
                 //Editar text
-                if(pair.Key == "name"){                       
-                    
+                if(pair.Key == "name")
+                {
                     Text hintNameLabel = hintElement.transform.Find("HintNameLabel").GetComponent<Text>();
                     hintNameLabel.text = pair.Value.ToString();
+                    hintName = pair.Value.ToString();
                 }
-                if (pair.Key == "description"){
+                if (pair.Key == "description")
+                {
                     hintDescription = pair.Value.ToString();
                 }
                 if(pair.Key == "score")
@@ -59,7 +62,7 @@ public class ListStudentHints : MonoBehaviour
                         hintElement.transform.Find("Toggle").GetComponent<Toggle>().isOn = false;
                     }
                 }
-            }   
+            }
 
             // Añadir a Lista
             currentHints.Add(new InfoHint(hintElement, hintName, hintDescription));
@@ -67,13 +70,12 @@ public class ListStudentHints : MonoBehaviour
     }
 }
 
+[System.Serializable]
 public class InfoHint
 {
     public GameObject hint;
     public string name;
     public string description;
-
-    public InfoHint() { }
 
     public InfoHint(GameObject hint, string name, string description)
     {

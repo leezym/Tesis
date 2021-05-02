@@ -255,7 +255,7 @@ public class LoadingScreenManager : MonoBehaviour
         {
             triviaInProgress = false;
             GameObject.FindObjectOfType<PlayATrivia>().ShowFinalRanking();
-            ScenesManager.Instance.LoadNewCanvas(canvasPodiumStudent);
+            ScenesManager.Instance.LoadNewCanvas(canvasPodiumStudent);            
         }
     }
 

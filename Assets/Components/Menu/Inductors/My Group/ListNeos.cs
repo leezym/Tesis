@@ -9,6 +9,7 @@ using UnityEngine.UIElements;
 
 public class ListNeos : MonoBehaviour
 {
+    [Header("INDUCTOR")]
     public Text content;
     public Canvas canvasMyGroup;
     int currentSizeStudents = 0, newSizeStudents = 0;
@@ -18,7 +19,10 @@ public class ListNeos : MonoBehaviour
         if (canvasMyGroup.enabled)
             await DetectStudent();
         else
+        {
             currentSizeStudents = 0;
+            newSizeStudents = 0;
+        }
     }
 
     async Task DetectStudent()

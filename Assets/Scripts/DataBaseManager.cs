@@ -350,7 +350,7 @@ public class DataBaseManager : MonoBehaviour
             string idHint = documentSnapshot.Id;
             Dictionary<string, object> hint = documentSnapshot.ToDictionary();
             
-            List<Dictionary<string, object>> hintsChallengesList = await SearchByAttribute("HintsChallenges", "idRoom", idRoom, "idHint", idHint) ;
+            List<Dictionary<string, object>> hintsChallengesList = await SearchByAttribute("HintsChallenges", "idRoom", idRoom, "idHint", idHint);
             foreach(Dictionary<string, object> hintChallenge in hintsChallengesList)
             {
                 foreach(KeyValuePair<string, object> pair in hintChallenge)
