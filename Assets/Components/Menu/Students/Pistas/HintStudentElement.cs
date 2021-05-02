@@ -8,8 +8,7 @@ public class HintStudentElement : MonoBehaviour
     public void SelectHint()
     {
         Text hintTitle = this.gameObject.GetComponentInChildren<Text>();
-
-        GameObject canvasDescription = GameObject.Find("PanelPistas").transform.Find("Description").GetComponent<GameObject>();
+        GameObject canvasDescription = GameObject.Find("PanelPistas").transform.Find("Description").gameObject;
         Text hintText = canvasDescription.GetComponentInChildren<Text>();
         foreach(InfoHint hint in GameObject.FindObjectOfType<ListStudentHints>().currentHints)
         {
