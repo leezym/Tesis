@@ -130,17 +130,20 @@ public class AuthManager : MonoBehaviour
             userFirebase = authFirebase.CurrentUser;
             if (userFirebase != null)
             {   
+                // Sacar inductor
                 GlobalDataManager.Instance.idUserInductor = await UsersManager.Instance.GetInductorIdByAuth(userFirebase.UserId);
                 if(GlobalDataManager.Instance.idUserInductor != null){
                     GlobalDataManager.Instance.idRoomByInductor = await DataBaseManager.Instance.SearchId("Rooms", "idInductor", GlobalDataManager.Instance.idUserInductor);
                     await UsersManager.Instance.DeleteSession();
                 }
-                /*else
+                
+                // Sacar neojaveriano
+                GlobalDataManager.Instance.idUserStudent = userFirebase.UserId;
+                if(GlobalDataManager.Instance.idUserStudent != null)
                 {
-                    GlobalDataManager.Instance.idUserStudent = userFirebase.UserId;
-                    if(GlobalDataManager.Instance.idUserStudent != null)
-                        await RoomsManager.Instance.DeleteStudentInRoom();
-                }*/
+                    GlobalDataManager.Instance.idRoomByStudent = (await DataBaseManager.Instance.SearchAttribute("Students", GlobalDataManager.Instance.idUserStudent, "idRoom")).ToString();
+                    await RoomsManager.Instance.DeleteStudentInRoom();
+                }
 
                 InitializeAtributes();
                 authFirebase.SignOut();
@@ -271,7 +274,6 @@ public class AuthManager : MonoBehaviour
         {
             if (!await UsersManager.Instance.ExistUserByUser("Inductors", user))
             {
-                signInInductor.interactable = false;
                 await authFirebase.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(async task => {           
                     if (task.IsFaulted)
                     {
@@ -280,6 +282,7 @@ public class AuthManager : MonoBehaviour
                             Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
                             string message = NotificationsManager.Instance.GetErrorMessage(firebaseEx);
                             NotificationsManager.Instance.SetFailureNotificationMessage(message);
+                            signInInductor.interactable = true;
                         }
                         return;
                     }
@@ -291,10 +294,12 @@ public class AuthManager : MonoBehaviour
                 });
             }else{
                 NotificationsManager.Instance.SetFailureNotificationMessage("Ya inició sesión un usuario con esas credenciales.");
+                signInInductor.interactable = true;
             }
 
         }else{
             NotificationsManager.Instance.SetFailureNotificationMessage("Por favor llena los campos.");
+            signInInductor.interactable = true;
         }
 
     }
@@ -313,7 +318,6 @@ public class AuthManager : MonoBehaviour
                     GlobalDataManager.Instance.idRoomByStudent = await RoomsManager.Instance.GetAvailableRoom();
                     if(GlobalDataManager.Instance.idRoomByStudent != null)
                     {
-                        signInStudent.interactable = false;
                         await authFirebase.SignInAnonymouslyAsync().ContinueWith(async task => {
                             if (task.IsFaulted)
                             {
@@ -322,6 +326,7 @@ public class AuthManager : MonoBehaviour
                                     Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
                                     string message = NotificationsManager.Instance.GetErrorMessage(firebaseEx);
                                     NotificationsManager.Instance.SetFailureNotificationMessage(message);
+                                    signInStudent.interactable = true;
                                 }
                                 return;
                             }
@@ -333,15 +338,19 @@ public class AuthManager : MonoBehaviour
                         });
                     }else{
                         NotificationsManager.Instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");
+                        signInStudent.interactable = true;
                     }
                 }else{
                     NotificationsManager.Instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");
+                    signInStudent.interactable = true;
                 }
             }else{
                 NotificationsManager.Instance.SetFailureNotificationMessage("Ya existe un usuario con ese documento.");
+                signInStudent.interactable = true;
             }
         }else{
             NotificationsManager.Instance.SetFailureNotificationMessage("Por favor llena los campos.");
+            signInStudent.interactable = true;
         }
     }
 

@@ -12081,7 +12081,12 @@ PrefabInstance:
     - target: {fileID: 6272284009317932419, guid: 7f62259bb3dce704b96fa2033466d763,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6272284009317932419, guid: 7f62259bb3dce704b96fa2033466d763,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6272284009317932419, guid: 7f62259bb3dce704b96fa2033466d763,
         type: 3}
@@ -12092,11 +12097,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 2038316232}
+      objectReference: {fileID: 1127974556}
     - target: {fileID: 6272284009317932419, guid: 7f62259bb3dce704b96fa2033466d763,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: SignInInductor
+      value: set_interactable
       objectReference: {fileID: 0}
     - target: {fileID: 6272284009317932419, guid: 7f62259bb3dce704b96fa2033466d763,
         type: 3}
@@ -12648,7 +12653,12 @@ PrefabInstance:
     - target: {fileID: 6703201372796631720, guid: 0a1d023cdffdfc34ea3c800563790b46,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703201372796631720, guid: 0a1d023cdffdfc34ea3c800563790b46,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6703201372796631720, guid: 0a1d023cdffdfc34ea3c800563790b46,
         type: 3}
@@ -12659,7 +12669,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 20953126}
+      objectReference: {fileID: 500266856}
+    - target: {fileID: 6703201372796631720, guid: 0a1d023cdffdfc34ea3c800563790b46,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: set_interactable
+      objectReference: {fileID: 0}
+    - target: {fileID: 6703201372796631720, guid: 0a1d023cdffdfc34ea3c800563790b46,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 8731691651564975608, guid: 0a1d023cdffdfc34ea3c800563790b46,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
@@ -14694,6 +14714,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1948786070}
     m_Modifications:
+    - target: {fileID: 5550483962273121414, guid: 6609b8d1fb145e54896b116a8adbbf32,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 652.6605
+      objectReference: {fileID: 0}
+    - target: {fileID: 5550483962273121414, guid: 6609b8d1fb145e54896b116a8adbbf32,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -19
+      objectReference: {fileID: 0}
+    - target: {fileID: 5550491450571636120, guid: 6609b8d1fb145e54896b116a8adbbf32,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -5
+      objectReference: {fileID: 0}
     - target: {fileID: 5627771913887366512, guid: 6609b8d1fb145e54896b116a8adbbf32,
         type: 3}
       propertyPath: m_RootOrder
@@ -14749,10 +14784,37 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5627771913887366518, guid: 6609b8d1fb145e54896b116a8adbbf32,
+        type: 3}
+      propertyPath: m_Alpha
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5627771913887366519, guid: 6609b8d1fb145e54896b116a8adbbf32,
         type: 3}
       propertyPath: m_Name
       value: PanelARMap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5627771915226078553, guid: 6609b8d1fb145e54896b116a8adbbf32,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628639518019573374, guid: 6609b8d1fb145e54896b116a8adbbf32,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732149495232301888, guid: 6609b8d1fb145e54896b116a8adbbf32,
+        type: 3}
+      propertyPath: m_Text
+      value: "Mu\xE9vete con el cursor y para acercarte o alejarte utiliza las flechas.\n\nDale
+        click a los elementos representativos de cada edificio para activar la realidad
+        aumentada."
+      objectReference: {fileID: 0}
+    - target: {fileID: 5732149495232301888, guid: 6609b8d1fb145e54896b116a8adbbf32,
+        type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8008144651470656856, guid: 6609b8d1fb145e54896b116a8adbbf32,
         type: 3}
