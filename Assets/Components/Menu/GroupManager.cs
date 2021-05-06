@@ -30,7 +30,7 @@ public class GroupManager : MonoBehaviour
 
     public async Task<List<Dictionary<string, string>>> GetOtherGroupsDataAsync()
     {
-        string nameRoom  = "";
+        string nameRoom  = "", idInductor = "", nameInductor = "";
         List<Dictionary<string, string>> Salas = new List<Dictionary<string, string>>();
         List<DocumentSnapshot> rooms = await DataBaseManager.Instance.SearchByCollection("Rooms");
         
@@ -42,9 +42,23 @@ public class GroupManager : MonoBehaviour
                 {
                     nameRoom = pairRoom.Value.ToString();
                 }
+                else if (pairRoom.Key == "idInductor")
+                {
+                    idInductor = pairRoom.Value.ToString();
+                    Dictionary<string, object> inductor = await UsersManager.Instance.GetUserAsync("Inductors", idInductor);
+                    if (inductor != null)
+                    {
+                        foreach (KeyValuePair<string, object> pairInductor in inductor)
+                        {   
+                            if (pairInductor.Key == "name")
+                            {
+                                nameInductor = pairInductor.Value.ToString();
+                            }
+                        }
+                    }
+                }
             }
-
-            string nameInductor = GlobalDataManager.Instance.nameInductor;
+            
             Salas.Add(new Dictionary<string, string> () {
                 {"nameInductor", nameInductor},
                 {"nameRoom", nameRoom}

@@ -22,7 +22,8 @@ public class EditGroup : MonoBehaviour
     public Button finishButton;
     public Button rankingsButton;
     public int amountBuilding;
-    
+    public Button signInInductor;
+
     [HideInInspector]
     public int countTrivias = 0, countHints = 0;
     
@@ -110,6 +111,8 @@ public class EditGroup : MonoBehaviour
 
     public async void SendInductorName()
     {
+        signInInductor.interactable = false;
+        
         if (CheckNewData())
         {
             GlobalDataManager.Instance.nameInductor = inputInductorName.text;
@@ -126,6 +129,8 @@ public class EditGroup : MonoBehaviour
         {
             NotificationsManager.Instance.SetFailureNotificationMessage("Por favor llene los campos.");
         }
+
+        signInInductor.interactable = true;
     }
 
     public async void SendNewRoomInfo()

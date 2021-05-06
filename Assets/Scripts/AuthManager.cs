@@ -269,6 +269,8 @@ public class AuthManager : MonoBehaviour
         string user = inputFieldUser.text.ToLower();
         string password = inputFieldPassword.text;
         string email = user + "@javerianacali.edu.co";
+
+        signInInductor.interactable = false;
         
         if(password != "" && email != "")
         {
@@ -282,32 +284,33 @@ public class AuthManager : MonoBehaviour
                             Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
                             string message = NotificationsManager.Instance.GetErrorMessage(firebaseEx);
                             NotificationsManager.Instance.SetFailureNotificationMessage(message);
-                            signInInductor.interactable = true;
                         }
                         return;
                     }
-                    
-                    await UsersManager.Instance.PostNewInductor(GetUserId(), "", user);
-                    GlobalDataManager.Instance.idUserInductor = await UsersManager.Instance.GetInductorIdByAuth(GetUserId());
-                    //GameObject.FindObjectOfType<ListTrivias>().SearchBuilding();
-                    signInInductor.interactable = true;
+                    else if (task.IsCompleted)
+                    {
+                        await UsersManager.Instance.PostNewInductor(GetUserId(), "", user);
+                        GlobalDataManager.Instance.idUserInductor = await UsersManager.Instance.GetInductorIdByAuth(GetUserId());
+                        //GameObject.FindObjectOfType<ListTrivias>().SearchBuilding();
+                        return;
+                    }
                 });
             }else{
                 NotificationsManager.Instance.SetFailureNotificationMessage("Ya inició sesión un usuario con esas credenciales.");
-                signInInductor.interactable = true;
             }
-
         }else{
             NotificationsManager.Instance.SetFailureNotificationMessage("Por favor llena los campos.");
-            signInInductor.interactable = true;
         }
-
+        
+        signInInductor.interactable = true;
     }
 
     public async void SignInStudent()
     {
         string name = inputFieldName.text;
         string document = inputFieldDocument.text;
+
+        signInStudent.interactable = false;
 
         if(name != "" && document != "")
         {
@@ -326,32 +329,32 @@ public class AuthManager : MonoBehaviour
                                     Firebase.FirebaseException firebaseEx = exception.InnerException as Firebase.FirebaseException;
                                     string message = NotificationsManager.Instance.GetErrorMessage(firebaseEx);
                                     NotificationsManager.Instance.SetFailureNotificationMessage(message);
-                                    signInStudent.interactable = true;
                                 }
                                 return;
                             }
-                            await UsersManager.Instance.PostNewStudent(userFirebase.UserId, name, document, GlobalDataManager.Instance.idRoomByStudent);
-                            GlobalDataManager.Instance.idUserStudent = userFirebase.UserId;
-                            GlobalDataManager.Instance.idInductorByStudent = (await DataBaseManager.Instance.SearchAttribute("Rooms", GlobalDataManager.Instance.idRoomByStudent, "idInductor")).ToString();
-                            GlobalDataManager.Instance.nameInductor = (await DataBaseManager.Instance.SearchAttribute("Inductors", GlobalDataManager.Instance.idInductorByStudent, "name")).ToString();
-                            signInStudent.interactable = true;
+                            else if (task.IsCompleted)
+                            {
+                                await UsersManager.Instance.PostNewStudent(userFirebase.UserId, name, document, GlobalDataManager.Instance.idRoomByStudent);
+                                GlobalDataManager.Instance.idUserStudent = userFirebase.UserId;
+                                GlobalDataManager.Instance.idInductorByStudent = (await DataBaseManager.Instance.SearchAttribute("Rooms", GlobalDataManager.Instance.idRoomByStudent, "idInductor")).ToString();
+                                GlobalDataManager.Instance.nameInductor = (await DataBaseManager.Instance.SearchAttribute("Inductors", GlobalDataManager.Instance.idInductorByStudent, "name")).ToString();
+                                return;
+                            }
                         });
                     }else{
                         NotificationsManager.Instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");
-                        signInStudent.interactable = true;
                     }
                 }else{
                     NotificationsManager.Instance.SetFailureNotificationMessage("No hay salas disponibles. Pide ayuda a tu inductor más cercano.");
-                    signInStudent.interactable = true;
                 }
             }else{
                 NotificationsManager.Instance.SetFailureNotificationMessage("Ya existe un usuario con ese documento.");
-                signInStudent.interactable = true;
             }
         }else{
             NotificationsManager.Instance.SetFailureNotificationMessage("Por favor llena los campos.");
-            signInStudent.interactable = true;
         }
+
+        signInStudent.interactable = true;
     }
 
     public void LogOut() 

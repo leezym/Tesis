@@ -118,7 +118,7 @@ public class CardsHints : MonoBehaviour
         {
             for(int i = 0; i < pos.Length; i++)
             {
-                if(scrollPos < pos[i] + (distance/2) && scrollPos > pos[i] - (distance/2))
+                if(scrollPos < pos[i] + (distance/4) && scrollPos > pos[i] - (distance/4))
                 {
                     hintsScrollbar.GetComponent<Scrollbar>().value = Mathf.Lerp(hintsScrollbar.GetComponent<Scrollbar>().value, pos[i], 0.1f);
                 }
@@ -127,7 +127,7 @@ public class CardsHints : MonoBehaviour
 
         for(int i = 0; i < pos.Length; i++)
         {
-            if(scrollPos < pos[i] + (distance/2) && scrollPos > pos[i] - (distance/2))
+            if(scrollPos < pos[i] + (distance/4) && scrollPos > pos[i] - (distance/4))
             {
                 contentCards.GetChild(i).localScale = Vector2.Lerp(contentCards.GetChild(i).localScale, new Vector2(1f, 1f), 0.1f);
                 for(int j = 0; j < pos.Length; j++)

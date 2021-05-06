@@ -23,10 +23,12 @@ public class ScenesManager : MonoBehaviour
     public void DeleteCurrentCanvas(CanvasGroup canvas)
     {
         canvas.alpha = 0;
+        canvas.interactable = false;
     }
 
     public void LoadNewCanvas(CanvasGroup canvas)
     {
         canvas.alpha = 1;
+        canvas.interactable = true;
     }
 }

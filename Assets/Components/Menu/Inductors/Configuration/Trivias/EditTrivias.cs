@@ -30,10 +30,18 @@ public class EditTrivias : MonoBehaviour
         inputTriviaAnswerOneDetail.text = ""; 
         inputTriviaAnswerTwoDetail.text = "";
         inputTriviaAnswerThreeDetail.text = "";
+        inputTriviaQuestionDetail.interactable = false;
+        inputTriviaAnswerOneDetail.interactable = false; 
+        inputTriviaAnswerTwoDetail.interactable = false;
+        inputTriviaAnswerThreeDetail.interactable = false;
+
+        imageEditAnswer.enabled = true;
+        imageEditQuestion.enabled = true;
         imageCancelAnswer.enabled = false;
         imageCancelQuestion.enabled = false;
         imageSaveAnswer.enabled = false;
         imageSaveQuestion.enabled = false;
+        
         toggleTriviaAnswerOneDetail.interactable = false;
         toggleTriviaAnswerTwoDetail.interactable = false;
         toggleTriviaAnswerThreeDetail.interactable = false;

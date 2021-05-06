@@ -25,12 +25,19 @@ public class EditHints : MonoBehaviour
         inputHintNameDetail.text = "";
         inputHintDescriptionDetail.text = ""; 
         inputHintAnswerDetail.text = "";
+        inputHintNameDetail.interactable = false;
+        inputHintDescriptionDetail.interactable = false; 
+        inputHintAnswerDetail.interactable = false;
+
+        imageSaveDescription.enabled = false;
+        imageEditAnswer.enabled = true;
+        imageEditDescription.enabled = true;
+        imageEditName.enabled = true;
         imageCancelAnswer.enabled = false;
         imageCancelName.enabled = false;
         imageCancelDescription.enabled = false;
         imageSaveAnswer.enabled = false;
         imageSaveName.enabled = false;
-        imageSaveDescription.enabled = false;
     }
 
     public async void SearchHintDetails(string hintText)

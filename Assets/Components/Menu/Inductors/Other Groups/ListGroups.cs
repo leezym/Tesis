@@ -11,7 +11,6 @@ public class ListGroups : MonoBehaviour
     public Canvas canvasOtherGroups;
     public Transform groupsContent;
     public GameObject otherGroupPrefab;
-    List<Dictionary<string, string>> groupsList = new List<Dictionary<string, string>>();
     List<GameObject> currentGroups = new List<GameObject>();
     int newSizeGroups = 0, currentSizeGroups = 0;
 
@@ -35,7 +34,7 @@ public class ListGroups : MonoBehaviour
 
     async void ShowGroupsData()
     {
-        groupsList = await GroupManager.Instance.GetOtherGroupsDataAsync();
+        List<Dictionary<string, string>> groupsList = await GroupManager.Instance.GetOtherGroupsDataAsync();
         newSizeGroups = groupsList.Count;
 
         if (currentSizeGroups != newSizeGroups)

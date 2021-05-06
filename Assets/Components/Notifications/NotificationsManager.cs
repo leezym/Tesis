@@ -13,7 +13,7 @@ public class NotificationsManager : MonoBehaviour
 
     public Canvas canvasNotificationFailure, canvasNotificationSuccess, canvasNotificationQuestion;
     public Text NotificationFailureText, NotificationSuccessText, NotificationQuestionText;
-    public Button acceptQuestionButton;
+    public Button acceptQuestionButton, acceptSuccessButton, acceptFailureButton;
 
     void Awake()
     {
