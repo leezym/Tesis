@@ -33,6 +33,10 @@ Crear una rama y subir los cambios
 - git commit -m "<nombre rama>:<mensaje>"
 - git push origin <nombre de la rama>
 
+Subir los cambios de mi rama en otra rama 
+- git checkout <nombre otra rama>
+- git push origin <nombre mi rama>
+
 -----------------------------------------------------------
 
 Traer cambios a mi rama de mi propia rama
